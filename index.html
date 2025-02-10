@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Secure Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,7 +19,8 @@
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            width: 350px;
+            width: 90%;
+            max-width: 350px;
             transition: transform 0.3s ease;
         }
 
@@ -112,10 +114,10 @@
             const errorMessage = document.getElementById('errorMessage');
 
             if (username === validUsername1 && password === validPassword1) {
-                // Redirect to account1 dashboard
+                // Redirect to account1 dashboard (index.html in account1 folder)
                 window.location.href = "account1/index.html";
             } else if (username === validUsername2 && password === validPassword2) {
-                // Redirect to account2 dashboard
+                // Redirect to account2 dashboard (index.html in account2 folder)
                 window.location.href = "account2/index.html";
             } else {
                 errorMessage.style.display = 'block';

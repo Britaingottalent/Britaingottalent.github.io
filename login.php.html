@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>보안 로그인</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #83a4d4, #b6fbff);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 350px;
+            transition: transform 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .login-header {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        input[type="text"], 
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, 
+        input[type="password"]:focus {
+            border-color: #83a4d4;
+            outline: none;
+        }
+
+        .login-btn {
+            background: #83a4d4;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: #6b8dbd;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>보안 로그인</h2>
+            <p>자격 증명을 입력하세요</p>
+        </div>
+        
+        <form id="loginForm" onsubmit="return validateLogin(event)">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="사용자 이름" required>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="password" placeholder="비밀번호" required>
+            </div>
+            
+            <button type="submit" class="login-btn">로그인</button>
+            <div id="errorMessage" class="error-message">잘못된 자격 증명입니다!</div>
+        </form>
+    </div>
+
+    <script>
+        // 하드코딩된 자격 증명 (데모용으로만 사용)
+        const validUsername1 = "admin";
+        const validPassword1 = "admin";
+        const validUsername2 = "admin";
+        const validPassword2 = "slag";
+
+        function validateLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (username === validUsername1 && password === validPassword1) {
+                // account1 대시보드로 리디렉션 (account1 폴더의 index.html)
+                window.location.href = "account1/index.html";
+            } else if (username === validUsername2 && password === validPassword2) {
+                // account2 대시보드로 리디렉션 (account2 폴더의 index.html)
+                window.location.href = "account2/index.html";
+            } else {
+                errorMessage.style.display = 'block';
+                document.getElementById('password').value = '';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>

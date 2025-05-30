@@ -1,0 +1,1227 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Portfolio Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-bg: #0a0d12;
+            --secondary-bg: #121720;
+            --card-bg: #1a202c;
+            --accent: #00c774;
+            --accent-secondary: #2a9ef4;
+            --text-primary: #e2e8f0;
+            --text-secondary: #8b939f;
+            --positive: #00c774;
+            --negative: #ff4d4d;
+            --warning: #ffa726;
+            --border-radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: radial-gradient(circle at top right, rgba(42, 158, 244, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(0, 199, 116, 0.05) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-primary);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-actions button {
+            background: var(--secondary-bg);
+            border: none;
+            color: var(--text-primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-actions button.primary {
+            background: var(--accent);
+            color: var(--primary-bg);
+        }
+
+        .user-actions button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2.5rem;
+        }
+
+        .welcome-section {
+            max-width: 500px;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .welcome-section p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            padding: 0.9rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-buttons button.send {
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+        }
+
+        .action-buttons button.deposit {
+            background: var(--accent);
+            color: var(--primary-bg);
+        }
+
+        .action-buttons button:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+        }
+
+        .balance-overview {
+            background: linear-gradient(135deg, #1A3A32 0%, #0B0E11 100%);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            border: 1px solid #2A3A32;
+            min-width: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-overview::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(42,158,244,0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .balance-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .balance-content h2 {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-change {
+            color: var(--positive);
+            font-weight: 500;
+        }
+
+        .balance-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            flex: 1;
+            margin: 0 0.5rem;
+            text-align: center;
+        }
+
+        .stat-card:first-child {
+            margin-left: 0;
+        }
+
+        .stat-card:last-child {
+            margin-right: 0;
+        }
+
+        .stat-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card h3 {
+            font-size: 1.2rem;
+        }
+
+        /* Main Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            height: 350px;
+        }
+
+        .portfolio-breakdown {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            height: 100%;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .view-all {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        /* Deposit Selection Section */
+        .deposit-selection {
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .deposit-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .deposit-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .deposit-header p {
+            color: var(--text-secondary);
+        }
+
+        .crypto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .crypto-card {
+            background: var(--card-bg);
+            padding: 1.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .crypto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-color: rgba(0, 199, 116, 0.2);
+        }
+
+        .crypto-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.8rem;
+        }
+
+        .crypto-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .crypto-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Deposit Form */
+        .deposit-form {
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .deposit-form-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .deposit-form-title {
+            font-size: 1.5rem;
+        }
+
+        .coin-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .coin-icon-lg {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .coin-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .coin-details p {
+            color: var(--text-secondary);
+        }
+
+        .network-selector {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 0.75rem;
+            color: var(--text-primary);
+            width: 100%;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .qr-container {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0;
+            padding: 10px;
+            background: white;
+            border-radius: 12px;
+            max-width: 180px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
+
+        .address-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            position: relative;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .address-container p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .address-container .address {
+            font-size: 0.9rem;
+            word-break: break-all;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            color: var(--primary-bg);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1.5rem;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #00b366;
+        }
+
+        .warning {
+            color: var(--warning);
+            font-size: 0.8rem;
+            margin-top: 1rem;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Assets Section */
+        .assets-section {
+            margin-bottom: 2rem;
+        }
+
+        .assets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .asset-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .asset-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .asset-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .coin-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .asset-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .asset-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .asset-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .asset-price {
+            text-align: right;
+        }
+
+        .asset-price .price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .asset-price .change {
+            font-size: 0.9rem;
+        }
+
+        .positive {
+            color: var(--positive);
+        }
+
+        .negative {
+            color: var(--negative);
+        }
+
+        .asset-chart {
+            height: 60px;
+            margin-top: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 2rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .balance-overview {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .balance-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .stat-card {
+                margin: 0;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .crypto-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-wallet"></i>
+                <span>CryptoPortfolio</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="#"><i class="fas fa-wallet"></i> Portfolio</a>
+                <a href="#"><i class="fas fa-exchange-alt"></i> Trade</a>
+                <a href="#"><i class="fas fa-chart-line"></i> Markets</a>
+            </nav>
+            
+            <div class="user-actions">
+                <button><i class="fas fa-bell"></i></button>
+                <button class="primary"><i class="fas fa-user"></i> Account</button>
+            </div>
+        </header>
+        
+        <!-- Hero Section -->
+        <section class="hero fade-in">
+            <div class="welcome-section">
+                <h1>Crypto Portfolio Dashboard</h1>
+                <p>Track, manage, and grow your digital assets with professional tools and real-time market insights.</p>
+                
+                <div class="action-buttons">
+                    <button class="send" id="send-button">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                    <button class="deposit" id="deposit-button">
+                        <i class="fas fa-wallet"></i> Deposit
+                    </button>
+                </div>
+            </div>
+            
+            <div class="balance-overview fade-in delay-1">
+                <div class="balance-content">
+                    <h2>Total Portfolio Value</h2>
+                    <div class="balance-amount">$24,567.89</div>
+                    <div class="balance-change positive">+2.45% ($587.32) Last 24h</div>
+                    
+                    <div class="balance-stats">
+                        <div class="stat-card">
+                            <p>Total Profit</p>
+                            <h3 class="positive">$4,231.50</h3>
+                        </div>
+                        <div class="stat-card">
+                            <p>Best Performer</p>
+                            <h3>SOL <span class="positive">+8.2%</span></h3>
+                        </div>
+                        <div class="stat-card">
+                            <p>24h Volume</p>
+                            <h3>$3,450.20</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Deposit Selection Section (Initially hidden) -->
+        <section class="deposit-selection fade-in" id="deposit-selection" style="display: none;">
+            <div class="deposit-header">
+                <h2><i class="fas fa-wallet"></i> Deposit Crypto</h2>
+                <p>Select a cryptocurrency to deposit into your wallet</p>
+            </div>
+            
+            <div class="crypto-grid">
+                <!-- Bitcoin -->
+                <div class="crypto-card" data-crypto="btc">
+                    <div class="crypto-icon" style="background: rgba(247, 147, 26, 0.1);">
+                        <i class="fab fa-bitcoin" style="color: #F7931A;"></i>
+                    </div>
+                    <div class="crypto-info">
+                        <h3>Bitcoin</h3>
+                        <p>BTC</p>
+                    </div>
+                </div>
+                
+                <!-- USDT (TRC20) -->
+                <div class="crypto-card" data-crypto="usdt">
+                    <div class="crypto-icon" style="background: rgba(38, 161, 123, 0.1);">
+                        <i class="fas fa-dollar-sign" style="color: #26A17B;"></i>
+                    </div>
+                    <div class="crypto-info">
+                        <h3>USDT</h3>
+                        <p>TRC20</p>
+                    </div>
+                </div>
+                
+                <!-- Solana -->
+                <div class="crypto-card" data-crypto="sol">
+                    <div class="crypto-icon" style="background: rgba(0, 255, 163, 0.1);">
+                        <i class="fas fa-bolt" style="color: #00FFA3;"></i>
+                    </div>
+                    <div class="crypto-info">
+                        <h3>Solana</h3>
+                        <p>SOL</p>
+                    </div>
+                </div>
+                
+                <!-- USDC -->
+                <div class="crypto-card" data-crypto="usdc">
+                    <div class="crypto-icon" style="background: rgba(39, 117, 202, 0.1);">
+                        <i class="fas fa-dollar-sign" style="color: #2775CA;"></i>
+                    </div>
+                    <div class="crypto-info">
+                        <h3>USDC</h3>
+                        <p>ERC-20</p>
+                    </div>
+                </div>
+                
+                <!-- Cardano -->
+                <div class="crypto-card" data-crypto="ada">
+                    <div class="crypto-icon" style="background: rgba(0, 51, 173, 0.1);">
+                        <i class="fas fa-chart-line" style="color: #0033AD;"></i>
+                    </div>
+                    <div class="crypto-info">
+                        <h3>Cardano</h3>
+                        <p>ADA</p>
+                    </div>
+                </div>
+                
+                <!-- Dogecoin -->
+                <div class="crypto-card" data-crypto="doge">
+                    <div class="crypto-icon" style="background: rgba(194, 160, 83, 0.1);">
+                        <i class="fab fa-reddit" style="color: #C2A053;"></i>
+                    </div>
+                    <div class="crypto-info">
+                        <h3>Dogecoin</h3>
+                        <p>DOGE</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Deposit Form (Initially hidden) -->
+        <section class="deposit-form" id="deposit-form">
+            <div class="deposit-form-header">
+                <button class="back-button" id="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="deposit-form-title">Deposit <span id="crypto-name">Bitcoin</span></h2>
+            </div>
+            
+            <div class="coin-info">
+                <div class="coin-icon-lg" id="crypto-icon" style="background: rgba(247, 147, 26, 0.1);">
+                    <i class="fab fa-bitcoin" style="color: #F7931A;"></i>
+                </div>
+                <div class="coin-details">
+                    <h3 id="crypto-full-name">Bitcoin</h3>
+                    <p id="crypto-symbol">BTC</p>
+                </div>
+            </div>
+            
+            <div>
+                <label>Network</label>
+                <select class="network-selector" id="network-selector">
+                    <option>Bitcoin Network</option>
+                    <option>Lightning Network</option>
+                </select>
+            </div>
+            
+            <div class="qr-container">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq" class="qr-code" alt="QR Code">
+            </div>
+            
+            <div class="address-container">
+                <p>Deposit Address</p>
+                <div class="address" id="deposit-address">bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq</div>
+            </div>
+            
+            <button class="copy-btn" id="copy-btn">
+                <i class="fas fa-copy"></i> Copy Address
+            </button>
+            
+            <p class="warning">
+                <i class="fas fa-exclamation-triangle"></i> Only send Bitcoin (BTC) to this address. 
+                Sending other assets may result in permanent loss.
+            </p>
+        </section>
+        
+        <!-- Main Dashboard (Initially visible) -->
+        <section class="dashboard" id="dashboard-section">
+            <div>
+                <div class="chart-container fade-in delay-2">
+                    <div class="section-header">
+                        <h3 class="section-title">Portfolio Performance</h3>
+                        <a href="#" class="view-all">View Report <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <canvas id="portfolio-chart"></canvas>
+                </div>
+                
+                <div class="assets-section fade-in delay-3">
+                    <div class="section-header">
+                        <h3 class="section-title">Your Assets</h3>
+                        <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="assets-grid">
+                        <!-- Asset Cards -->
+                        <div class="asset-card">
+                            <div class="asset-header">
+                                <div class="coin-label">
+                                    <div class="asset-icon" style="background: rgba(247, 147, 26, 0.1);">
+                                        <i class="fab fa-bitcoin" style="color: #F7931A;"></i>
+                                    </div>
+                                    <div class="asset-info">
+                                        <h3>Bitcoin</h3>
+                                        <p>BTC</p>
+                                    </div>
+                                </div>
+                                <div class="asset-price">
+                                    <div class="price">$36,842.10</div>
+                                    <div class="change positive">+1.8%</div>
+                                </div>
+                            </div>
+                            <div class="asset-chart">
+                                <canvas id="btc-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="asset-card">
+                            <div class="asset-header">
+                                <div class="coin-label">
+                                    <div class="asset-icon" style="background: rgba(98, 126, 234, 0.1);">
+                                        <i class="fab fa-ethereum" style="color: #627EEA;"></i>
+                                    </div>
+                                    <div class="asset-info">
+                                        <h3>Ethereum</h3>
+                                        <p>ETH</p>
+                                    </div>
+                                </div>
+                                <div class="asset-price">
+                                    <div class="price">$2,045.30</div>
+                                    <div class="change positive">+3.2%</div>
+                                </div>
+                            </div>
+                            <div class="asset-chart">
+                                <canvas id="eth-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="asset-card">
+                            <div class="asset-header">
+                                <div class="coin-label">
+                                    <div class="asset-icon" style="background: rgba(0, 255, 163, 0.1);">
+                                        <i class="fas fa-bolt" style="color: #00FFA3;"></i>
+                                    </div>
+                                    <div class="asset-info">
+                                        <h3>Solana</h3>
+                                        <p>SOL</p>
+                                    </div>
+                                </div>
+                                <div class="asset-price">
+                                    <div class="price">$98.75</div>
+                                    <div class="change positive">+8.5%</div>
+                                </div>
+                            </div>
+                            <div class="asset-chart">
+                                <canvas id="sol-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="portfolio-breakdown fade-in delay-2">
+                <div class="section-header">
+                    <h3 class="section-title">Portfolio Allocation</h3>
+                </div>
+                <div style="height: 200px; margin-bottom: 2rem;">
+                    <canvas id="allocation-chart"></canvas>
+                </div>
+                
+                <div class="section-header">
+                    <h3 class="section-title">Recent Activity</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                
+                <div class="activity-list">
+                    <div class="activity-item" style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <div style="background: rgba(0,255,95,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-arrow-down positive"></i>
+                            </div>
+                            <div>
+                                <div>BTC Deposit</div>
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">2 hours ago</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="positive">+0.025 BTC</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">$1,250.00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item" style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <div style="background: rgba(42,158,244,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-exchange-alt" style="color: var(--accent-secondary);"></i>
+                            </div>
+                            <div>
+                                <div>ETH Swap</div>
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">5 hours ago</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div>-1.2 SOL</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">+0.05 ETH</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item" style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <div style="background: rgba(255,77,77,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-arrow-up negative"></i>
+                            </div>
+                            <div>
+                                <div>USDC Withdrawal</div>
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">Yesterday</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="negative">-500 USDC</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">$500.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>CryptoPortfolio Manager • Secure Digital Asset Management</p>
+            <p style="margin-top: 0.5rem;">© 2023 CryptoPortfolio. All rights reserved. | Privacy Policy | Terms of Service</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Portfolio performance chart
+            const portfolioCtx = document.getElementById('portfolio-chart').getContext('2d');
+            new Chart(portfolioCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                    datasets: [{
+                        label: 'Portfolio Value',
+                        data: [15000, 16500, 17000, 18200, 19500, 21000, 22500, 23000, 24000, 24567],
+                        borderColor: '#00c774',
+                        backgroundColor: 'rgba(0, 199, 116, 0.1)',
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                        }
+                    }
+                }
+            });
+            
+            // Allocation chart
+            const allocCtx = document.getElementById('allocation-chart').getContext('2d');
+            new Chart(allocCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Bitcoin', 'Ethereum', 'Solana', 'Cardano', 'USDC'],
+                    datasets: [{
+                        data: [45, 25, 15, 8, 7],
+                        backgroundColor: [
+                            '#F7931A',
+                            '#627EEA',
+                            '#00FFA3',
+                            '#0033AD',
+                            '#2775CA'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#e2e8f0',
+                                font: {
+                                    size: 11
+                                },
+                                padding: 15
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+            
+            // Asset sparklines
+            function createSparkline(canvasId, color) {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                const data = [];
+                let current = Math.random() * 100 + 20;
+                
+                for (let i = 0; i < 15; i++) {
+                    current += (Math.random() - 0.4) * 10;
+                    data.push(current);
+                }
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.map((_, i) => i),
+                        datasets: [{
+                            data: data,
+                            borderColor: color,
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            fill: false,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { display: false },
+                            y: { display: false }
+                        }
+                    }
+                });
+            }
+            
+            createSparkline('btc-chart', '#F7931A');
+            createSparkline('eth-chart', '#627EEA');
+            createSparkline('sol-chart', '#00FFA3');
+            
+            // Deposit functionality
+            const depositButton = document.getElementById('deposit-button');
+            const sendButton = document.getElementById('send-button');
+            const depositSelection = document.getElementById('deposit-selection');
+            const depositForm = document.getElementById('deposit-form');
+            const dashboardSection = document.getElementById('dashboard-section');
+            const backButton = document.getElementById('back-button');
+            const cryptoCards = document.querySelectorAll('.crypto-card');
+            const copyBtn = document.getElementById('copy-btn');
+            
+            // Show deposit selection
+            depositButton.addEventListener('click', function() {
+                dashboardSection.style.display = 'none';
+                depositSelection.style.display = 'block';
+                depositForm.style.display = 'none';
+            });
+            
+            // Show send functionality (placeholder)
+            sendButton.addEventListener('click', function() {
+                alert('Send functionality would open here. This would allow you to send crypto to other wallets.');
+            });
+            
+            // Back button from deposit form to deposit selection
+            backButton.addEventListener('click', function() {
+                depositForm.style.display = 'none';
+                depositSelection.style.display = 'block';
+            });
+            
+            // Crypto card click handler
+            cryptoCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const crypto = this.getAttribute('data-crypto');
+                    showDepositForm(crypto);
+                });
+            });
+            
+            // Copy address functionality
+            copyBtn.addEventListener('click', function() {
+                const address = document.getElementById('deposit-address').textContent;
+                navigator.clipboard.writeText(address);
+                
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                }, 2000);
+            });
+            
+            // Show deposit form for selected crypto
+            function showDepositForm(crypto) {
+                depositSelection.style.display = 'none';
+                depositForm.style.display = 'block';
+                
+                // Update form based on selected crypto
+                switch(crypto) {
+                    case 'btc':
+                        document.getElementById('crypto-name').textContent = 'Bitcoin';
+                        document.getElementById('crypto-full-name').textContent = 'Bitcoin';
+                        document.getElementById('crypto-symbol').textContent = 'BTC';
+                        document.getElementById('crypto-icon').innerHTML = '<i class="fab fa-bitcoin" style="color: #F7931A;"></i>';
+                        document.getElementById('crypto-icon').style.background = 'rgba(247, 147, 26, 0.1)';
+                        document.getElementById('deposit-address').textContent = 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq';
+                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq';
+                        document.querySelector('.warning').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Only send Bitcoin (BTC) to this address. Sending other assets may result in permanent loss.';
+                        
+                        // Update network selector
+                        const btcNetworks = ['Bitcoin Network', 'Lightning Network'];
+                        const networkSelector = document.getElementById('network-selector');
+                        networkSelector.innerHTML = '';
+                        btcNetworks.forEach(network => {
+                            const option = document.createElement('option');
+                            option.textContent = network;
+                            networkSelector.appendChild(option);
+                        });
+                        break;
+                        
+                    case 'usdt':
+                        document.getElementById('crypto-name').textContent = 'USDT';
+                        document.getElementById('crypto-full-name').textContent = 'Tether (TRC20)';
+                        document.getElementById('crypto-symbol').textContent = 'USDT';
+                        document.getElementById('crypto-icon').innerHTML = '<i class="fas fa-dollar-sign" style="color: #26A17B;"></i>';
+                        document.getElementById('crypto-icon').style.background = 'rgba(38, 161, 123, 0.1)';
+                        document.getElementById('deposit-address').textContent = 'TJDdS9Xef6wRHK1B5uGqH6Kk9WgJ8sZxY7';
+                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TJDdS9Xef6wRHK1B5uGqH6Kk9WgJ8sZxY7';
+                        document.querySelector('.warning').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Only send USDT (TRC20) to this address. Sending other assets or using different networks may result in permanent loss.';
+                        
+                        // Update network selector
+                        const usdtNetworks = ['TRC20 Network', 'ERC20 Network', 'BEP20 Network'];
+                        const usdtNetworkSelector = document.getElementById('network-selector');
+                        usdtNetworkSelector.innerHTML = '';
+                        usdtNetworks.forEach(network => {
+                            const option = document.createElement('option');
+                            option.textContent = network;
+                            usdtNetworkSelector.appendChild(option);
+                        });
+                        break;
+                        
+                    case 'sol':
+                        document.getElementById('crypto-name').textContent = 'Solana';
+                        document.getElementById('crypto-full-name').textContent = 'Solana';
+                        document.getElementById('crypto-symbol').textContent = 'SOL';
+                        document.getElementById('crypto-icon').innerHTML = '<i class="fas fa-bolt" style="color: #00FFA3;"></i>';
+                        document.getElementById('crypto-icon').style.background = 'rgba(0, 255, 163, 0.1)';
+                        document.getElementById('deposit-address').textContent = '4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi';
+                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi';
+                        document.querySelector('.warning').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Only send Solana (SOL) to this address. Ensure you\'re using the Solana network.';
+                        
+                        // Update network selector
+                        const solNetworks = ['Solana Network'];
+                        const solNetworkSelector = document.getElementById('network-selector');
+                        solNetworkSelector.innerHTML = '';
+                        solNetworks.forEach(network => {
+                            const option = document.createElement('option');
+                            option.textContent = network;
+                            solNetworkSelector.appendChild(option);
+                        });
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

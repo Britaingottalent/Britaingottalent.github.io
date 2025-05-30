@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Portfolio Manager</title>
+    <title>Crypto Portfolio Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://s3.tradingview.com/tv.js"></script>
@@ -50,7 +50,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 0;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .logo {
@@ -130,66 +130,13 @@
             transform: translateY(-2px);
         }
 
-        /* Hero Section */
-        .hero {
+        /* Balance Section */
+        .balance-section {
             display: flex;
             justify-content: space-between;
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
-        }
-
-        .welcome-section {
-            max-width: 500px;
-            margin-bottom: 1.5rem;
-        }
-
-        .welcome-section h1 {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            line-height: 1.2;
-        }
-
-        .welcome-section p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-
-        .action-buttons {
-            display: flex;
             gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .action-buttons button {
-            flex: 1;
-            padding: 0.8rem;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 0.9rem;
-        }
-
-        .action-buttons button.send {
-            background: var(--secondary-bg);
-            color: var(--text-primary);
-        }
-
-        .action-buttons button.deposit {
-            background: var(--accent);
-            color: var(--primary-bg);
-        }
-
-        .action-buttons button:hover {
-            opacity: 0.9;
-            transform: translateY(-3px);
         }
 
         .balance-overview {
@@ -197,11 +144,10 @@
             padding: 1.5rem;
             border-radius: var(--border-radius);
             border: 1px solid #2A3A32;
+            flex: 1;
             min-width: 300px;
             position: relative;
             overflow: hidden;
-            flex: 1;
-            margin-left: 1rem;
         }
 
         .balance-overview::before {
@@ -262,6 +208,44 @@
 
         .stat-card h3 {
             font-size: 1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            min-width: 140px;
+        }
+
+        .action-buttons button.send {
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+        }
+
+        .action-buttons button.deposit {
+            background: var(--accent);
+            color: var(--primary-bg);
+        }
+
+        .action-buttons button:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
         }
 
         /* Main Dashboard */
@@ -635,14 +619,13 @@
                 grid-template-columns: 1fr;
             }
             
-            .hero {
+            .balance-section {
                 flex-direction: column;
                 gap: 1rem;
             }
             
             .balance-overview {
                 min-width: 100%;
-                margin-left: 0;
             }
         }
 
@@ -728,13 +711,8 @@
             </div>
         </header>
         
-        <!-- Hero Section -->
-        <section class="hero fade-in">
-            <div class="welcome-section">
-                <h1>Crypto Portfolio</h1>
-                <p>Manage your digital assets with professional tools</p>
-            </div>
-            
+        <!-- Balance Section -->
+        <section class="balance-section fade-in">
             <div class="balance-overview fade-in delay-1">
                 <div class="balance-content">
                     <h2>Total Portfolio Value</h2>

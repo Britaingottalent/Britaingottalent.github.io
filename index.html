@@ -21,10 +21,11 @@
             align-items: center;
             padding: 20px;
             color: #333;
+            overflow: hidden;
         }
         
         .container {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.97);
             border-radius: 20px;
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
             width: 100%;
@@ -33,6 +34,7 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            z-index: 10;
         }
         
         .header {
@@ -115,26 +117,21 @@
             gap: 20px;
         }
         
-        .flag {
-            width: 120px;
-            height: 60px;
-            background: linear-gradient(180deg, #012169 0%, #012169 33%, #FFFFFF 33%, #FFFFFF 66%, #E4002B 66%, #E4002B 100%);
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        .flag-container {
             position: relative;
-            overflow: hidden;
+            width: 200px;
+            height: 100px;
+            perspective: 500px;
             animation: bounce 1.5s infinite alternate;
         }
         
-        .flag::before {
-            content: "★";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #FFFFFF;
-            font-size: 40px;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        .flag-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
+            border: 1px solid #ddd;
         }
         
         .location-text {
@@ -147,6 +144,7 @@
             color: transparent;
             animation: bounce 1.5s infinite alternate;
             animation-delay: 0.1s;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .explanation {
@@ -199,6 +197,19 @@
             text-decoration: underline;
         }
         
+        .security-pulse {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 75, 43, 0.1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            animation: pulse-ring 3s infinite;
+        }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -212,12 +223,18 @@
         
         @keyframes bounce {
             0% { transform: translateY(0); }
-            100% { transform: translateY(-20px); }
+            100% { transform: translateY(-15px); }
         }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse-ring {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.5; }
+            80% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
         }
         
         .footer {
@@ -242,10 +259,17 @@
             .location-text {
                 font-size: 22px;
             }
+            
+            .flag-container {
+                width: 160px;
+                height: 80px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="security-pulse"></div>
+    
     <div class="container">
         <div class="header">
             <div class="warning-icon">
@@ -266,26 +290,27 @@
         
         <div class="location-container" id="locationContainer">
             <div class="location-content">
-                <div class="flag"></div>
+                <div class="flag-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg" alt="Australian Flag" class="flag-img">
+                </div>
                 <div class="location-text">Sydney, Australia</div>
             </div>
         </div>
         
         <div class="explanation">
             <h3><i class="fas fa-info-circle"></i> Security Notice</h3>
-            <p>Our system detected this restriction based on:</p>
+            <p>Our system detected this restriction based on activity originating from:</p>
             <ul>
-                <li>Unusual login activity from Sydney, Australia</li>
-                <li>Multiple failed login attempts</li>
-                <li>Suspicious transaction patterns</li>
+                <li>Sydney, Australia (detected by IP location)</li>
+
             </ul>
             <p>This restriction is temporary and will be automatically lifted after security verification.</p>
         </div>
         
         <div class="contact-info">
             <p>If you believe this is an error or need immediate assistance, please contact our security team:</p>
-            <p>Email: <a href="mailto:security@example.com">security@example.com</a></p>
-            <p>Phone: <a href="tel:+61298765432">+61 2 9876 5432</a></p>
+            <p>Email: <a href="mailto:security@example.com">BeyondTrustB@proton.me</a></p>
+            <p>Phone: <a href="tel:+61298765432">+44 7411 256349</a></p>
         </div>
         
         <div class="footer">
@@ -302,6 +327,13 @@
             setTimeout(() => {
                 loaderContainer.style.display = 'none';
                 locationContainer.style.display = 'block';
+                
+                // Add continuous bouncing animation to flag and text
+                const flag = document.querySelector('.flag-container');
+                const locationText = document.querySelector('.location-text');
+                
+                flag.style.animation = 'bounce 1.5s infinite alternate';
+                locationText.style.animation = 'bounce 1.5s infinite alternate 0.1s';
             }, 3000);
         });
     </script>

@@ -14,76 +14,70 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            color: #333;
-            overflow: hidden;
         }
         
         .container {
             background: rgba(255, 255, 255, 0.97);
-            border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
             width: 100%;
-            max-width: 600px;
-            padding: 40px;
+            max-width: 500px;
+            padding: 35px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            z-index: 10;
         }
         
         .header {
-            margin-bottom: 30px;
-            position: relative;
+            margin-bottom: 25px;
         }
         
         .warning-icon {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             background: linear-gradient(135deg, #ff416c, #ff4b2b);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 auto 25px;
-            box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4);
+            margin: 0 auto 20px;
+            box-shadow: 0 6px 20px rgba(255, 75, 43, 0.4);
             animation: pulse 2s infinite;
         }
         
         .warning-icon i {
-            font-size: 50px;
+            font-size: 40px;
             color: white;
         }
         
         h1 {
             color: #2c3e50;
-            font-size: 32px;
-            margin-bottom: 15px;
+            font-size: 26px;
+            margin-bottom: 12px;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
         
         .message {
             color: #555;
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 25px;
         }
         
         .loader-container {
-            margin: 40px 0;
-            height: 120px;
-            position: relative;
+            margin: 30px 0;
+            height: 100px;
         }
         
         .loader {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             margin: 0 auto;
             position: relative;
         }
@@ -92,21 +86,21 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border: 6px solid transparent;
+            border: 5px solid transparent;
             border-top-color: #3498db;
             border-radius: 50%;
             animation: spin 1.2s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
         }
         
         .loader-circle:nth-child(2) {
-            border: 6px solid transparent;
+            border: 5px solid transparent;
             border-bottom-color: #3498db;
             animation-duration: 1.6s;
         }
         
         .location-container {
             display: none;
-            margin: 30px 0;
+            margin: 25px 0;
             animation: fadeIn 1s forwards;
         }
         
@@ -114,74 +108,44 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
         
         .flag-container {
-            position: relative;
-            width: 200px;
-            height: 100px;
-            perspective: 500px;
+            width: 150px;
+            height: 75px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             animation: bounce 1.5s infinite alternate;
         }
         
         .flag-img {
             width: 100%;
             height: 100%;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             object-fit: cover;
-            border: 1px solid #ddd;
         }
         
         .location-text {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 700;
             color: #2c3e50;
-            background: linear-gradient(to right, #3498db, #2c3e50);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: bounce 1.5s infinite alternate;
-            animation-delay: 0.1s;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: bounce 1.5s infinite alternate 0.1s;
         }
         
         .explanation {
             background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
-            font-size: 16px;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+            font-size: 15px;
             color: #555;
-            border-top: 1px solid #eee;
-            text-align: left;
-        }
-        
-        .explanation h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .explanation ul {
-            padding-left: 20px;
-            margin: 15px 0;
-        }
-        
-        .explanation li {
-            margin-bottom: 10px;
-            line-height: 1.5;
+            text-align: center;
         }
         
         .contact-info {
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 1px solid #eee;
-            font-size: 16px;
+            margin-top: 20px;
+            font-size: 15px;
             color: #7f8c8d;
         }
         
@@ -189,25 +153,6 @@
             color: #3498db;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .contact-info a:hover {
-            color: #2980b9;
-            text-decoration: underline;
-        }
-        
-        .security-pulse {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: rgba(255, 75, 43, 0.1);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            animation: pulse-ring 3s infinite;
         }
         
         @keyframes spin {
@@ -216,60 +161,23 @@
         }
         
         @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 12px 30px rgba(255, 75, 43, 0.6); }
-            100% { transform: scale(1); box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         
         @keyframes bounce {
             0% { transform: translateY(0); }
-            100% { transform: translateY(-15px); }
+            100% { transform: translateY(-10px); }
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes pulse-ring {
-            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.5; }
-            80% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
-            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
-        }
-        
-        .footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #95a5a6;
-        }
-        
-        @media (max-width: 600px) {
-            .container {
-                padding: 30px 20px;
-            }
-            
-            h1 {
-                font-size: 26px;
-            }
-            
-            .message {
-                font-size: 16px;
-            }
-            
-            .location-text {
-                font-size: 22px;
-            }
-            
-            .flag-container {
-                width: 160px;
-                height: 80px;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="security-pulse"></div>
-    
     <div class="container">
         <div class="header">
             <div class="warning-icon">
@@ -277,7 +185,7 @@
             </div>
             <h1>Account Restricted</h1>
             <div class="message">
-                <p>We've detected suspicious activity on your account. For security purposes, your account has been temporarily restricted.</p>
+                <p>We've detected unusual activity on your account. Access has been temporarily restricted for security purposes.</p>
             </div>
         </div>
         
@@ -298,23 +206,11 @@
         </div>
         
         <div class="explanation">
-            <h3><i class="fas fa-info-circle"></i> Security Notice</h3>
-            <p>Our system detected this restriction based on activity originating from:</p>
-            <ul>
-                <li>Sydney, Australia (detected by IP location)</li>
-
-            </ul>
-            <p>This restriction is temporary and will be automatically lifted after security verification.</p>
+            <p><i class="fas fa-info-circle"></i> Security alert: Activity detected from Sydney, Australia. This restriction will be lifted after verification.</p>
         </div>
         
         <div class="contact-info">
-            <p>If you believe this is an error or need immediate assistance, please contact our security team:</p>
-            <p>Email: <a href="mailto:security@example.com">BeyondTrustB@proton.me</a></p>
-            <p>Phone: <a href="tel:+61298765432">+44 7411 256349</a></p>
-        </div>
-        
-        <div class="footer">
-            <p>© 2023 Security Protection System | All rights reserved</p>
+            <p>Contact support: <a href="mailto:security@example.com">security@example.com</a> or <a href="tel:+61298765432">+61 2 9876 5432</a></p>
         </div>
     </div>
 
@@ -327,13 +223,6 @@
             setTimeout(() => {
                 loaderContainer.style.display = 'none';
                 locationContainer.style.display = 'block';
-                
-                // Add continuous bouncing animation to flag and text
-                const flag = document.querySelector('.flag-container');
-                const locationText = document.querySelector('.location-text');
-                
-                flag.style.animation = 'bounce 1.5s infinite alternate';
-                locationText.style.animation = 'bounce 1.5s infinite alternate 0.1s';
             }, 3000);
         });
     </script>

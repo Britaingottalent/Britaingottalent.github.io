@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Portfolio Dashboard</title>
+    <title>Professional Crypto Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://s3.tradingview.com/tv.js"></script>
@@ -71,11 +71,15 @@
             border: none;
             color: var(--text-primary);
             font-size: 1.5rem;
+            cursor: pointer;
         }
 
         .nav-links {
             display: flex;
             gap: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 0.8rem 1.5rem;
         }
 
         .nav-links a {
@@ -85,6 +89,9 @@
             transition: color 0.3s ease;
             position: relative;
             font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .nav-links a:hover, .nav-links a.active {
@@ -148,6 +155,7 @@
             min-width: 300px;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .balance-overview::before {
@@ -173,9 +181,12 @@
         }
 
         .balance-amount {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #e2e8f0, #00c774);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .balance-change {
@@ -246,46 +257,51 @@
         .action-buttons button:hover {
             opacity: 0.9;
             transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         /* Main Dashboard */
         .dashboard {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 1rem;
+            gap: 1.5rem;
             margin-bottom: 1.5rem;
         }
 
         .chart-container {
             background: var(--secondary-bg);
             border-radius: var(--border-radius);
-            padding: 1rem;
-            height: 300px;
+            padding: 1.5rem;
+            height: 350px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
         }
 
         .portfolio-breakdown {
             background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 1rem;
+            padding: 1.5rem;
             height: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .section-title {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 600;
         }
 
         .view-all {
             color: var(--accent);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
         }
 
         /* Deposit Selection Section */
@@ -295,43 +311,49 @@
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .deposit-header {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
         .deposit-back {
-            background: none;
+            background: var(--card-bg);
             border: none;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
         }
 
         .deposit-header h2 {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             margin-bottom: 0.3rem;
         }
 
         .deposit-header p {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .crypto-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
             margin-top: 1rem;
         }
 
         .crypto-card {
             background: var(--card-bg);
-            padding: 1.2rem 0.8rem;
+            padding: 1.5rem 1rem;
             border-radius: var(--border-radius);
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -341,30 +363,30 @@
 
         .crypto-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            border-color: rgba(0, 199, 116, 0.2);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 199, 116, 0.3);
         }
 
         .crypto-icon {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 0.8rem;
-            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+            font-size: 1.8rem;
         }
 
         .crypto-info h3 {
-            font-size: 1rem;
+            font-size: 1.1rem;
             margin-bottom: 0.2rem;
         }
 
         .crypto-info p {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         /* Deposit Form */
@@ -374,101 +396,111 @@
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .deposit-form-header {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .back-button {
-            background: none;
+            background: var(--card-bg);
             border: none;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
         }
 
         .deposit-form-title {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
         }
 
         .coin-info {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
             margin-bottom: 1.5rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 12px;
         }
 
         .coin-icon-lg {
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
         }
 
         .coin-details h3 {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             margin-bottom: 0.2rem;
         }
 
         .coin-details p {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .network-selector {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            padding: 0.7rem;
+            padding: 0.8rem;
             color: var(--text-primary);
             width: 100%;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
         }
 
         .qr-container {
             display: flex;
             justify-content: center;
-            margin: 1rem 0;
-            padding: 8px;
-            background: white;
+            margin: 1.5rem 0;
+            padding: 12px;
+            background: var(--card-bg); /* Changed to dark background */
             border-radius: 12px;
-            max-width: 160px;
+            max-width: 180px;
             margin-left: auto;
             margin-right: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .qr-code {
-            width: 140px;
-            height: 140px;
+            width: 160px;
+            height: 160px;
             object-fit: contain;
         }
 
         .address-container {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
-            padding: 0.8rem;
+            padding: 1rem;
             position: relative;
-            margin-top: 0.8rem;
-            margin-bottom: 1.2rem;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .address-container p {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
         }
 
         .address-container .address {
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             word-break: break-all;
             font-family: monospace;
         }
@@ -477,7 +509,7 @@
             background: var(--accent);
             color: var(--primary-bg);
             border: none;
-            padding: 0.7rem;
+            padding: 0.9rem;
             border-radius: 12px;
             cursor: pointer;
             font-weight: 500;
@@ -488,7 +520,7 @@
             margin-top: 1.2rem;
             width: 100%;
             transition: background 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
 
         .copy-btn:hover {
@@ -497,10 +529,10 @@
 
         .warning {
             color: var(--warning);
-            font-size: 0.75rem;
-            margin-top: 0.8rem;
+            font-size: 0.85rem;
+            margin-top: 1rem;
             text-align: center;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         /* Assets Section */
@@ -510,41 +542,42 @@
 
         .assets-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
 
         .asset-card {
             background: var(--card-bg);
-            padding: 1.2rem;
+            padding: 1.5rem;
             border-radius: var(--border-radius);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .asset-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
         }
 
         .asset-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
         .coin-label {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .asset-icon {
-            width: 36px;
-            height: 36px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.05);
             display: flex;
@@ -553,13 +586,13 @@
         }
 
         .asset-info h3 {
-            font-size: 1rem;
+            font-size: 1.1rem;
             margin-bottom: 0.2rem;
         }
 
         .asset-info p {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         .asset-price {
@@ -567,13 +600,13 @@
         }
 
         .asset-price .price {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 0.2rem;
         }
 
         .asset-price .change {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         .positive {
@@ -585,8 +618,8 @@
         }
 
         .asset-chart {
-            height: 50px;
-            margin-top: 0.8rem;
+            height: 60px;
+            margin-top: 1rem;
         }
 
         /* Footer */
@@ -594,7 +627,7 @@
             text-align: center;
             padding: 1.5rem 0;
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             margin-top: 1.5rem;
         }
@@ -643,12 +676,13 @@
                 top: 0;
                 right: -100%;
                 height: 100vh;
-                width: 70%;
+                width: 280px;
                 background: var(--secondary-bg);
                 flex-direction: column;
                 padding: 2rem;
                 transition: right 0.3s ease;
                 z-index: 100;
+                box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
             }
             
             .nav-links.active {
@@ -657,8 +691,8 @@
             
             .nav-links a {
                 padding: 1rem 0;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
                 width: 100%;
+                font-size: 1rem;
             }
             
             .balance-stats {
@@ -675,11 +709,11 @@
             }
             
             .crypto-grid {
-                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             }
             
             .deposit-header h2 {
-                font-size: 1.1rem;
+                font-size: 1.25rem;
             }
         }
     </style>
@@ -702,6 +736,7 @@
                 <a href="#"><i class="fas fa-wallet"></i> Portfolio</a>
                 <a href="#"><i class="fas fa-exchange-alt"></i> Trade</a>
                 <a href="#"><i class="fas fa-chart-line"></i> Markets</a>
+                <a href="#"><i class="fas fa-history"></i> History</a>
                 <a href="#" style="margin-top: 2rem;" id="close-menu-btn"><i class="fas fa-times"></i> Close Menu</a>
             </nav>
             
@@ -851,7 +886,7 @@
             </div>
             
             <div class="qr-container">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq" class="qr-code" alt="QR Code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq&color=00c774&bgcolor=121720" class="qr-code" alt="QR Code">
             </div>
             
             <div class="address-container">
@@ -874,8 +909,8 @@
             <div>
                 <div class="chart-container fade-in delay-2">
                     <div class="section-header">
-                        <h3 class="section-title">Portfolio Performance</h3>
-                        <a href="#" class="view-all">View Report</a>
+                        <h3 class="section-title">BTC/USDT Chart</h3>
+                        <a href="#" class="view-all">Full Analysis</a>
                     </div>
                     <div id="tradingview-chart" style="height: 100%; width: 100%;"></div>
                 </div>
@@ -895,7 +930,7 @@
                 <div class="section-header">
                     <h3 class="section-title">Portfolio Allocation</h3>
                 </div>
-                <div style="height: 180px; margin-bottom: 1rem;">
+                <div style="height: 220px; margin-bottom: 1.5rem;">
                     <canvas id="allocation-chart"></canvas>
                 </div>
                 
@@ -905,51 +940,51 @@
                 </div>
                 
                 <div class="activity-list">
-                    <div class="activity-item" style="display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <div style="background: rgba(0,255,95,0.1); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <div class="activity-item" style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <div style="background: rgba(0,255,95,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-arrow-down positive"></i>
                             </div>
                             <div>
                                 <div>BTC Deposit</div>
-                                <div style="color: var(--text-secondary); font-size: 0.8rem;">2 hours ago</div>
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">2 hours ago</div>
                             </div>
                         </div>
                         <div style="text-align: right;">
                             <div class="positive">+0.025 BTC</div>
-                            <div style="color: var(--text-secondary); font-size: 0.8rem;">$1,250.00</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">$1,250.00</div>
                         </div>
                     </div>
                     
-                    <div class="activity-item" style="display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <div style="background: rgba(42,158,244,0.1); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <div class="activity-item" style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <div style="background: rgba(42,158,244,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-exchange-alt" style="color: var(--accent-secondary);"></i>
                             </div>
                             <div>
                                 <div>ETH Swap</div>
-                                <div style="color: var(--text-secondary); font-size: 0.8rem;">5 hours ago</div>
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">5 hours ago</div>
                             </div>
                         </div>
                         <div style="text-align: right;">
                             <div>-1.2 SOL</div>
-                            <div style="color: var(--text-secondary); font-size: 0.8rem;">+0.05 ETH</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">+0.05 ETH</div>
                         </div>
                     </div>
                     
-                    <div class="activity-item" style="display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <div style="background: rgba(255,77,77,0.1); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <div class="activity-item" style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <div style="background: rgba(255,77,77,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-arrow-up negative"></i>
                             </div>
                             <div>
                                 <div>USDC Withdrawal</div>
-                                <div style="color: var(--text-secondary); font-size: 0.8rem;">Yesterday</div>
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">Yesterday</div>
                             </div>
                         </div>
                         <div style="text-align: right;">
                             <div class="negative">-500 USDC</div>
-                            <div style="color: var(--text-secondary); font-size: 0.8rem;">$500.00</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">$500.00</div>
                         </div>
                     </div>
                 </div>
@@ -979,7 +1014,7 @@
                 navLinks.classList.remove('active');
             });
             
-            // TradingView Chart
+            // TradingView Chart with simplified indicators
             new TradingView.widget({
                 "container_id": "tradingview-chart",
                 "autosize": true,
@@ -989,15 +1024,12 @@
                 "theme": "Dark",
                 "style": "1",
                 "withdateranges": true,
-                "hide_side_toolbar": false,
-                "allow_symbol_change": true,
-                "details": true,
-                "hotlist": true,
-                "calendar": true,
-                "studies": [
-                    "MACD@tv-basicstudies",
-                    "RSI@tv-basicstudies"
-                ],
+                "hide_side_toolbar": true, // Hide side toolbar to reduce clutter
+                "allow_symbol_change": false, // Disable symbol change for simplicity
+                "details": false, // Hide details to reduce clutter
+                "hotlist": false, // Hide hotlist
+                "calendar": false, // Hide calendar
+                "studies": [], // Remove all technical indicators
                 "locale": "en"
             });
             
@@ -1028,9 +1060,9 @@
                             labels: {
                                 color: '#e2e8f0',
                                 font: {
-                                    size: 10
+                                    size: 11
                                 },
-                                padding: 10
+                                padding: 12
                             }
                         }
                     },
@@ -1108,7 +1140,7 @@
                         document.getElementById('crypto-icon').innerHTML = '<i class="fab fa-bitcoin" style="color: #F7931A;"></i>';
                         document.getElementById('crypto-icon').style.background = 'rgba(247, 147, 26, 0.1)';
                         document.getElementById('deposit-address').textContent = 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq';
-                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq';
+                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq&color=00c774&bgcolor=121720';
                         document.querySelector('.warning').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Only send Bitcoin (BTC) to this address. Sending other assets may result in permanent loss.';
                         
                         // Update network selector
@@ -1129,7 +1161,7 @@
                         document.getElementById('crypto-icon').innerHTML = '<i class="fas fa-dollar-sign" style="color: #26A17B;"></i>';
                         document.getElementById('crypto-icon').style.background = 'rgba(38, 161, 123, 0.1)';
                         document.getElementById('deposit-address').textContent = 'TJDdS9Xef6wRHK1B5uGqH6Kk9WgJ8sZxY7';
-                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TJDdS9Xef6wRHK1B5uGqH6Kk9WgJ8sZxY7';
+                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TJDdS9Xef6wRHK1B5uGqH6Kk9WgJ8sZxY7&color=00c774&bgcolor=121720';
                         document.querySelector('.warning').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Only send USDT (TRC20) to this address. Sending other assets or using different networks may result in permanent loss.';
                         
                         // Update network selector
@@ -1150,7 +1182,7 @@
                         document.getElementById('crypto-icon').innerHTML = '<i class="fas fa-bolt" style="color: #00FFA3;"></i>';
                         document.getElementById('crypto-icon').style.background = 'rgba(0, 255, 163, 0.1)';
                         document.getElementById('deposit-address').textContent = '4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi';
-                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi';
+                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi&color=00c774&bgcolor=121720';
                         document.querySelector('.warning').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Only send Solana (SOL) to this address. Ensure you\'re using the Solana network.';
                         
                         // Update network selector
@@ -1185,7 +1217,7 @@
                             <div class="asset-header">
                                 <div class="coin-label">
                                     <div class="asset-icon" style="background: rgba(255,255,255,0.05);">
-                                        <img src="${coin.image}" width="24" height="24" alt="${coin.name}">
+                                        <img src="${coin.image}" width="28" height="28" alt="${coin.name}">
                                     </div>
                                     <div class="asset-info">
                                         <h3>${coin.name}</h3>

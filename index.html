@@ -9,7 +9,7 @@
     <script src="https://s3.tradingview.com/tv.js"></script>
     <style>
         :root {
-            --primary-bg: #05080c; /* Darker background color */
+            --primary-bg: #05080c;
             --secondary-bg: #0e121b;
             --card-bg: #161c28;
             --accent: #00c774;
@@ -34,6 +34,8 @@
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
+            background: radial-gradient(circle at top right, rgba(42, 158, 244, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(0, 199, 116, 0.05) 0%, transparent 50%);
         }
 
         .container {
@@ -386,6 +388,12 @@
             font-size: 1.8rem;
         }
 
+        .crypto-icon img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+
         .crypto-info h3 {
             font-size: 1.1rem;
             margin-bottom: 0.2rem;
@@ -454,6 +462,12 @@
             font-size: 1.5rem;
         }
 
+        .coin-icon-lg img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+
         .coin-details h3 {
             font-size: 1.25rem;
             margin-bottom: 0.2rem;
@@ -465,7 +479,7 @@
         }
 
         .network-selector {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 0.8rem;
@@ -473,6 +487,17 @@
             width: 100%;
             font-size: 0.95rem;
             margin-bottom: 1.5rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238b939f'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+        }
+
+        .network-selector option {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            padding: 0.5rem;
         }
 
         .qr-container {
@@ -594,6 +619,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .asset-icon img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
         }
 
         .asset-info h3 {
@@ -804,7 +835,7 @@
                 <!-- Bitcoin -->
                 <div class="crypto-card" data-crypto="btc">
                     <div class="crypto-icon" style="background: rgba(247, 147, 26, 0.1);">
-                        <i class="fab fa-bitcoin" style="color: #F7931A;"></i>
+                        <img src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579" alt="Bitcoin">
                     </div>
                     <div class="crypto-info">
                         <h3>Bitcoin</h3>
@@ -815,7 +846,7 @@
                 <!-- USDT (TRC20) -->
                 <div class="crypto-card" data-crypto="usdt">
                     <div class="crypto-icon" style="background: rgba(38, 161, 123, 0.1);">
-                        <i class="fas fa-dollar-sign" style="color: #26A17B;"></i>
+                        <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663" alt="Tether">
                     </div>
                     <div class="crypto-info">
                         <h3>USDT</h3>
@@ -826,7 +857,7 @@
                 <!-- Solana -->
                 <div class="crypto-card" data-crypto="sol">
                     <div class="crypto-icon" style="background: rgba(0, 255, 163, 0.1);">
-                        <i class="fas fa-bolt" style="color: #00FFA3;"></i>
+                        <img src="https://assets.coingecko.com/coins/images/4128/large/solana.png?1640133422" alt="Solana">
                     </div>
                     <div class="crypto-info">
                         <h3>Solana</h3>
@@ -837,7 +868,7 @@
                 <!-- USDC -->
                 <div class="crypto-card" data-crypto="usdc">
                     <div class="crypto-icon" style="background: rgba(39, 117, 202, 0.1);">
-                        <i class="fas fa-dollar-sign" style="color: #2775CA;"></i>
+                        <img src="https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389" alt="USDC">
                     </div>
                     <div class="crypto-info">
                         <h3>USDC</h3>
@@ -848,7 +879,7 @@
                 <!-- Cardano -->
                 <div class="crypto-card" data-crypto="ada">
                     <div class="crypto-icon" style="background: rgba(0, 51, 173, 0.1);">
-                        <i class="fas fa-chart-line" style="color: #0033AD;"></i>
+                        <img src="https://assets.coingecko.com/coins/images/975/large/cardano.png?1547034860" alt="Cardano">
                     </div>
                     <div class="crypto-info">
                         <h3>Cardano</h3>
@@ -859,7 +890,7 @@
                 <!-- Dogecoin -->
                 <div class="crypto-card" data-crypto="doge">
                     <div class="crypto-icon" style="background: rgba(194, 160, 83, 0.1);">
-                        <i class="fab fa-reddit" style="color: #C2A053;"></i>
+                        <img src="https://assets.coingecko.com/coins/images/5/large/dogecoin.png?1547792256" alt="Dogecoin">
                     </div>
                     <div class="crypto-info">
                         <h3>Dogecoin</h3>
@@ -880,7 +911,7 @@
             
             <div class="coin-info">
                 <div class="coin-icon-lg" id="crypto-icon" style="background: rgba(247, 147, 26, 0.1);">
-                    <i class="fab fa-bitcoin" style="color: #F7931A;"></i>
+                    <img id="crypto-icon-img" src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579" alt="Bitcoin">
                 </div>
                 <div class="coin-details">
                     <h3 id="crypto-full-name">Bitcoin</h3>
@@ -897,7 +928,7 @@
             </div>
             
             <div class="qr-container">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq&color=00c774&bgcolor=121720" class="qr-code" alt="QR Code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq&color=00c774&bgcolor=121720" class="qr-code" id="qr-code" alt="QR Code">
             </div>
             
             <div class="address-container">
@@ -909,7 +940,7 @@
                 <i class="fas fa-copy"></i> Copy Address
             </button>
             
-            <p class="warning">
+            <p class="warning" id="warning-text">
                 <i class="fas fa-exclamation-triangle"></i> Only send Bitcoin (BTC) to this address. 
                 Sending other assets may result in permanent loss.
             </p>
@@ -1091,6 +1122,87 @@
             const depositBack = document.getElementById('deposit-back');
             const cryptoCards = document.querySelectorAll('.crypto-card');
             const copyBtn = document.getElementById('copy-btn');
+            const networkSelector = document.getElementById('network-selector');
+            const cryptoIconImg = document.getElementById('crypto-icon-img');
+            const qrCode = document.getElementById('qr-code');
+            const depositAddress = document.getElementById('deposit-address');
+            const warningText = document.getElementById('warning-text');
+            
+            // Addresses for different cryptocurrencies and networks
+            const cryptoAddresses = {
+                btc: {
+                    "Bitcoin Network": {
+                        address: "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
+                        qr: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq&color=00c774&bgcolor=121720",
+                        warning: "Only send Bitcoin (BTC) to this address. Sending other assets may result in permanent loss."
+                    },
+                    "Lightning Network": {
+                        address: "lnbc1pwpk2r3pp5...",
+                        qr: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=lnbc1pwpk2r3pp5...&color=00c774&bgcolor=121720",
+                        warning: "Lightning Network for Bitcoin. Only send BTC via Lightning Network."
+                    }
+                },
+                usdt: {
+                    "TRC20 Network": {
+                        address: "TJDdS9Xef6wRHK1B5uGqH6Kk9WgJ8sZxY7",
+                        qr: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TJDdS9Xef6wRHK1B5uGqH6Kk9WgJ8sZxY7&color=00c774&bgcolor=121720",
+                        warning: "Only send USDT (TRC20) to this address. Sending other assets or using different networks may result in permanent loss."
+                    },
+                    "ERC20 Network": {
+                        address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+                        qr: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x742d35Cc6634C0532925a3b844Bc454e4438f44e&color=00c774&bgcolor=121720",
+                        warning: "Only send USDT (ERC20) to this address."
+                    },
+                    "BEP20 Network": {
+                        address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+                        qr: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x742d35Cc6634C0532925a3b844Bc454e4438f44e&color=00c774&bgcolor=121720",
+                        warning: "Only send USDT (BEP20) to this address."
+                    }
+                },
+                sol: {
+                    "Solana Network": {
+                        address: "4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi",
+                        qr: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi&color=00c774&bgcolor=121720",
+                        warning: "Only send Solana (SOL) to this address. Ensure you're using the Solana network."
+                    }
+                },
+                usdc: {
+                    "ERC-20 Network": {
+                        address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+                        qr: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x742d35Cc6634C0532925a3b844Bc454e4438f44e&color=00c774&bgcolor=121720",
+                        warning: "Only send USDC (ERC-20) to this address."
+                    },
+                    "Polygon Network": {
+                        address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+                        qr: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x742d35Cc6634C0532925a3b844Bc454e4438f44e&color=00c774&bgcolor=121720",
+                        warning: "Only send USDC (Polygon) to this address."
+                    }
+                },
+                ada: {
+                    "Cardano Network": {
+                        address: "addr1qx2fxv2umyhttk...",
+                        qr: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=addr1qx2fxv2umyhttk...&color=00c774&bgcolor=121720",
+                        warning: "Only send Cardano (ADA) to this address."
+                    }
+                },
+                doge: {
+                    "Dogecoin Network": {
+                        address: "DB1U9d1Qk3d4Uo1bJgYg5NR1CNMc1dLf7f",
+                        qr: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=DB1U9d1Qk3d4Uo1bJgYg5NR1CNMc1dLf7f&color=00c774&bgcolor=121720",
+                        warning: "Only send Dogecoin (DOGE) to this address."
+                    }
+                }
+            };
+            
+            // Crypto icons for deposit form
+            const cryptoIcons = {
+                btc: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+                usdt: "https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663",
+                sol: "https://assets.coingecko.com/coins/images/4128/large/solana.png?1640133422",
+                usdc: "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389",
+                ada: "https://assets.coingecko.com/coins/images/975/large/cardano.png?1547034860",
+                doge: "https://assets.coingecko.com/coins/images/5/large/dogecoin.png?1547792256"
+            };
             
             // Show deposit selection
             depositButton.addEventListener('click', function() {
@@ -1124,9 +1236,16 @@
                 });
             });
             
+            // Update address when network changes
+            networkSelector.addEventListener('change', function() {
+                const crypto = depositForm.getAttribute('data-current-crypto');
+                const network = this.value;
+                updateCryptoAddress(crypto, network);
+            });
+            
             // Copy address functionality
             copyBtn.addEventListener('click', function() {
-                const address = document.getElementById('deposit-address').textContent;
+                const address = depositAddress.textContent;
                 navigator.clipboard.writeText(address);
                 
                 const originalText = this.innerHTML;
@@ -1137,10 +1256,21 @@
                 }, 2000);
             });
             
+            // Update address for selected crypto and network
+            function updateCryptoAddress(crypto, network) {
+                const addressData = cryptoAddresses[crypto][network];
+                if (addressData) {
+                    depositAddress.textContent = addressData.address;
+                    qrCode.src = addressData.qr;
+                    warningText.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${addressData.warning}`;
+                }
+            }
+            
             // Show deposit form for selected crypto
             function showDepositForm(crypto) {
                 depositSelection.style.display = 'none';
                 depositForm.style.display = 'block';
+                depositForm.setAttribute('data-current-crypto', crypto);
                 
                 // Update form based on selected crypto
                 switch(crypto) {
@@ -1148,15 +1278,10 @@
                         document.getElementById('crypto-name').textContent = 'Bitcoin';
                         document.getElementById('crypto-full-name').textContent = 'Bitcoin';
                         document.getElementById('crypto-symbol').textContent = 'BTC';
-                        document.getElementById('crypto-icon').innerHTML = '<i class="fab fa-bitcoin" style="color: #F7931A;"></i>';
                         document.getElementById('crypto-icon').style.background = 'rgba(247, 147, 26, 0.1)';
-                        document.getElementById('deposit-address').textContent = 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq';
-                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq&color=00c774&bgcolor=121720';
-                        document.querySelector('.warning').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Only send Bitcoin (BTC) to this address. Sending other assets may result in permanent loss.';
                         
                         // Update network selector
                         const btcNetworks = ['Bitcoin Network', 'Lightning Network'];
-                        const networkSelector = document.getElementById('network-selector');
                         networkSelector.innerHTML = '';
                         btcNetworks.forEach(network => {
                             const option = document.createElement('option');
@@ -1169,20 +1294,15 @@
                         document.getElementById('crypto-name').textContent = 'USDT';
                         document.getElementById('crypto-full-name').textContent = 'Tether (TRC20)';
                         document.getElementById('crypto-symbol').textContent = 'USDT';
-                        document.getElementById('crypto-icon').innerHTML = '<i class="fas fa-dollar-sign" style="color: #26A17B;"></i>';
                         document.getElementById('crypto-icon').style.background = 'rgba(38, 161, 123, 0.1)';
-                        document.getElementById('deposit-address').textContent = 'TJDdS9Xef6wRHK1B5uGqH6Kk9WgJ8sZxY7';
-                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TJDdS9Xef6wRHK1B5uGqH6Kk9WgJ8sZxY7&color=00c774&bgcolor=121720';
-                        document.querySelector('.warning').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Only send USDT (TRC20) to this address. Sending other assets or using different networks may result in permanent loss.';
                         
                         // Update network selector
                         const usdtNetworks = ['TRC20 Network', 'ERC20 Network', 'BEP20 Network'];
-                        const usdtNetworkSelector = document.getElementById('network-selector');
-                        usdtNetworkSelector.innerHTML = '';
+                        networkSelector.innerHTML = '';
                         usdtNetworks.forEach(network => {
                             const option = document.createElement('option');
                             option.textContent = network;
-                            usdtNetworkSelector.appendChild(option);
+                            networkSelector.appendChild(option);
                         });
                         break;
                         
@@ -1190,23 +1310,41 @@
                         document.getElementById('crypto-name').textContent = 'Solana';
                         document.getElementById('crypto-full-name').textContent = 'Solana';
                         document.getElementById('crypto-symbol').textContent = 'SOL';
-                        document.getElementById('crypto-icon').innerHTML = '<i class="fas fa-bolt" style="color: #00FFA3;"></i>';
                         document.getElementById('crypto-icon').style.background = 'rgba(0, 255, 163, 0.1)';
-                        document.getElementById('deposit-address').textContent = '4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi';
-                        document.querySelector('.qr-container img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi&color=00c774&bgcolor=121720';
-                        document.querySelector('.warning').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Only send Solana (SOL) to this address. Ensure you\'re using the Solana network.';
                         
                         // Update network selector
                         const solNetworks = ['Solana Network'];
-                        const solNetworkSelector = document.getElementById('network-selector');
-                        solNetworkSelector.innerHTML = '';
+                        networkSelector.innerHTML = '';
                         solNetworks.forEach(network => {
                             const option = document.createElement('option');
                             option.textContent = network;
-                            solNetworkSelector.appendChild(option);
+                            networkSelector.appendChild(option);
+                        });
+                        break;
+                        
+                    case 'usdc':
+                        document.getElementById('crypto-name').textContent = 'USDC';
+                        document.getElementById('crypto-full-name').textContent = 'USD Coin';
+                        document.getElementById('crypto-symbol').textContent = 'USDC';
+                        document.getElementById('crypto-icon').style.background = 'rgba(39, 117, 202, 0.1)';
+                        
+                        // Update network selector
+                        const usdcNetworks = ['ERC-20 Network', 'Polygon Network'];
+                        networkSelector.innerHTML = '';
+                        usdcNetworks.forEach(network => {
+                            const option = document.createElement('option');
+                            option.textContent = network;
+                            networkSelector.appendChild(option);
                         });
                         break;
                 }
+                
+                // Update the crypto icon
+                cryptoIconImg.src = cryptoIcons[crypto];
+                
+                // Update address for the first network
+                const firstNetwork = networkSelector.options[0].value;
+                updateCryptoAddress(crypto, firstNetwork);
             }
             
             // Load live cryptocurrency data
@@ -1228,7 +1366,7 @@
                             <div class="asset-header">
                                 <div class="coin-label">
                                     <div class="asset-icon" style="background: rgba(255,255,255,0.05);">
-                                        <img src="${coin.image}" width="28" height="28" alt="${coin.name}">
+                                        <img src="${coin.image}" alt="${coin.name}">
                                     </div>
                                     <div class="asset-info">
                                         <h3>${coin.name}</h3>

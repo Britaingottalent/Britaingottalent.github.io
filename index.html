@@ -1,167 +1,801 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Direct Device Connection</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Portfolio Manager - Professional Crypto Tracking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        #connectionStatus { padding: 10px; margin: 10px 0; border-radius: 5px; }
-        .connected { background: #d4edda; color: #155724; }
-        .disconnected { background: #f8d7da; color: #721c24; }
-        #messages { height: 200px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; }
-        #localSDP, #remoteSDP { width: 100%; height: 100px; margin: 10px 0; }
-        button { padding: 8px 15px; margin: 5px; cursor: pointer; }
+        :root {
+            /* Darkened background colors */
+            /* Dark blue theme colors */
+            --primary-bg: #0a1129;
+            --secondary-bg: #0f1a3a;
+            --card-bg: #152352;
+            --accent: #5c77ff;
+            --accent-secondary: #2a9ef4;
+            --text-primary: #e2e8f0;
+            --text-secondary: #8b939f;
+            --positive: #00c774;
+            --negative: #ff4d4d;
+            --warning: #ffa726;
+            --border-radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 8%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(2, 5, 8, 0.95); /* Darkened */
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-primary);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .auth-buttons .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+
+        .auth-buttons .login {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--accent);
+        }
+
+        .auth-buttons .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 15rem 8% 8rem;
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #e2e8f0, #00c774);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+            max-width: 600px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .hero-buttons .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-buttons .primary {
+            background: var(--accent);
+            color: var(--primary-bg);
+        }
+
+        .hero-buttons .secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--text-secondary);
+        }
+
+        .hero-buttons .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-preview {
+            width: 100%;
+            max-width: 700px;
+            background: var(--card-bg); /* Darkened */
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dashboard-preview img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+            height: 400px;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 8%;
+            background: var(--secondary-bg); /* Darkened */
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg); /* Darkened */
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            border-color: rgba(0, 199, 116, 0.3);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 199, 116, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 8rem 8%;
+            position: relative;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg); /* Darkened */
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .testimonial-card:before {
+            content: '"';
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            font-size: 5rem;
+            color: rgba(0, 199, 116, 0.1);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-content {
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-content p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .author-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 5rem 8%;
+            background: var(--secondary-bg); /* Darkened */
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg); /* Darkened */
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #e2e8f0, #00c774);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 8%;
+            text-align: center;
+            /* Darkened gradient */
+            background: linear-gradient(135deg, #0a1512 0%, #050709 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(42,158,244,0.08) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 5rem 8% 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg); /* Darkened */
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 10rem;
+            }
+            
+            .hero-content {
+                margin-bottom: 3rem;
+            }
+            
+            .hero p {
+                margin: 0 auto 2.5rem;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem 5%;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                color: var(--text-primary);
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .features-grid, .testimonial-grid, .stats-grid, .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Direct Device Connection</h1>
-    
-    <div id="connectionStatus" class="disconnected">Status: Not connected</div>
-    
-    <div>
-        <button id="startBtn">Start Connection</button>
-        <button id="copyBtn" disabled>Copy Offer</button>
-        <button id="pasteBtn" disabled>Paste Answer</button>
-    </div>
-    
-    <div>
-        <h3>Local SDP (Offer)</h3>
-        <textarea id="localSDP" placeholder="Your offer will appear here..." readonly></textarea>
-    </div>
-    
-    <div>
-        <h3>Remote SDP (Answer)</h3>
-        <textarea id="remoteSDP" placeholder="Paste the answer from the other device here..."></textarea>
-    </div>
-    
-    <div>
-        <h3>Messages</h3>
-        <div id="messages"></div>
-        <input type="text" id="messageInput" placeholder="Type your message">
-        <button id="sendBtn" disabled>Send</button>
-    </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-wallet"></i>
+            <span>CryptoPortfolio</span>
+        </div>
+        
+        <nav class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="features.html">Features</a>
+            <a href="pricing.html">Pricing</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        
+        <div class="auth-buttons">
+            <a href="login.html" class="btn login">Log In</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Manage Your Crypto Portfolio Like a Pro</h1>
+            <p>Track, analyze, and grow your cryptocurrency investments with our advanced portfolio management tools. Join 250,000+ investors who trust us with $4.5B+ in assets.</p>
+            <div class="hero-buttons">
+                <a href="signup.html" class="btn primary">Get Started Free</a>
+                <a href="demo.html" class="btn secondary"><i class="fas fa-play-circle"></i> Watch Demo</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="dashboard-preview">
+                <img src="https://www.cifinancial.com/ci-assante/ca/en/insights/wealth-planning-insights/is-cryptocurrency-for-investors-or-speculators/_jcr_content/root/responsivegrid/custom_container/custom_container_left/custom_container_main/container_1320966451/image.coreimg.jpeg/1646835283045/is-crypto-for-investors-or-speculators.jpeg" alt="Crypto Dashboard Preview">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-header">
+            <h2>Everything You Need to Master Crypto Investing</h2>
+            <p>Our platform provides institutional-grade tools for cryptocurrency investors of all experience levels. Track your portfolio, analyze performance, and make informed investment decisions.</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Portfolio Tracking</h3>
+                <p>Connect all your exchange accounts and wallets to track your entire crypto portfolio in one place. Real-time valuation and performance metrics.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <h3>Advanced Analytics</h3>
+                <p>Gain deep insights with advanced analytics, performance charts, and risk assessment tools to optimize your investment strategy.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h3>Smart Alerts</h3>
+                <p>Set custom price alerts, portfolio value notifications, and market movement triggers to never miss an opportunity.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Security First</h3>
+                <p>Bank-grade security with end-to-end encryption. We never store your API keys or have access to your funds.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-taxi"></i>
+                </div>
+                <h3>Tax Reporting</h3>
+                <p>Automatically generate tax reports for your crypto transactions, compatible with major tax jurisdictions worldwide.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Mobile Access</h3>
+                <p>Access your portfolio from anywhere with our iOS and Android apps. Real-time sync across all devices.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="section-header">
+            <h2>Trusted by Crypto Investors Worldwide</h2>
+            <p>Join thousands of investors who have transformed their crypto portfolio management</p>
+        </div>
+        
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>"CryptoPortfolio completely changed how I manage my investments. The analytics helped me identify underperforming assets and rebalance my portfolio, resulting in a 37% increase in returns last quarter."</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MJ</div>
+                    <div class="author-info">
+                        <h4>Michael Johnson</h4>
+                        <p>Professional Crypto Trader</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>"As someone new to crypto, I was overwhelmed by tracking my investments across multiple exchanges. CryptoPortfolio simplified everything and gave me the confidence to make better investment decisions."</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SR</div>
+                    <div class="author-info">
+                        <h4>Sarah Rodriguez</h4>
+                        <p>Beginner Investor</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>"The tax reporting feature alone saved me dozens of hours during tax season. Accurate, comprehensive reports that my accountant was impressed with. Worth every penny!"</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">DT</div>
+                    <div class="author-info">
+                        <h4>David Thompson</h4>
+                        <p>Long-term Investor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">$4.5B+</div>
+                <div class="stat-label">Assets Tracked</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">250K+</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">98%</div>
+                <div class="stat-label">Customer Satisfaction</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">27</div>
+                <div class="stat-label">Supported Exchanges</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Ready to Take Control of Your Crypto Portfolio?</h2>
+            <p>Join thousands of investors who are already maximizing their crypto investment potential. Start your free 14-day trial today - no credit card required.</p>
+            <div class="hero-buttons">
+                <a href="demo.html" class="btn secondary">Schedule a Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-column">
+                <div class="logo">
+                    <i class="fas fa-wallet"></i>
+                    <span>CryptoPortfolio</span>
+                </div>
+                <p style="color: var(--text-secondary); margin: 1.5rem 0; line-height: 1.7;">Professional cryptocurrency portfolio management for investors of all levels. Track, analyze, and optimize your crypto investments.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Product</h3>
+                <div class="footer-links">
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="integrations.html">Integrations</a>
+                    <a href="roadmap.html">Roadmap</a>
+                    <a href="changelog.html">Changelog</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <div class="footer-links">
+                    <a href="blog.html">Blog</a>
+                    <a href="help.html">Help Center</a>
+                    <a href="community.html">Community</a>
+                    <a href="guides.html">Crypto Guides</a>
+                    <a href="api.html">API Documentation</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Company</h3>
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="careers.html">Careers</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="legal.html">Legal</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 CryptoPortfolio. All rights reserved. Cryptocurrency investments are volatile and high risk. Only invest what you can afford to lose.</p>
+        </div>
+    </footer>
 
     <script>
-        // DOM elements
-        const startBtn = document.getElementById('startBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const pasteBtn = document.getElementById('pasteBtn');
-        const sendBtn = document.getElementById('sendBtn');
-        const localSDP = document.getElementById('localSDP');
-        const remoteSDP = document.getElementById('remoteSDP');
-        const messageInput = document.getElementById('messageInput');
-        const messagesDiv = document.getElementById('messages');
-        const connectionStatus = document.getElementById('connectionStatus');
-        
-        // WebRTC variables
-        let peerConnection;
-        let dataChannel;
-        
-        // Start connection
-        startBtn.onclick = async () => {
-            try {
-                // Create peer connection
-                peerConnection = new RTCPeerConnection({
-                    iceServers: [
-                        { urls: "stun:stun.l.google.com:19302" }, // Free STUN server
-                        // Add more STUN servers or TURN servers if needed
-                    ]
+        // Simple navigation functionality
+        document.querySelectorAll('a').forEach(link => {
+            if (link.getAttribute('href').startsWith('#')) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // In a real app, you would navigate to the page
+                    alert('This would navigate to: ' + this.getAttribute('href') + '.html');
                 });
-                
-                // Create data channel
-                dataChannel = peerConnection.createDataChannel("messageChannel");
-                
-                // Set up data channel handlers
-                dataChannel.onopen = () => {
-                    connectionStatus.textContent = "Status: Connected!";
-                    connectionStatus.className = "connected";
-                    sendBtn.disabled = false;
-                    appendMessage("System: Data channel opened!");
-                };
-                
-                dataChannel.onclose = () => {
-                    connectionStatus.textContent = "Status: Disconnected";
-                    connectionStatus.className = "disconnected";
-                    sendBtn.disabled = true;
-                    appendMessage("System: Data channel closed!");
-                };
-                
-                dataChannel.onmessage = (event) => {
-                    appendMessage(`Peer: ${event.data}`);
-                };
-                
-                // ICE candidate handler
-                peerConnection.onicecandidate = (event) => {
-                    if (event.candidate) {
-                        // Normally you'd send this to the other peer via signaling
-                        // For this demo, we're just using the SDP exchange
-                    } else {
-                        // ICE gathering complete
-                        localSDP.value = JSON.stringify(peerConnection.localDescription);
-                        copyBtn.disabled = false;
-                        pasteBtn.disabled = false;
-                    }
-                };
-                
-                // Create offer
-                const offer = await peerConnection.createOffer();
-                await peerConnection.setLocalDescription(offer);
-                
-                startBtn.disabled = true;
-                
-            } catch (error) {
-                console.error("Error creating connection:", error);
-                appendMessage(`System: Error - ${error.message}`);
-            }
-        };
-        
-        // Copy offer to clipboard
-        copyBtn.onclick = () => {
-            localSDP.select();
-            document.execCommand('copy');
-            appendMessage("System: Offer copied to clipboard - send this to the other device");
-        };
-        
-        // Paste answer and establish connection
-        pasteBtn.onclick = async () => {
-            try {
-                const answer = JSON.parse(remoteSDP.value);
-                if (!answer.type || !answer.sdp) {
-                    throw new Error("Invalid answer format");
-                }
-                
-                await peerConnection.setRemoteDescription(answer);
-                appendMessage("System: Answer received - connection should be established soon");
-                
-            } catch (error) {
-                console.error("Error processing answer:", error);
-                appendMessage(`System: Error - ${error.message}`);
-            }
-        };
-        
-        // Send message
-        sendBtn.onclick = () => {
-            const message = messageInput.value.trim();
-            if (message && dataChannel.readyState === "open") {
-                dataChannel.send(message);
-                appendMessage(`You: ${message}`);
-                messageInput.value = "";
-            }
-        };
-        
-        // Handle Enter key
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !sendBtn.disabled) {
-                sendBtn.click();
             }
         });
-        
-        // Helper function to append messages
-        function appendMessage(message) {
-            const messageElement = document.createElement('div');
-            messageElement.textContent = message;
-            messagesDiv.appendChild(messageElement);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
     </script>
 </body>
 </html>

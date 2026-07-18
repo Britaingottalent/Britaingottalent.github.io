@@ -185,6 +185,7 @@
             cursor: pointer;
             color: var(--text-primary);
             font-size: 1.1rem;
+            flex-shrink: 0;
         }
         .notif-btn .badge {
             position: absolute;
@@ -1598,6 +1599,12 @@
             .balance-stats {
                 grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             }
+            .notif-dropdown {
+                right: 0;
+                left: auto;
+                min-width: 320px;
+                max-width: 400px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1656,9 +1663,21 @@
             .crypto-grid {
                 grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             }
+            /* 🔵 FIXED: Notification dropdown on mobile – full width with margins */
             .notif-dropdown {
-                min-width: 280px;
-                right: -20px;
+                position: fixed;
+                top: 70px;
+                right: 10px;
+                left: 10px;
+                min-width: unset;
+                max-width: unset;
+                width: auto;
+                max-height: 70vh;
+                border-radius: 16px;
+                margin-top: 0;
+            }
+            .notif-dropdown.open {
+                display: block;
             }
             .transaction-popup {
                 padding: 1.8rem 1.5rem;
@@ -1684,6 +1703,28 @@
                 flex: 1 1 100%;
             }
         }
+
+        /* ───────────── EXTRA SMALL SCREENS ───────────── */
+        @media (max-width: 480px) {
+            .notif-dropdown {
+                top: 65px;
+                right: 8px;
+                left: 8px;
+                padding: 0.8rem;
+                max-height: 65vh;
+            }
+            .notif-dropdown .notif-item .notif-title {
+                font-size: 0.78rem;
+            }
+            .user-actions button {
+                padding: 0.4rem 0.7rem;
+                font-size: 0.8rem;
+            }
+            .notif-btn {
+                padding: 0.4rem 0.6rem !important;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1696,12 +1737,11 @@
         <header>
             <div class="logo">
                 <i class="fas fa-wallet"></i>
-                <span>BeyondCrypto</span> <!-- 🔵 Changed to BeyondCrypto -->
+                <span>BeyondCrypto</span>
             </div>
 
-            <!-- 🔵 MOBILE MENU BUTTON – Edit the icon here -->
             <button class="mobile-menu-btn" id="mobile-menu-btn">
-                <i class="fas fa-bars"></i> <!-- Change to any Font Awesome icon -->
+                <i class="fas fa-bars"></i>
             </button>
 
             <nav class="nav-links" id="nav-links">
@@ -1710,7 +1750,6 @@
                 <a href="#" onclick="openSection('withdraw')"><i class="fas fa-arrow-up"></i> Withdraw</a>
                 <a href="#" onclick="openSection('convert')"><i class="fas fa-exchange-alt"></i> Convert</a>
                 <a href="#" onclick="openSection('history')"><i class="fas fa-history"></i> History</a>
-                <!-- 🔵 Add more menu items here if needed -->
             </nav>
 
             <div class="user-actions">
@@ -2326,7 +2365,7 @@
         // ════════════════════════════════════════════════════════════════
         // 🔧 CONFIGURATION – Edit this to control behavior
         // ════════════════════════════════════════════════════════════════
-        const LOCAL_STORAGE_ENABLED = true; // 🔵 Set to false to disable and true to enable webstorage saving/loading
+        const LOCAL_STORAGE_ENABLED = true;
 
         // ════════════════════════════════════════════════════════════════
         // 🔵 STORAGE KEYS
@@ -3507,7 +3546,6 @@
         // ────────────────────────────────────────────────────────────────
         function seedTransactions() {
             // No transactions – fresh start
-            // Just render empty history
             renderHistory();
         }
 
@@ -3539,9 +3577,8 @@
         loadAssets();
         initTradingView();
 
-        console.log('✅ BeyondCrypto Pro loaded as a fresh profile.');
-        console.log('📱 Mobile menu closes when tapping outside or selecting a link.');
-        console.log('🔵 All balances are zero and history is empty.');
+        console.log('✅ BeyondCrypto Pro loaded with fresh profile.');
+        console.log('📱 Mobile menu & notification dropdown are mobile-friendly.');
     </script>
 </body>
 </html>

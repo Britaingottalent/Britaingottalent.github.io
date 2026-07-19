@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeyondCrypto · Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-bg: #0a1129;
+            --secondary-bg: #0f1a3a;
+            --card-bg: #152352;
+            --accent: #00c774;
+            --accent-secondary: #7c3aed;
+            --text-primary: #e2e8f0;
+            --text-secondary: #8b939f;
+            --positive: #00c774;
+            --negative: #ff4d4d;
+            --warning: #ffa726;
+            --border-radius: 16px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --input-bg: #0a1129;
+            --hover-bg: rgba(255, 255, 255, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        header {
+            padding: 25px 30px;
+            text-align: center;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 18px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: var(--card-bg);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+            z-index: 5;
+        }
+
+        .back-btn i {
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        .back-btn:hover {
+            background: var(--hover-bg);
+            color: var(--text-primary);
+            border-color: var(--accent);
+        }
+
+        /* Dashboard grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .card-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .card-change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .positive {
+            color: var(--positive);
+        }
+
+        .negative {
+            color: var(--negative);
+        }
+
+        .span-2 {
+            grid-column: span 2;
+        }
+
+        .span-4 {
+            grid-column: span 4;
+        }
+
+        .asset-list {
+            list-style: none;
+            margin-top: 8px;
+        }
+
+        .asset-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .asset-item:last-child {
+            border-bottom: none;
+        }
+
+        .asset-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .asset-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--hover-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--accent);
+        }
+
+        .chart-placeholder {
+            height: 180px;
+            background: linear-gradient(135deg, rgba(0,199,116,0.08) 0%, rgba(124,58,237,0.08) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Overlays */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 100;
+            border-radius: var(--border-radius);
+            transition: opacity 0.3s;
+        }
+
+        .loading-screen {
+            background: var(--secondary-bg);
+            display: flex;
+        }
+
+        .loading-screen.hidden {
+            display: none;
+        }
+
+        .balance-overlay {
+            background: rgba(10, 17, 41, 0.75);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: none;
+            flex-direction: column;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .balance-overlay.show {
+            display: flex;
+        }
+
+        .spinner-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 25px;
+        }
+
+        .spinner-wrapper .crypto-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            color: var(--accent);
+            z-index: 2;
+            animation: pulse-icon 1.2s ease-in-out infinite;
+        }
+
+        .spinner-wrapper .ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--accent);
+            border-bottom-color: var(--accent-secondary);
+            animation: spin-ring 1s linear infinite;
+        }
+
+        .spinner-wrapper .ring:nth-child(2) {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            border-top-color: var(--accent-secondary);
+            border-bottom-color: var(--accent);
+            animation-duration: 1.4s;
+            animation-direction: reverse;
+        }
+
+        .spinner-wrapper .ring:nth-child(3) {
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            border-top-color: var(--text-secondary);
+            border-bottom-color: var(--accent);
+            animation-duration: 1.8s;
+        }
+
+        @keyframes spin-ring {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+        }
+
+        .overlay-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .overlay-sub {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            max-width: 320px;
+        }
+
+        .error-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255, 77, 77, 0.12);
+            border: 2px solid var(--negative);
+            color: var(--negative);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            animation: pop-in 0.5s ease;
+        }
+
+        @keyframes pop-in {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border-radius: 60px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--accent);
+            color: var(--primary-bg);
+        }
+
+        .btn:hover {
+            transform: scale(0.97);
+            box-shadow: 0 4px 16px rgba(0, 199, 116, 0.3);
+        }
+
+        footer {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 20px;
+            }
+            .span-2, .span-4 {
+                grid-column: span 2;
+            }
+            .card-value {
+                font-size: 1.4rem;
+            }
+            .back-btn {
+                top: 10px;
+                left: 10px;
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 15px;
+            }
+            .span-2, .span-4 {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="addacc.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to addacc
+            </a>
+            <div class="logo">
+                <i class="fas fa-chart-pie"></i>
+                <h1>BeyondCrypto</h1>
+            </div>
+        </header>
+
+        <!-- Dashboard (initially hidden behind loading screen) -->
+        <div class="dashboard">
+            <!-- Total Balance -->
+            <div class="card span-2">
+                <div class="card-header">
+                    <span class="card-title">Total Balance</span>
+                    <i class="fas fa-eye" style="color: var(--accent);"></i>
+                </div>
+                <div class="card-value">$124,582.39</div>
+                <div class="card-change positive">
+                    <i class="fas fa-arrow-up"></i> +8.24% ($9,482.10)
+                </div>
+                <div class="chart-placeholder">
+                    <i class="fas fa-chart-line" style="margin-right: 8px;"></i> Portfolio chart loading...
+                </div>
+            </div>
+
+            <!-- BTC Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Bitcoin</span>
+                    <i class="fab fa-bitcoin" style="color: #f7931a;"></i>
+                </div>
+                <div class="card-value">1.234 BTC</div>
+                <div class="card-change positive">
+                    <i class="fas fa-arrow-up"></i> +2.15%
+                </div>
+            </div>
+
+            <!-- ETH Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Ethereum</span>
+                    <i class="fab fa-ethereum" style="color: #627eea;"></i>
+                </div>
+                <div class="card-value">12.45 ETH</div>
+                <div class="card-change negative">
+                    <i class="fas fa-arrow-down"></i> -1.08%
+                </div>
+            </div>
+
+            <!-- Assets list -->
+            <div class="card span-2">
+                <div class="card-title" style="margin-bottom: 14px;">Your Assets</div>
+                <ul class="asset-list">
+                    <li class="asset-item">
+                        <div class="asset-name">
+                            <div class="asset-icon"><i class="fab fa-bitcoin"></i></div>
+                            <div>
+                                <div style="font-weight:600;">Bitcoin</div>
+                                <div style="font-size:0.8rem; color:var(--text-secondary);">BTC</div>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-weight:600;">1.234</div>
+                            <div class="positive" style="font-size:0.8rem;">+2.15%</div>
+                        </div>
+                    </li>
+                    <li class="asset-item">
+                        <div class="asset-name">
+                            <div class="asset-icon"><i class="fab fa-ethereum"></i></div>
+                            <div>
+                                <div style="font-weight:600;">Ethereum</div>
+                                <div style="font-size:0.8rem; color:var(--text-secondary);">ETH</div>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-weight:600;">12.45</div>
+                            <div class="negative" style="font-size:0.8rem;">-1.08%</div>
+                        </div>
+                    </li>
+                    <li class="asset-item">
+                        <div class="asset-name">
+                            <div class="asset-icon"><i class="fas fa-coins"></i></div>
+                            <div>
+                                <div style="font-weight:600;">Cardano</div>
+                                <div style="font-size:0.8rem; color:var(--text-secondary);">ADA</div>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-weight:600;">5,200</div>
+                            <div class="positive" style="font-size:0.8rem;">+0.82%</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card span-2">
+                <div class="card-title" style="margin-bottom: 14px;">Recent Activity</div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                    <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);">
+                        <span><i class="fas fa-arrow-down" style="color: var(--accent); margin-right:6px;"></i> Received BTC</span>
+                        <span>0.052 BTC</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);">
+                        <span><i class="fas fa-arrow-up" style="color: var(--negative); margin-right:6px;"></i> Sent ETH</span>
+                        <span>0.85 ETH</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; padding:8px 0;">
+                        <span><i class="fas fa-exchange-alt" style="color: var(--accent-secondary); margin-right:6px;"></i> Swapped ADA</span>
+                        <span>1,200 ADA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full loading screen (initial) -->
+        <div class="overlay loading-screen" id="loadingScreen">
+            <div class="spinner-wrapper">
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="crypto-icon"><i class="fas fa-coins"></i></div>
+            </div>
+            <div class="overlay-title">Loading Dashboard...</div>
+            <div class="overlay-sub">Fetching your portfolio data</div>
+        </div>
+
+        <!-- Balance loading / error overlay (transparent) -->
+        <div class="overlay balance-overlay" id="balanceOverlay">
+            <!-- Content will be dynamically changed -->
+        </div>
+
+        <footer>
+            <p>BeyondCrypto · Secure Crypto Dashboard | &copy; 2024 BeyondCrypto</p>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const balanceOverlay = document.getElementById('balanceOverlay');
+
+            // Step 1: Show full loading screen for 2 seconds, then reveal dashboard + balance overlay
+            setTimeout(() => {
+                // Hide initial loading screen
+                loadingScreen.classList.add('hidden');
+                // Show balance overlay with spinner
+                balanceOverlay.classList.add('show');
+                balanceOverlay.innerHTML = `
+                    <div class="spinner-wrapper">
+                        <div class="ring"></div>
+                        <div class="ring"></div>
+                        <div class="ring"></div>
+                        <div class="crypto-icon"><i class="fas fa-sync-alt"></i></div>
+                    </div>
+                    <div class="overlay-title">Loading Balance...</div>
+                    <div class="overlay-sub">Synchronizing with blockchain</div>
+                `;
+
+                // Step 2: After 3 more seconds, show error in the same overlay
+                setTimeout(() => {
+                    balanceOverlay.innerHTML = `
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="overlay-title">Failed to complete action</div>
+                        <div class="overlay-sub">An error occurred while loading your balance. Please try again.</div>
+                        <button class="btn" onclick="window.location.href='addacc.html'">
+                            <i class="fas fa-redo-alt"></i> Try Again
+                        </button>
+                    `;
+                }, 3000);
+
+            }, 2000);
+        })();
+    </script>
+</body>
+</html>

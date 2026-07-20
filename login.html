@@ -623,7 +623,7 @@
 
                 if (authenticatedUser) {
                     sessionStorage.setItem('currentUser', JSON.stringify(authenticatedUser));
-                    window.location.href = authenticatedUser.folder + '/index.html';
+                    window.location.href = authenticatedUser.folder + '/profile.html';
                 } else {
                     loginError.textContent = 'Invalid username or password. Please try again.';
                     loginError.style.display = 'block';

